@@ -1,12 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import Test from './components/Test';
 
 export default function App() {
+  let nombre = 'Gestión de Activos';
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <View style={styles.container}>
+        <Text>Título</Text>
+        <Text>{nombre}</Text>
+        <Test />
+        <StatusBar style="auto" />
+      </View>
+
+
+
+    </>
   );
 }
 
