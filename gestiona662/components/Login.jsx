@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import React, { useState } from 'react';
 
-const Login = () => {
+const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,7 +33,9 @@ const handleLogin = async () => {
     Alert.alert('Error', 'No se pudo conectar con el servidor');
   }
 };
-
+const handleRegistro = () => {
+    navigation.push("registro")
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Iniciar Sesión</Text>
@@ -54,6 +56,7 @@ const handleLogin = async () => {
       />
 
       <Button title="Iniciar Sesión" onPress={handleLogin} />
+      <Button title="Registrarse" onPress={handleRegistro} />
     </View>
   );
 };

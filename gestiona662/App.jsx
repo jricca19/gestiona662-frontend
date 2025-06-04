@@ -3,19 +3,16 @@ import { StyleSheet, Text, View } from 'react-native';
 import Test from './components/Test';
 import Login from './components/Login';
 import Registro from './components/Registro';
+import { NavigationContainer } from '@react-navigation/native';
+import Pila from './routes/Pila';
 
 export default function App() {
-  let nombre = 'Gestión de Activos';
   return (
     <>
-      <View style={styles.container}>
-        {/* <Login/> */}
-        <Registro/>
         <StatusBar style="auto" />
-      </View>
-
-
-
+        <NavigationContainer>
+          <Pila/>
+        </NavigationContainer>
     </>
   );
 }
