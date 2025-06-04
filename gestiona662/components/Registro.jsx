@@ -2,7 +2,7 @@ import { StyleSheet, Text, View,TextInput,Button,Alert } from 'react-native'
 import React, { useState } from 'react'
 import { Picker } from '@react-native-picker/picker';
 
-const Registro = () => {
+const Registro = ({navigation}) => {
     const [name, setName] = useState('');
     const [lastName, setLastName] = useState('');
     const [ci, setCI] = useState('');
@@ -38,6 +38,9 @@ const Registro = () => {
         Alert.alert('Error', 'No se pudo conectar con el servidor');
       }
     };
+    const handleLogin = () => {
+    navigation.push("login")
+  }
     return (
         <View style={styles.container}>
             <Text style={styles.titulo}>Registro</Text>
@@ -96,6 +99,7 @@ const Registro = () => {
             </Picker>
 
             <Button title="Registrar" onPress={handleSignUp} />
+            <Button title="Ir al login" onPress={handleLogin} />
         </View>
     )
 }
