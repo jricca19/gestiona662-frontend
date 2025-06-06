@@ -1,85 +1,98 @@
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loguear } from '../store/slices/usuarioSlice';
+import * as SecureStore from 'expo-secure-store';
 
-const Login = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login = ({ navigation }) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const dispatch = useDispatch();
+    const handleLogin = async () => {
+        if (!email || !password) {
+            setError('Completa todos los campos');
+            return;
+        }
 
-const handleLogin = async () => {
-  if (!email || !password) {
-    Alert.alert('Error', 'Completa todos los campos');
-    return;
-  }
+        try {
+            const response = await fetch('https://gestiona662-backend.vercel.app/v1/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
 
-  try {
-    const response = await fetch('https://gestiona662-backend.vercel.app/v1/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
+            const data = await response.json();
 
-    const data = await response.json();
-
-    if (response.ok) {
-      Alert.alert('Éxito','Inicio de sesión correcto');
-      // Aquí puedes guardar el token, navegar, etc.
-    } else {
-      Alert.alert('Error', data?.message || 'Credenciales inválidas');
+            if (response.ok) {
+                await SecureStore.setItemAsync("token", data.token);
+                await SecureStore.setItemAsync("isLogged", "true");
+                dispatch(loguear());
+                Alert.alert('Éxito', 'Inicio de sesión correcto');
+                const isLoggedValue = await SecureStore.getItemAsync("isLogged");
+                const tokenValue = await SecureStore.getItemAsync("token");
+                console.log("Is Logged:", isLoggedValue);
+                console.log("Token actual:", tokenValue);
+            } else {
+                setError(data?.message || 'Credenciales inválidas');
+            }
+        } catch (error) {
+            setError('No se pudo conectar con el servidor');
+        }
+    };
+    const handleRegistro = () => {
+        navigation.replace("registro");
     }
-  } catch (error) {
-    console.error('Error en login:', error);
-    Alert.alert('Error', 'No se pudo conectar con el servidor');
-  }
-};
-const handleRegistro = () => {
-    navigation.push("registro")
-  }
-  return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Iniciar Sesión</Text>
+    return (
+        <View style={styles.container}>
+            <Text style={styles.titulo}>Iniciar Sesión</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
+            <TextInput
+                style={styles.input}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+            />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+            />
 
-      <Button title="Iniciar Sesión" onPress={handleLogin} />
-      <Button title="Registrarse" onPress={handleRegistro} />
-    </View>
-  );
+            <Button title="Iniciar Sesión" onPress={handleLogin} />
+            <Button title="Registrarse" onPress={handleRegistro} />
+            {error ? <Text style={styles.error}>{error}</Text> : null}
+        </View>
+    );
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: 'center',
-    marginTop: 100,
-  },
-  titulo: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 15,
-    padding: 10,
-    borderRadius: 5,
-  },
+    container: {
+        padding: 20,
+        justifyContent: 'center',
+        marginTop: 100,
+    },
+    titulo: {
+        fontSize: 24,
+        marginBottom: 20,
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+    input: {
+        borderColor: '#ccc',
+        borderWidth: 1,
+        marginBottom: 15,
+        padding: 10,
+        borderRadius: 5,
+    },
+    error: {
+
+    }
 });

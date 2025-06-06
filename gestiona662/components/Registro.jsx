@@ -1,8 +1,11 @@
-import { StyleSheet, Text, View,TextInput,Button,Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Picker } from '@react-native-picker/picker';
+import { loguear } from '../store/slices/usuarioSlice';
+import * as SecureStore from 'expo-secure-store';
 
-const Registro = ({navigation}) => {
+const Registro = ({ navigation }) => {
     const [name, setName] = useState('');
     const [lastName, setLastName] = useState('');
     const [ci, setCI] = useState('');
@@ -10,37 +13,44 @@ const Registro = ({navigation}) => {
     const [password, setPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [role, setRole] = useState('STAFF');
+    const dispatch = useDispatch();
     const handleSignUp = async () => {
-      if (!email || !password || !name || !lastName || !ci || !phoneNumber || !role) {
-        Alert.alert('Error', 'Completa todos los campos');
-        return;
-      }
-    
-      try {
-        const response = await fetch('https://gestiona662-backend.vercel.app/v1/auth/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({name,lastName,ci,email,password,phoneNumber,role}),
-        });
-    
-        const data = await response.json();
-        console.log(data);
-        if ((response.status === 201)) {
-          Alert.alert('Éxito', 'Se ha registrado el usuario correctamente');
-          // Aquí puedes guardar el token, navegar, etc.
-        } else {
-          Alert.alert('Error', data?.message || 'Credenciales inválidas');
+        if (!email || !password || !name || !lastName || !ci || !phoneNumber || !role) {
+            Alert.alert('Error', 'Completa todos los campos');
+            return;
         }
-      } catch (error) {
-        console.error('Error en registro:', error);
-        Alert.alert('Error', 'No se pudo conectar con el servidor');
-      }
+
+        try {
+            const response = await fetch('https://gestiona662-backend.vercel.app/v1/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, lastName, ci, email, password, phoneNumber, role }),
+            });
+
+            const data = await response.json();
+            console.log(data);
+            if ((response.status === 201)) {
+                await SecureStore.setItemAsync("token", data.token);
+                await SecureStore.setItemAsync("isLogged", "true");
+                dispatch(loguear());
+                Alert.alert('Éxito', 'Se ha registrado el usuario correctamente');
+                const isLoggedValue = await SecureStore.getItemAsync("isLogged");
+                const tokenValue = await SecureStore.getItemAsync("token");
+                console.log("Is Logged:", isLoggedValue);
+                console.log("Token actual:", tokenValue);
+            } else {
+                Alert.alert('Error', data?.message || 'Credenciales inválidas');
+            }
+        } catch (error) {
+            console.error('Error en registro:', error);
+            Alert.alert('Error', 'No se pudo conectar con el servidor');
+        }
     };
     const handleLogin = () => {
-    navigation.push("login")
-  }
+        navigation.replace("login");
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.titulo}>Registro</Text>
