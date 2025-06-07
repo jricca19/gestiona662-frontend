@@ -1,43 +1,67 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Login from './components/Login';
-import Registro from './components/Registro';
 import { NavigationContainer } from '@react-navigation/native';
 import Pila from './routes/Pila';
 import { store } from './store/store';
 import * as SecureStore from 'expo-secure-store';
 import { useState, useEffect } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
+import { loguear, desloguear } from './store/slices/usuarioSlice';
 
-export default function App() {
-  const [isLogged, setIsLogged] = useState(null);
+function AppContent() {
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const verificarSesion = async () => {
       try {
         const isLoggedStorage = await SecureStore.getItemAsync("isLogged");
         if (isLoggedStorage === "true") {
-          setIsLogged(true);
-        }
-        else {
-          setIsLogged(false);
+          // Restaurar perfil de usuario
+          const usuarioStr = await SecureStore.getItemAsync("usuario");
+          if (usuarioStr) {
+            const usuario = JSON.parse(usuarioStr);
+            dispatch(loguear(usuario));
+          } else {
+            // Si no hay datos de usuario en SecureStore, limpiar el estado del store
+            dispatch(desloguear());
+          }
+        } else {
+          // Si no está logueado limpiar el estado del store
+          dispatch(desloguear());
         }
       } catch (error) {
-        console.error("Error al verificar la sesión", error);
-        setIsLogged(false);
+        dispatch(desloguear());
+      } finally {
+        setLoading(false);
       }
     }
     verificarSesion();
-  }, [])
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Cargando...</Text>
+      </View>
+    );
+  }
 
   return (
     <>
-      <Provider store={store}>
-        <StatusBar style="auto" />
-        <NavigationContainer>
-          <Pila />
-        </NavigationContainer>
-      </Provider>
+      <StatusBar style="auto" />
+      <NavigationContainer>
+        <Pila />
+      </NavigationContainer>
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <AppContent />
+    </Provider>
   );
 }
 

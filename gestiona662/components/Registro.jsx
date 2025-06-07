@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Picker } from '@react-native-picker/picker';
 import { loguear } from '../store/slices/usuarioSlice';
@@ -34,12 +34,32 @@ const Registro = ({ navigation }) => {
             if ((response.status === 201)) {
                 await SecureStore.setItemAsync("token", data.token);
                 await SecureStore.setItemAsync("isLogged", "true");
-                dispatch(loguear());
+                // Obtener perfil de usuario
+                const profileResp = await fetch('https://gestiona662-backend.vercel.app/v1/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${data.token}`,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const profile = await profileResp.json();
+                // Guardar perfil en SecureStore y store
+                await SecureStore.setItemAsync("usuario", JSON.stringify({
+                    name: profile.name,
+                    lastName: profile.lastName,
+                    email: profile.email,
+                    role: profile.role,
+                    ci: profile.ci,
+                    phoneNumber: profile.phoneNumber
+                }));
+                dispatch(loguear({
+                    name: profile.name,
+                    lastName: profile.lastName,
+                    email: profile.email,
+                    role: profile.role,
+                    ci: profile.ci,
+                    phoneNumber: profile.phoneNumber
+                }));
                 Alert.alert('Éxito', 'Se ha registrado el usuario correctamente');
-                const isLoggedValue = await SecureStore.getItemAsync("isLogged");
-                const tokenValue = await SecureStore.getItemAsync("token");
-                console.log("Is Logged:", isLoggedValue);
-                console.log("Token actual:", tokenValue);
             } else {
                 Alert.alert('Error', data?.message || 'Credenciales inválidas');
             }
