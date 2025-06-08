@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import Pila from './routes/Pila';
+import Pantallas from './routes/Pantallas';
 import { store } from './store/store';
 import * as SecureStore from 'expo-secure-store';
 import { useState, useEffect } from 'react';
@@ -51,7 +51,7 @@ function AppContent() {
     <>
       <StatusBar style="auto" />
       <NavigationContainer>
-        <Pila />
+        <Pantallas />
       </NavigationContainer>
     </>
   );

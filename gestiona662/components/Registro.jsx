@@ -30,7 +30,6 @@ const Registro = ({ navigation }) => {
             });
 
             const data = await response.json();
-            console.log(data);
             if ((response.status === 201)) {
                 await SecureStore.setItemAsync("token", data.token);
                 await SecureStore.setItemAsync("isLogged", "true");

@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Login from '../components/Login'
 import Registro from '../components/Registro'
@@ -37,7 +36,7 @@ function PilaInicio() {
   );
 }
 
-const Pila = () => {
+const Pantallas = () => {
   const { logueado, role } = useSelector(state => state.usuario);
 
   if (!logueado) return <PilaInicio />;
@@ -45,6 +44,4 @@ const Pila = () => {
   return <PilaDirector />;
 }
 
-export default Pila
-
-const styles = StyleSheet.create({})
+export default Pantallas
