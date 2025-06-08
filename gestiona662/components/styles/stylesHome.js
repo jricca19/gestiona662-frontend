@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-export const stylesHome = StyleSheet.create({
-    container: {
+export const estilosHome = StyleSheet.create({
+    contenedor: {
         flex: 1,
         backgroundColor: '#f7f7f7',
         alignItems: 'center',
     },
-    header: {
+    encabezado: {
         width: '100%',
         backgroundColor: '#009fe3',
         paddingTop: 40,
@@ -15,27 +15,33 @@ export const stylesHome = StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
-    headerText: {
+    textoEncabezado: {
         color: '#fff',
         fontSize: 22,
         fontWeight: 'bold',
     },
-    welcome: {
+    bienvenida: {
         marginTop: 20,
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
     },
-    name: {
+    nombre: {
         fontSize: 18,
         fontWeight: '600',
         textAlign: 'center',
         marginBottom: 20,
     },
-    indicadoresContainer: {
+    contenedorIndicadores: {
         width: '100%',
         alignItems: 'center',
         marginBottom: 20,
+    },
+    indicadorYEtiqueta: {
+        marginVertical: 10,
+        alignItems: 'center',
+        backgroundColor: '#f7f7f7',
+        width: 100,
     },
     indicador: {
         alignItems: 'center',
@@ -45,18 +51,12 @@ export const stylesHome = StyleSheet.create({
         paddingVertical: 10,
         elevation: 1,
     },
-    indicadorylabel: {
-        marginVertical: 10,
-        alignItems: 'center',
-        backgroundColor: '#f7f7f7',
-        width: 100,
-    },
-    indicadorNumero: {
+    numeroIndicador: {
         color: '#009fe3',
         fontWeight: 'bold',
         fontSize: 22,
     },
-    indicadorLabel: {
+    etiquetaIndicador: {
         textAlign: 'center',
         color: '#009fe3',
         fontWeight: '500',
@@ -73,13 +73,13 @@ export const stylesHome = StyleSheet.create({
         marginBottom: 30,
         elevation: 2,
     },
-    botonTexto: {
+    textoBoton: {
         color: '#fff',
         fontWeight: 'bold',
         marginLeft: 8,
         fontSize: 16,
     },
-    escuelaContainer: {
+    contenedorEscuela: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,

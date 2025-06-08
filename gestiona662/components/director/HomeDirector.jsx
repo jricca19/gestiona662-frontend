@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import Menu from '../Menu';
 import { Picker } from '@react-native-picker/picker';
-import { stylesHome } from '../styles/stylesHome';
+import { estilosHome } from '../styles/stylesHome';
 
 const HomeDirector = ({ navigation }) => {
     const { name, lastName } = useSelector(state => state.usuario);
@@ -13,16 +13,16 @@ const HomeDirector = ({ navigation }) => {
     const [escuela, setEscuela] = useState(escuelas[0]);
 
     return (
-        <View style={stylesHome.container}>
+        <View style={estilosHome.contenedor}>
 
-            <View style={stylesHome.header}>
-                <Text style={stylesHome.headerText}>Gestiona 662</Text>
+            <View style={estilosHome.encabezado}>
+                <Text style={estilosHome.textoEncabezado}>Gestiona 662</Text>
             </View>
 
-            <Text style={stylesHome.welcome}>Bienvenido</Text>
-            <Text style={stylesHome.name}>{`${name} ${lastName}`}</Text>
+            <Text style={estilosHome.bienvenida}>Bienvenido</Text>
+            <Text style={estilosHome.nombre}>{`${name} ${lastName}`}</Text>
 
-            <View style={stylesHome.escuelaContainer}>
+            <View style={estilosHome.contenedorEscuela}>
                 <Picker
                     selectedValue={escuela}
                     style={{ flex: 1, height: 56, width: '100%' }}
@@ -33,33 +33,33 @@ const HomeDirector = ({ navigation }) => {
                 </Picker>
             </View>
 
-            <View style={stylesHome.indicadoresContainer}>
-                <View style={stylesHome.indicadorylabel}>
-                    <View style={stylesHome.indicador}>
+            <View style={estilosHome.contenedorIndicadores}>
+                <View style={estilosHome.indicadorYEtiqueta}>
+                    <View style={estilosHome.indicador}>
                         <MaterialIcons name="event-note" size={40} color="#009fe3" />
-                        <Text style={stylesHome.indicadorNumero}>4</Text>
+                        <Text style={estilosHome.numeroIndicador}>4</Text>
                     </View>
-                    <Text style={stylesHome.indicadorLabel}>Publicaciones{"\n"}Activas</Text>
+                    <Text style={estilosHome.etiquetaIndicador}>Publicaciones{"\n"}Activas</Text>
                 </View>
-                <View style={stylesHome.indicadorylabel}>
-                    <View style={stylesHome.indicador}>
+                <View style={estilosHome.indicadorYEtiqueta}>
+                    <View style={estilosHome.indicador}>
                         <MaterialIcons name="warning" size={40} color="#009fe3" />
-                        <Text style={stylesHome.indicadorNumero}>1</Text>
+                        <Text style={estilosHome.numeroIndicador}>1</Text>
                     </View>
-                    <Text style={stylesHome.indicadorLabel}>Próximas a{"\n"}Vencer</Text>
+                    <Text style={estilosHome.etiquetaIndicador}>Próximas a{"\n"}Vencer</Text>
                 </View>
-                <View style={stylesHome.indicadorylabel}>
-                    <View style={stylesHome.indicador}>
+                <View style={estilosHome.indicadorYEtiqueta}>
+                    <View style={estilosHome.indicador}>
                         <MaterialIcons name="pending-actions" size={40} color="#009fe3" />
-                        <Text style={stylesHome.indicadorNumero}>2</Text>
+                        <Text style={estilosHome.numeroIndicador}>2</Text>
                     </View>
-                    <Text style={stylesHome.indicadorLabel}>Selección{"\n"}Pendiente</Text>
+                    <Text style={estilosHome.etiquetaIndicador}>Selección{"\n"}Pendiente</Text>
                 </View>
             </View>
 
-            <TouchableOpacity style={stylesHome.boton}>
+            <TouchableOpacity style={estilosHome.boton}>
                 <MaterialIcons name="post-add" size={24} color="#fff" />
-                <Text style={stylesHome.botonTexto}>Crear Publicación</Text>
+                <Text style={estilosHome.textoBoton}>Crear Publicación</Text>
             </TouchableOpacity>
 
             <Menu navigation={navigation} />
