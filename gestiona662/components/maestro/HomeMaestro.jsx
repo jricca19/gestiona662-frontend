@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
-import Menu from '../Menu';
 import { estilosHome } from '../styles/stylesHome';
 
 const HomeMaestro = ({ navigation }) => {
@@ -46,7 +45,6 @@ const HomeMaestro = ({ navigation }) => {
                 <Text style={estilosHome.textoBoton}>Buscar Publicación</Text>
             </TouchableOpacity>
 
-            <Menu navigation={navigation} />
         </View>
     );
 };

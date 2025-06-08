@@ -3,7 +3,6 @@ import { Ionicons, MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons
 import { useSelector, useDispatch } from 'react-redux';
 import { desloguear } from '../../store/slices/usuarioSlice';
 import * as SecureStore from 'expo-secure-store';
-import Menu from '../Menu';
 import { stylesPerfil } from '../styles/stylesPerfil';
 
 const PerfilMaestro = ({ navigation }) => {
@@ -97,7 +96,6 @@ const PerfilMaestro = ({ navigation }) => {
                     <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
                 </TouchableOpacity>
             </ScrollView>
-            <Menu navigation={navigation} />
         </View>
     );
 };

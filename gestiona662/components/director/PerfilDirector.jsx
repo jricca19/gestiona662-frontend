@@ -4,7 +4,6 @@ import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { desloguear } from '../../store/slices/usuarioSlice';
 import * as SecureStore from 'expo-secure-store';
-import Menu from '../Menu';
 import { stylesPerfil } from '../styles/stylesPerfil';
 
 const PerfilDirector = ({ navigation }) => {
@@ -114,7 +113,6 @@ const PerfilDirector = ({ navigation }) => {
                     <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
                 </TouchableOpacity>
             </ScrollView>
-            <Menu navigation={navigation} />
         </View>
     );
 };

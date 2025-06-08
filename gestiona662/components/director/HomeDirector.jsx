@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
-import Menu from '../Menu';
 import { Picker } from '@react-native-picker/picker';
 import { estilosHome } from '../styles/stylesHome';
 
@@ -62,7 +61,6 @@ const HomeDirector = ({ navigation }) => {
                 <Text style={estilosHome.textoBoton}>Crear Publicación</Text>
             </TouchableOpacity>
 
-            <Menu navigation={navigation} />
         </View>
     );
 };
