@@ -1,0 +1,120 @@
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { desloguear } from '../../store/slices/usuarioSlice';
+import * as SecureStore from 'expo-secure-store';
+import { stylesPerfil } from '../styles/stylesPerfil';
+
+const PerfilDirector = ({ navigation }) => {
+    const usuario = useSelector(state => state.usuario);
+    const dispatch = useDispatch();
+
+    // Estado para escuelas (simulado, deberías traerlo de tu backend)
+    const [escuelas, setEscuelas] = useState(['335']);
+    const [nuevaEscuela, setNuevaEscuela] = useState('');
+
+    const handleLogout = async () => {
+        await SecureStore.deleteItemAsync("token");
+        await SecureStore.deleteItemAsync("isLogged");
+        await SecureStore.deleteItemAsync("usuario");
+        dispatch(desloguear());
+    };
+
+    const handleAgregarEscuela = () => {
+        if (nuevaEscuela && !escuelas.includes(nuevaEscuela)) {
+            setEscuelas([...escuelas, nuevaEscuela]);
+            setNuevaEscuela('');
+        }
+    };
+
+    const handleEliminarEscuela = (codigo) => {
+        setEscuelas(escuelas.filter(e => e !== codigo));
+    };
+
+    return (
+        <View style={stylesPerfil.contenedor}>
+            {/* Header */}
+            <View style={stylesPerfil.encabezado}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={stylesPerfil.botonAtras}>
+                    <Ionicons name="arrow-back" size={28} color="#fff" />
+                </TouchableOpacity>
+                <Text style={stylesPerfil.textoEncabezado}>Perfil</Text>
+            </View>
+            <ScrollView contentContainerStyle={stylesPerfil.contenidoScroll}>
+                {/* Foto y nombre */}
+                <View style={stylesPerfil.avatarContainer}>
+                    <View style={stylesPerfil.avatar}>
+                        <Ionicons name="person" size={60} color="#009fe3" />
+                    </View>
+                    <View>
+                        <Text style={stylesPerfil.nombre}>{usuario.name} {usuario.lastName}</Text>
+                        <Text style={stylesPerfil.rol}>Director</Text>
+                    </View>
+                </View>
+
+                {/* Datos */}
+                <View>
+                    <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
+                    <View style={stylesPerfil.datosSeccion}>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="email" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="phone" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59892654987'}</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="badge" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>{usuario.ci || '49088546'}</Text>
+                        </View>
+                    </View>
+                </View>
+
+                {/* Botón Editar Datos */}
+                <TouchableOpacity style={stylesPerfil.botonEditar}>
+                    <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
+                </TouchableOpacity>
+
+                {/* Escuelas */}
+                <Text style={stylesPerfil.tituloSeccion}>Tus Escuelas</Text>
+                <View style={stylesPerfil.escuelasContainer}>
+                    <View style={stylesPerfil.filaEscuelaInput}>
+                        <TextInput
+                            style={stylesPerfil.inputEscuela}
+                            value={nuevaEscuela}
+                            onChangeText={setNuevaEscuela}
+                            placeholder="Código"
+                            keyboardType="numeric"
+                        />
+                        <TouchableOpacity onPress={handleAgregarEscuela} style={stylesPerfil.botonIcono}>
+                            <MaterialIcons name="add" size={24} color="#009fe3" />
+                        </TouchableOpacity>
+                    </View>
+                    {escuelas.map((codigo, idx) => (
+                        <View key={codigo} style={stylesPerfil.filaEscuela}>
+                            <Text style={stylesPerfil.codigoEscuela}>{codigo}</Text>
+                            <TouchableOpacity onPress={() => handleEliminarEscuela(codigo)} style={stylesPerfil.botonIcono}>
+                                <MaterialIcons name="delete" size={22} color="#009fe3" />
+                            </TouchableOpacity>
+                        </View>
+                    ))}
+                </View>
+
+                {/* Calificación */}
+                <View style={stylesPerfil.filaCalificacion}>
+                    <FontAwesome name="star" size={20} color="#009fe3" style={stylesPerfil.icono} />
+                    <Text style={stylesPerfil.textoCalificacion}>4.9</Text>
+                </View>
+
+                {/* Cerrar sesión */}
+                <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
+                    <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
+                </TouchableOpacity>
+            </ScrollView>
+        </View>
+    );
+};
+
+export default PerfilDirector;

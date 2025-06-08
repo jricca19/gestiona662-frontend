@@ -1,0 +1,96 @@
+import { StyleSheet } from 'react-native';
+
+export const estilosHome = StyleSheet.create({
+    contenedor: {
+        flex: 1,
+        backgroundColor: '#f7f7f7',
+        alignItems: 'center',
+    },
+    encabezado: {
+        width: '100%',
+        backgroundColor: '#009fe3',
+        paddingTop: 40,
+        paddingBottom: 10,
+        alignItems: 'center',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+    },
+    textoEncabezado: {
+        color: '#fff',
+        fontSize: 22,
+        fontWeight: 'bold',
+    },
+    bienvenida: {
+        marginTop: 20,
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    nombre: {
+        fontSize: 18,
+        fontWeight: '600',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    contenedorIndicadores: {
+        width: '100%',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    indicadorYEtiqueta: {
+        marginVertical: 10,
+        alignItems: 'center',
+        backgroundColor: '#f7f7f7',
+        width: 100,
+    },
+    indicador: {
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 50,
+        width: 100,
+        paddingVertical: 10,
+        elevation: 1,
+    },
+    numeroIndicador: {
+        color: '#009fe3',
+        fontWeight: 'bold',
+        fontSize: 22,
+    },
+    etiquetaIndicador: {
+        textAlign: 'center',
+        color: '#009fe3',
+        fontWeight: '500',
+        fontSize: 14,
+    },
+    boton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#009fe3',
+        borderRadius: 8,
+        paddingVertical: 12,
+        paddingHorizontal: 30,
+        marginTop: 10,
+        marginBottom: 30,
+        elevation: 2,
+    },
+    textoBoton: {
+        color: '#fff',
+        fontWeight: 'bold',
+        marginLeft: 8,
+        fontSize: 16,
+    },
+    contenedorEscuela: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+        backgroundColor: '#fff',
+        borderRadius: 6,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        width: 200,
+        height: 56,
+        alignSelf: 'center',
+        overflow: 'hidden'
+    },
+});
