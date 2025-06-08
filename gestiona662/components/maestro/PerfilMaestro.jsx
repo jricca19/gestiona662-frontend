@@ -37,57 +37,61 @@ const PerfilMaestro = ({ navigation }) => {
                     </View>
                 </View>
                 {/* Datos */}
-                <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
-                <View style={stylesPerfil.datosSeccion}>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="email" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="phone" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59800000000'}</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="badge" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>{usuario.ci || '12345678'}</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <Entypo name="location-pin" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>Calle 1234</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="event" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>10/05/2024</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>90</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="verified-user" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>Efectivo</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="health-and-safety" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>Vigente</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="description" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>20/06/2025</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="schedule" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>Tarde</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <FontAwesome name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>4.9</Text>
+                <View>
+                    <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
+                    <View style={stylesPerfil.datosSeccion}>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="email" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="phone" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59800000000'}</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="badge" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>{usuario.ci || '12345678'}</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <Entypo name="location-pin" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>Calle 1234</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="event" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>10/05/2024</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>90</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="verified-user" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>Efectivo</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="health-and-safety" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>Vigente</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="description" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>20/06/2025</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="schedule" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>Tarde</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <FontAwesome name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>4.9</Text>
+                        </View>
                     </View>
                 </View>
+
                 {/* Botón Editar Datos */}
                 <TouchableOpacity style={stylesPerfil.botonEditar}>
                     <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
                 </TouchableOpacity>
+
                 {/* Cerrar sesión */}
                 <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
                     <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>

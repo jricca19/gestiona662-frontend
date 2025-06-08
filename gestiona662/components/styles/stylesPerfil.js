@@ -25,8 +25,10 @@ export const stylesPerfil = StyleSheet.create({
         fontWeight: 'bold',
     },
     contenidoScroll: {
-        padding: 20,
-        paddingBottom: 40,
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 60,
+        gap: 15,
     },
     avatarContainer: {
         flexDirection: 'row',

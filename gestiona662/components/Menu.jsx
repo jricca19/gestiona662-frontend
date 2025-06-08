@@ -5,8 +5,11 @@ import { useSelector } from 'react-redux';
 const Menu = ({ navigation }) => {
     const usuario = useSelector(state => state.usuario);
     const { role } = usuario;
+    const rutaActual = navigation.getState().routes[navigation.getState().index].name;
 
-    const handleNavigate = (screen) => {
+    const handleNavigate = (screen, nombreRuta) => {
+        // Si la pantalla actual es la misma que la que se quiere navegar, no hacer nada
+        if (rutaActual === nombreRuta) return;
         if (role === 'TEACHER') {
             if (screen === 'home') navigation.replace('homeMaestro');
             else if (screen === 'list') navigation.navigate('misPostulaciones');
@@ -19,15 +22,19 @@ const Menu = ({ navigation }) => {
         }
     };
 
+    const rutas = role === 'TEACHER'
+        ? { home: 'homeMaestro', list: 'misPostulaciones', profile: 'perfilMaestro' }
+        : { home: 'homeDirector', list: 'misPublicaciones', profile: 'perfilDirector' };
+
     return (
         <View style={styles.footer}>
-            <TouchableOpacity onPress={() => handleNavigate('home')}>
+            <TouchableOpacity onPress={() => handleNavigate('home', rutas.home)}>
                 <Ionicons name="home" size={28} color="#009fe3" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleNavigate('list')}>
+            <TouchableOpacity onPress={() => handleNavigate('list', rutas.list)}>
                 <Ionicons name="list-outline" size={28} color="#009fe3" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleNavigate('profile')}>
+            <TouchableOpacity onPress={() => handleNavigate('profile', rutas.profile)}>
                 <Ionicons name="person-circle-outline" size={28} color="#009fe3" />
             </TouchableOpacity>
         </View>
@@ -44,7 +51,11 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
         position: 'absolute',
+        left: 0,
+        right: 0,
         bottom: 0,
+        elevation: 10,
+        zIndex: 100,
     },
 });
 

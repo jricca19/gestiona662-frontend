@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { desloguear } from '../../store/slices/usuarioSlice';
 import * as SecureStore from 'expo-secure-store';
+import Menu from '../Menu';
 import { stylesPerfil } from '../styles/stylesPerfil';
 
 const PerfilDirector = ({ navigation }) => {
@@ -52,26 +53,31 @@ const PerfilDirector = ({ navigation }) => {
                         <Text style={stylesPerfil.rol}>Director</Text>
                     </View>
                 </View>
+
                 {/* Datos */}
-                <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
-                <View style={stylesPerfil.datosSeccion}>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="email" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="phone" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59892654987'}</Text>
-                    </View>
-                    <View style={stylesPerfil.filaSeccion}>
-                        <MaterialIcons name="badge" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                        <Text style={stylesPerfil.textoFila}>{usuario.ci || '49088546'}</Text>
+                <View>
+                    <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
+                    <View style={stylesPerfil.datosSeccion}>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="email" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="phone" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59892654987'}</Text>
+                        </View>
+                        <View style={stylesPerfil.filaSeccion}>
+                            <MaterialIcons name="badge" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                            <Text style={stylesPerfil.textoFila}>{usuario.ci || '49088546'}</Text>
+                        </View>
                     </View>
                 </View>
+
                 {/* Botón Editar Datos */}
                 <TouchableOpacity style={stylesPerfil.botonEditar}>
                     <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
                 </TouchableOpacity>
+
                 {/* Escuelas */}
                 <Text style={stylesPerfil.tituloSeccion}>Tus Escuelas</Text>
                 <View style={stylesPerfil.escuelasContainer}>
@@ -96,16 +102,19 @@ const PerfilDirector = ({ navigation }) => {
                         </View>
                     ))}
                 </View>
+
                 {/* Calificación */}
                 <View style={stylesPerfil.filaCalificacion}>
                     <FontAwesome name="star" size={20} color="#009fe3" style={stylesPerfil.icono} />
                     <Text style={stylesPerfil.textoCalificacion}>4.9</Text>
                 </View>
+
                 {/* Cerrar sesión */}
                 <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
                     <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
                 </TouchableOpacity>
             </ScrollView>
+            <Menu navigation={navigation} />
         </View>
     );
 };
