@@ -1,8 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { desloguear } from '../../store/slices/usuarioSlice';
 import * as SecureStore from 'expo-secure-store';
+import Menu from '../Menu';
+import { stylesPerfil } from '../styles/stylesPerfil';
 
 const PerfilMaestro = ({ navigation }) => {
     const usuario = useSelector(state => state.usuario);
@@ -14,188 +16,86 @@ const PerfilMaestro = ({ navigation }) => {
         await SecureStore.deleteItemAsync("usuario");
         dispatch(desloguear());
     };
-
     return (
-        <View style={styles.container}>
+        <View style={stylesPerfil.contenedor}>
             {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+            <View style={stylesPerfil.encabezado}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={stylesPerfil.botonAtras}>
                     <Ionicons name="arrow-back" size={28} color="#fff" />
                 </TouchableOpacity>
-                <Text style={styles.headerText}>Perfil</Text>
+                <Text style={stylesPerfil.textoEncabezado}>Perfil</Text>
             </View>
-            <ScrollView contentContainerStyle={styles.scrollContent}>
+            <ScrollView contentContainerStyle={stylesPerfil.contenidoScroll}>
                 {/* Foto y nombre */}
-                <View style={styles.avatarContainer}>
-                    <View style={styles.avatar}>
+                <View style={stylesPerfil.avatarContainer}>
+                    <View style={stylesPerfil.avatar}>
                         <Ionicons name="person" size={60} color="#009fe3" />
                     </View>
                     <View>
-                        <Text style={styles.nombre}>{usuario.name} {usuario.lastName}</Text>
-                        <Text style={styles.rol}>Maestra</Text>
+                        <Text style={stylesPerfil.nombre}>{usuario.name} {usuario.lastName}</Text>
+                        <Text style={stylesPerfil.rol}>Maestra</Text>
                     </View>
                 </View>
                 {/* Datos */}
-                <Text style={styles.sectionTitle}>Tus Datos</Text>
-                <View style={styles.datosContainer}>
-                    <View style={styles.datoRow}>
-                        <MaterialIcons name="email" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>{usuario.email || 'correo@dominio.com'}</Text>
+                <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
+                <View style={stylesPerfil.datosSeccion}>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <MaterialIcons name="email" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <MaterialIcons name="phone" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>{usuario.phoneNumber || '+59892654987'}</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <MaterialIcons name="phone" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59800000000'}</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <MaterialIcons name="badge" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>{usuario.ci || '49088546'}</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <MaterialIcons name="badge" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>{usuario.ci || '12345678'}</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <Entypo name="location-pin" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>Calle 1234</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <Entypo name="location-pin" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>Calle 1234</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <MaterialIcons name="event" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>10/05/2024</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <MaterialIcons name="event" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>10/05/2024</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <MaterialIcons name="star" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>90</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <MaterialIcons name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>90</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <MaterialIcons name="verified-user" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>Efectivo</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <MaterialIcons name="verified-user" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>Efectivo</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <MaterialIcons name="health-and-safety" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>Vigente</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <MaterialIcons name="health-and-safety" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>Vigente</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <MaterialIcons name="description" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>20/06/2025</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <MaterialIcons name="description" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>20/06/2025</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <MaterialIcons name="schedule" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>Tarde</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <MaterialIcons name="schedule" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>Tarde</Text>
                     </View>
-                    <View style={styles.datoRow}>
-                        <FontAwesome name="star" size={18} color="#009fe3" style={styles.icon} />
-                        <Text style={styles.datoText}>4.9</Text>
+                    <View style={stylesPerfil.filaSeccion}>
+                        <FontAwesome name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                        <Text style={stylesPerfil.textoFila}>4.9</Text>
                     </View>
                 </View>
                 {/* Botón Editar Datos */}
-                <TouchableOpacity style={styles.editBtn}>
-                    <Text style={styles.editBtnText}>Editar Datos</Text>
+                <TouchableOpacity style={stylesPerfil.botonEditar}>
+                    <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
                 </TouchableOpacity>
                 {/* Cerrar sesión */}
-                <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-                    <Text style={styles.logoutText}>Cerrar Sesión</Text>
+                <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
+                    <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
                 </TouchableOpacity>
             </ScrollView>
+            <Menu navigation={navigation} />
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#f7f7f7',
-    },
-    header: {
-        width: '100%',
-        backgroundColor: '#009fe3',
-        paddingTop: 40,
-        paddingBottom: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-    },
-    backBtn: {
-        marginLeft: 10,
-        marginRight: 10,
-    },
-    headerText: {
-        color: '#fff',
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
-    scrollContent: {
-        padding: 20,
-        paddingBottom: 40,
-    },
-    avatarContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    avatar: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: '#e0f2fb',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 15,
-    },
-    nombre: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    rol: {
-        fontSize: 15,
-        color: '#009fe3',
-        fontWeight: '600',
-    },
-    sectionTitle: {
-        color: '#009fe3',
-        fontWeight: 'bold',
-        fontSize: 16,
-        marginTop: 10,
-        marginBottom: 8,
-    },
-    datosContainer: {
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        padding: 15,
-        marginBottom: 15,
-        elevation: 1,
-    },
-    datoRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 7,
-    },
-    icon: {
-        marginRight: 8,
-    },
-    datoText: {
-        fontSize: 15,
-        color: '#333',
-    },
-    editBtn: {
-        backgroundColor: '#009fe3',
-        borderRadius: 8,
-        paddingVertical: 12,
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    editBtnText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    logoutBtn: {
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    logoutText: {
-        color: '#009fe3',
-        fontWeight: 'bold',
-        fontSize: 16,
-        textDecorationLine: 'underline',
-    },
-});
 
 export default PerfilMaestro;

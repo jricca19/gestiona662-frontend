@@ -35,3 +35,17 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# logs
+*.log
+
+# editor directories and files
+.vscode/
+.idea/
+
+# pnpm & bun
+pnpm-lock.yaml
+bun.lockb
+
+# iOS Pods (si usas eject)
+ios/Pods/

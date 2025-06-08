@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 
 const Menu = ({ navigation }) => {
     const usuario = useSelector(state => state.usuario);
-    console.log('Usuario en Menu:', usuario);
     const { role } = usuario;
 
     const handleNavigate = (screen) => {

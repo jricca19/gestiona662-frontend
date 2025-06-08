@@ -59,7 +59,8 @@ const Login = ({ navigation }) => {
                 setError(data?.message || 'Credenciales inválidas');
             }
         } catch (error) {
-            setError('No se pudo conectar con el servidor');
+            setError('No se pudo conectar con el servidor', error);
+            console.error('Error en login:', error);
         }
     };
     const handleRegistro = () => {
