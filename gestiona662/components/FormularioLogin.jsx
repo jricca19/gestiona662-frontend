@@ -1,14 +1,19 @@
-import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button, Alert, Image } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import { loguear } from '../store/slices/usuarioSlice';
+import { stylesLogin } from './styles/stylesLogin';
 
 const schema = yup.object().shape({
   email: yup.string().email('Email inválido').required('El email es obligatorio'),
-  password: yup.string().min(8, 'Mínimo 8 caracteres').required('La contraseña es obligatoria'),
+  password: yup
+    .string()
+    .min(8, 'Mínimo 8 caracteres')
+    .max(20, 'Máximo 20 caracteres')
+    .required('La contraseña es obligatoria'),
 });
 
 const FormularioLogin = ({ navigation }) => {
@@ -76,15 +81,19 @@ const FormularioLogin = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Iniciar Sesión</Text>
-
+    <View style={stylesLogin.container}>
+      <Image
+        source={require('../assets/logo-login.png')}
+        style={stylesLogin.logo}
+      />
+      <Text style={stylesLogin.titulo}>Bienvenido a Gestiona662</Text>
+      <Text style={stylesLogin.subtitulo}>Conectamos escuelas con maestros de forma rápida y segura</Text>
       <Controller
         control={control}
         name="email"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={styles.input}
+            style={stylesLogin.input}
             placeholder="Email"
             keyboardType="email-address"
             value={value}
@@ -92,14 +101,14 @@ const FormularioLogin = ({ navigation }) => {
           />
         )}
       />
-      {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+      {errors.email && <Text style={stylesLogin.error}>{errors.email.message}</Text>}
 
       <Controller
         control={control}
         name="password"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={styles.input}
+            style={stylesLogin.input}
             placeholder="Contraseña"
             secureTextEntry
             value={value}
@@ -108,36 +117,17 @@ const FormularioLogin = ({ navigation }) => {
         )}
       />
       {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
-
-      <Button title="Iniciar Sesión" onPress={handleSubmit(onSubmit)} />
-      <Button title="Registrarse" onPress={irARegistro} />
+      <TouchableOpacity style={stylesLogin.botonRecuperar}>
+        <Text style={stylesLogin.textoBotonRecuperar}>¿Olvidaste tu contraseña?</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={stylesLogin.botonIniciarSesion} onPress={handleSubmit(onSubmit)}>
+        <Text style={stylesLogin.textoBotonIniciarSesión}>Iniciar sesión</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={stylesLogin.botonRegistrarse} onPress={irARegistro}>
+        <Text style={stylesLogin.textoBotonRegistrarse}>Registrarse</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 export default FormularioLogin;
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: 'center',
-    marginTop: 100,
-  },
-  titulo: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 15,
-    padding: 10,
-    borderRadius: 5,
-  },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-  }
-});

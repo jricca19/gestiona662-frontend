@@ -8,11 +8,23 @@ import * as SecureStore from 'expo-secure-store';
 import { loguear } from '../store/slices/usuarioSlice';
 
 const schema = yup.object().shape({
-  name: yup.string().required('El nombre es obligatorio'),
-  lastName: yup.string().required('El apellido es obligatorio'),
+  name: yup
+  .string()
+  .required('El nombre es obligatorio')
+  .min(3, 'El nombre debe tener al menos 3 caracteres')
+  .max(20, 'El nombre no puede tener más de 20 caracteres'),
+  lastName: yup
+  .string()
+  .required('El nombre es obligatorio')
+  .min(3, 'El nombre debe tener al menos 3 caracteres')
+  .max(20, 'El nombre no puede tener más de 20 caracteres'),
   ci: yup.string().required('La cédula es obligatoria'),
   email: yup.string().email('Email inválido').required('El email es obligatorio'),
-  password: yup.string().min(8, 'Mínimo 8 caracteres').required('La contraseña es obligatoria'),
+  password: yup
+  .string()
+  .min(8, 'Mínimo 8 caracteres')
+  .max(20,'Máximo 20 caracteres')
+  .required('La contraseña es obligatoria'),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Las contraseñas no coinciden')
