@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert,TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -6,31 +6,36 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import { loguear } from '../store/slices/usuarioSlice';
+import { stylesRegistro } from './styles/stylesRegistro';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const schema = yup.object().shape({
   name: yup
-  .string()
-  .required('El nombre es obligatorio')
-  .min(3, 'El nombre debe tener al menos 3 caracteres')
-  .max(20, 'El nombre no puede tener más de 20 caracteres'),
+    .string()
+    .required('El nombre es obligatorio')
+    .min(3, 'El nombre debe tener al menos 3 caracteres')
+    .max(20, 'El nombre no puede tener más de 20 caracteres'),
   lastName: yup
-  .string()
-  .required('El nombre es obligatorio')
-  .min(3, 'El nombre debe tener al menos 3 caracteres')
-  .max(20, 'El nombre no puede tener más de 20 caracteres'),
+    .string()
+    .required('El nombre es obligatorio')
+    .min(3, 'El nombre debe tener al menos 3 caracteres')
+    .max(20, 'El nombre no puede tener más de 20 caracteres'),
   ci: yup.string().required('La cédula es obligatoria'),
   email: yup.string().email('Email inválido').required('El email es obligatorio'),
   password: yup
-  .string()
-  .min(8, 'Mínimo 8 caracteres')
-  .max(20,'Máximo 20 caracteres')
-  .required('La contraseña es obligatoria'),
+    .string()
+    .min(8, 'Mínimo 8 caracteres')
+    .max(20, 'Máximo 20 caracteres')
+    .required('La contraseña es obligatoria'),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Las contraseñas no coinciden')
     .required('Debes confirmar la contraseña'),
   phoneNumber: yup.string().required('El teléfono es obligatorio'),
   role: yup.string().oneOf(['STAFF', 'TEACHER'], 'Rol inválido').required(),
+  aceptarTerminos: yup
+    .bool()
+    .oneOf([true], 'Debes aceptar los términos y condiciones')
 });
 
 const FormularioRegistro = ({ navigation }) => {
@@ -47,6 +52,7 @@ const FormularioRegistro = ({ navigation }) => {
       confirmPassword: '',
       phoneNumber: '',
       role: 'STAFF',
+      aceptarTerminos: false
     },
   });
 
@@ -99,54 +105,58 @@ const FormularioRegistro = ({ navigation }) => {
 
   return (
     <View>
+      <View style={stylesRegistro.encabezado}>
+        <Text style={stylesRegistro.textoEncabezado}>Registro</Text>
+      </View>
+      <Text style={stylesRegistro.titulo}>Tus datos</Text>
       <Controller
         control={control}
         name="name"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={styles.input}
+            style={stylesRegistro.input}
             placeholder="Nombre"
             value={value}
             onChangeText={onChange}
           />
         )}
       />
-      {errors.name && <Text style={styles.error}>{errors.name.message}</Text>}
+      {errors.name && <Text style={stylesRegistro.error}>{errors.name.message}</Text>}
 
       <Controller
         control={control}
         name="lastName"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={styles.input}
+            style={stylesRegistro.input}
             placeholder="Apellido"
             value={value}
             onChangeText={onChange}
           />
         )}
       />
-      {errors.lastName && <Text style={styles.error}>{errors.lastName.message}</Text>}
+      {errors.lastName && <Text style={stylesRegistro.error}>{errors.lastName.message}</Text>}
 
       <Controller
         control={control}
         name="ci"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={styles.input}
+            style={stylesRegistro.input}
             placeholder="C.I"
             value={value}
             onChangeText={onChange}
           />
         )}
       />
-      {errors.ci && <Text style={styles.error}>{errors.ci.message}</Text>}
+      {errors.ci && <Text style={stylesRegistro.error}>{errors.ci.message}</Text>}
 
       <Controller
         control={control}
         name="email"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={styles.input}
+            style={stylesRegistro.input}
             placeholder="Email"
             keyboardType="email-address"
             value={value}
@@ -154,14 +164,14 @@ const FormularioRegistro = ({ navigation }) => {
           />
         )}
       />
-      {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+      {errors.email && <Text style={stylesRegistro.error}>{errors.email.message}</Text>}
 
       <Controller
         control={control}
         name="password"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={styles.input}
+            style={stylesRegistro.input}
             placeholder="Contraseña"
             secureTextEntry
             value={value}
@@ -169,14 +179,14 @@ const FormularioRegistro = ({ navigation }) => {
           />
         )}
       />
-      {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
+      {errors.password && <Text style={stylesRegistro.error}>{errors.password.message}</Text>}
 
       <Controller
         control={control}
         name="confirmPassword"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={styles.input}
+            style={stylesRegistro.input}
             placeholder="Confirmar Contraseña"
             secureTextEntry
             value={value}
@@ -184,14 +194,14 @@ const FormularioRegistro = ({ navigation }) => {
           />
         )}
       />
-      {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword.message}</Text>}
+      {errors.confirmPassword && <Text style={stylesRegistro.error}>{errors.confirmPassword.message}</Text>}
 
       <Controller
         control={control}
         name="phoneNumber"
         render={({ field: { onChange, value } }) => (
           <TextInput
-            style={styles.input}
+            style={stylesRegistro.input}
             placeholder="Número de teléfono"
             keyboardType="phone-pad"
             value={value}
@@ -199,9 +209,9 @@ const FormularioRegistro = ({ navigation }) => {
           />
         )}
       />
-      {errors.phoneNumber && <Text style={styles.error}>{errors.phoneNumber.message}</Text>}
+      {errors.phoneNumber && <Text style={stylesRegistro.error}>{errors.phoneNumber.message}</Text>}
 
-      <Text style={styles.label}>Rol</Text>
+      <Text style={stylesRegistro.label}>Rol</Text>
       <Controller
         control={control}
         name="role"
@@ -209,40 +219,44 @@ const FormularioRegistro = ({ navigation }) => {
           <Picker
             selectedValue={value}
             onValueChange={onChange}
-            style={styles.picker}
+            style={stylesRegistro.picker}
           >
             <Picker.Item label="STAFF" value="STAFF" />
             <Picker.Item label="TEACHER" value="TEACHER" />
           </Picker>
         )}
       />
-      {errors.role && <Text style={styles.error}>{errors.role.message}</Text>}
+      {errors.role && <Text style={stylesRegistro.error}>{errors.role.message}</Text>}
 
-      <Button title="Registrar" onPress={handleSubmit(onSubmit)} />
-      <Button title="Ir al login" onPress={() => navigation.replace("login")} />
+        <Controller
+  control={control}
+  name="aceptarTerminos"
+  render={({ field: { onChange, value } }) => (
+    <TouchableOpacity
+      style={stylesRegistro.checkboxContainer}
+      onPress={() => onChange(!value)}
+    >
+      <Ionicons
+        name={value ? 'checkbox-outline' : 'square-outline'}
+        size={24}
+        color="black"
+      />
+      <Text style={stylesRegistro.checkboxLabel}>Acepto los términos y condiciones</Text>
+    </TouchableOpacity>
+  )}
+/>
+{errors.aceptarTerminos && (
+  <Text style={stylesRegistro.error}>{errors.aceptarTerminos.message}</Text>
+)}
+
+      <TouchableOpacity style={stylesRegistro.botonRegistrarse} onPress={handleSubmit(onSubmit)}>
+              <Text style={stylesRegistro.textoBotonRegistrarse}>Registrarse</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={stylesRegistro.botonRegistrarse} onPress={() => navigation.replace("login")}>
+              <Text style={stylesRegistro.textoBotonRegistrarse}>Ir al login</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 export default FormularioRegistro;
-
-const styles = StyleSheet.create({
-  input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 5,
-  },
-  picker: {
-    marginBottom: 10,
-  },
-  label: {
-    marginBottom: 5,
-    fontWeight: 'bold',
-  },
-  error: {
-    color: 'red',
-    marginBottom: 5,
-  },
-});
