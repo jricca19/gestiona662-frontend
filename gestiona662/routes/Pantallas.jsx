@@ -61,8 +61,8 @@ function DirectorTabs() {
 function PilaInicio() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="login" component={Login} />
-      <Stack.Screen name="registro" component={Registro} />
+      <Stack.Screen name="login" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="registro" component={Registro} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
