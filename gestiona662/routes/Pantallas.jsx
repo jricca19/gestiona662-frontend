@@ -8,6 +8,7 @@ import PerfilMaestro from '../components/maestro/PerfilMaestro'
 import PerfilDirector from '../components/director/PerfilDirector'
 import PostulacionesMaestro  from '../components/maestro/PostulacionesMaestro'
 import PublicacionesDirector from '../components/director/PublicacionesDirector'
+import Publicaciones from '../components/maestro/Publicaciones'
 import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
 import { Dimensions } from 'react-native'
@@ -77,11 +78,20 @@ function PilaInicio() {
   );
 }
 
+function MaestroStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="MaestroTabs" component={MaestroTabs} options={{ headerShown: false }} />
+      <Stack.Screen name="Publicaciones" component={Publicaciones} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}
+
 const Pantallas = () => {
   const { logueado, role } = useSelector(state => state.usuario);
 
   if (!logueado) return <PilaInicio />;
-  if (role === 'TEACHER') return <MaestroTabs />;
+  if (role === 'TEACHER') return <MaestroStack />;
   return <DirectorTabs />;
 }
 
