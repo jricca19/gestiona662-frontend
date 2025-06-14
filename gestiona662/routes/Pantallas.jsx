@@ -10,18 +10,25 @@ import PostulacionesMaestro  from '../components/maestro/PostulacionesMaestro'
 import PublicacionesDirector from '../components/director/PublicacionesDirector'
 import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
+import { Dimensions } from 'react-native'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const { height } = Dimensions.get('window');
+const TAB_BAR_HEIGHT = height * 0.07;
 
 function MaestroTabs() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: '#009fe3',
-        tabBarInactiveTintColor: '#aaa',
-        tabBarStyle: { borderTopLeftRadius: 20, borderTopRightRadius: 20, height: 60 },
+        tabBarActiveTintColor: '#009BDB',
+        tabBarInactiveTintColor: '#333333',
+        tabBarStyle: { 
+          height: TAB_BAR_HEIGHT,
+          backgroundColor: '#FAFAFA',
+        },
         tabBarIcon: ({ color, size }) => {
           if (route.name === 'homeMaestro') return <Ionicons name="home" size={size} color={color} />;
           if (route.name === 'misPostulaciones') return <Ionicons name="list-outline" size={size} color={color} />;
@@ -41,9 +48,12 @@ function DirectorTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: '#009fe3',
-        tabBarInactiveTintColor: '#aaa',
-        tabBarStyle: { borderTopLeftRadius: 20, borderTopRightRadius: 20, height: 60 },
+        tabBarActiveTintColor: '#009BDB',
+        tabBarInactiveTintColor: '#333333',
+        tabBarStyle: { 
+          height: TAB_BAR_HEIGHT,
+          backgroundColor: '#FAFAFA',
+        },
         tabBarIcon: ({ color, size }) => {
           if (route.name === 'homeDirector') return <Ionicons name="home" size={size} color={color} />;
           if (route.name === 'misPublicaciones') return <Ionicons name="list-outline" size={size} color={color} />;

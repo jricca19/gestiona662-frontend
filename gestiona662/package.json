@@ -31,7 +31,8 @@
     "react-native-web": "^0.20.0",
     "react-redux": "^9.2.0",
     "redux-devtools-expo-dev-plugin": "^2.0.0",
-    "yup": "^1.6.1"
+    "yup": "^1.6.1",
+    "react-native-safe-area-context": "5.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

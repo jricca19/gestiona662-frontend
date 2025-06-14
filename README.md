@@ -11,4 +11,4 @@ Instalar Expo CLI a nivel global:    npm install -g expo-cli
 2. Ejecutar desde terminal:
     cd .\gestiona662\
     npm install
-    npx expo start 
+    npx expo start
