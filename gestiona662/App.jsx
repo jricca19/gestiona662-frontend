@@ -7,6 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useState, useEffect } from 'react';
 import { Provider, useDispatch } from 'react-redux';
 import { loguear, desloguear } from './store/slices/usuarioSlice';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 function AppContent() {
   const [loading, setLoading] = useState(true);
@@ -41,19 +42,23 @@ function AppContent() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Cargando...</Text>
-      </View>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Cargando...</Text>
+        </SafeAreaView>
+      </SafeAreaProvider>
     );
   }
 
   return (
-    <>
-      <StatusBar style="auto" />
-      <NavigationContainer>
-        <Pantallas />
-      </NavigationContainer>
-    </>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#009BDB' }} edges={['top', 'bottom']}>
+        <StatusBar style="light" />
+        <NavigationContainer>
+          <Pantallas />
+        </NavigationContainer>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
