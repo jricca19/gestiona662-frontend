@@ -13,8 +13,11 @@ const HomeMaestro = ({ navigation }) => {
             </View>
             <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
                 <View style={estilosHome.contenedor}>
-                    <Text style={estilosHome.bienvenida}>Bienvenid@</Text>
-                    <Text style={estilosHome.nombre}>{`${name} ${lastName}`}</Text>
+
+                    <View style={estilosHome.bienvenida}>
+                        <Text style={estilosHome.bienvenidaContenido}>Bienvenid@</Text>
+                        <Text style={estilosHome.bienvenidaContenido}>{`${name} ${lastName}`}</Text>
+                    </View>
 
                     <View style={estilosHome.contenedorIndicadores}>
                         <View style={estilosHome.filaIndicadores}>

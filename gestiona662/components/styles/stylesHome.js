@@ -4,15 +4,10 @@ import { fuentes, colores, tamanos } from './fuentesyColores'
 const { width, height } = Dimensions.get('window');
 
 export const estilosHome = StyleSheet.create({
-    contenedor: {
-        flex: 1,
-        backgroundColor: colores.terceario,
-        alignItems: 'center',
-    },
     encabezado: {
         width: '100%',
         backgroundColor: colores.primario,
-        paddingVertical:  height * 0.01,
+        paddingVertical: height * 0.01,
         alignItems: 'center',
     },
     textoEncabezado: {
@@ -20,27 +15,39 @@ export const estilosHome = StyleSheet.create({
         fontSize: tamanos.titulo1,
         fontWeight: 'bold',
     },
+    contenedor: {
+        flex: 1,
+        backgroundColor: colores.terceario,
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    },
     bienvenida: {
-        marginTop: height * 0.025,
+        padding: height * 0.025,
+    },
+    bienvenidaContenido: {
         fontSize: tamanos.titulo2,
         fontWeight: 'bold',
         textAlign: 'center',
     },
-    nombre: {
-        fontSize: tamanos.titulo2,
-        fontWeight: '600',
-        textAlign: 'center',
-        marginBottom: height * 0.025,
+    contenedorEscuela: {
+        margin: height * 0.025,
+        backgroundColor: colores.cuarto,
+        borderRadius: width * 0.015,
+        paddingHorizontal: width * 0.025,
+        borderWidth: 1,
+        borderColor: colores.tercearioOscuro,
+        width: width * 0.5,
+        height: height * 0.07,
+        alignSelf: 'center',
     },
     contenedorIndicadores: {
         width: '100%',
         alignItems: 'center',
-        marginVertical: height * 0.05,
     },
     filaIndicadores: {
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         margin: height * 0.012,
         gap: width * 0.15,
     },
@@ -51,11 +58,12 @@ export const estilosHome = StyleSheet.create({
     },
     indicador: {
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: colores.secundarioClaro,
         width: width * 0.25,
-        paddingVertical: height * 0.012,
+        height: width * 0.25,
         elevation: 5,
-        borderRadius: 100,
+        borderRadius: (width * 0.25),
         borderWidth: 2,
         borderColor: colores.primario,
     },
@@ -86,19 +94,5 @@ export const estilosHome = StyleSheet.create({
         fontWeight: 'bold',
         marginLeft: width * 0.02,
         fontSize: tamanos.texto,
-    },
-    contenedorEscuela: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: height * 0.025,
-        backgroundColor: colores.cuarto,
-        borderRadius: width * 0.015,
-        paddingHorizontal: width * 0.025,
-        borderWidth: 1,
-        borderColor: colores.tercearioOscuro,
-        width: width * 0.5,
-        height: height * 0.07,
-        alignSelf: 'center',
-        overflow: 'hidden'
     },
 });
