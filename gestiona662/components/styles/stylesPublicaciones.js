@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native'
 import { colores, tamanos } from './fuentesyColores'
+import { he } from 'date-fns/locale';
 
 const { width, height } = Dimensions.get('window');
 
@@ -89,7 +90,7 @@ export const estilosPublicaciones = StyleSheet.create({
         marginVertical: height * 0.005,
     },
     textoTarjeta: {
-        marginLeft: 8,
+        marginHorizontal: width * 0.02,
         fontSize: tamanos.texto,
         color: colores.quinto,
     },
@@ -105,17 +106,17 @@ export const estilosPublicaciones = StyleSheet.create({
     textoDetalles: {
         color: colores.terceario,
         fontWeight: 'bold',
-        marginLeft: 4,
+        marginLeft: width * 0.03,
         fontSize: tamanos.menu,
     },
     cargando: {
-        marginTop: 32,
+        marginTop: height * 0.2,
         textAlign: 'center',
         fontSize: tamanos.texto,
         color: colores.quinto,
     },
     error: {
-        marginTop: 32,
+        marginTop: height * 0.2,
         textAlign: 'center',
         fontSize: tamanos.texto,
         color: 'red',

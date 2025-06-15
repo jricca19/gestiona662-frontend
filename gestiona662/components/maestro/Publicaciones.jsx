@@ -107,16 +107,18 @@ const Publicaciones = ({ navigation }) => {
                         {fechaFormateada}
                     </Text>
                 </View>
-                <View style={estilosPublicaciones.filaTarjeta}>
+                <View style={[estilosPublicaciones.filaTarjeta, { justifyContent: 'space-between' }]}>
                     <MaterialIcons name="place" size={18} color={colores.primario} />
-                    <Text style={estilosPublicaciones.textoTarjeta}>
-                        {item.schoolId?.departmentId?.name || 'Sin Departamento'}
-                    </Text>
+                    <View style={{ flex: 1 }}>
+                        <Text style={estilosPublicaciones.textoTarjeta}>
+                            {item.schoolId?.departmentId?.name || 'Sin Departamento'}
+                        </Text>
+                    </View>
+                    <TouchableOpacity style={estilosPublicaciones.botonDetalles}>
+                        <Ionicons name="eye-outline" size={18} color="#fff" />
+                        <Text style={estilosPublicaciones.textoDetalles}>Ver Detalles</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={estilosPublicaciones.botonDetalles}>
-                    <Ionicons name="eye-outline" size={18} color="#fff" />
-                    <Text style={estilosPublicaciones.textoDetalles}>Ver Detalles</Text>
-                </TouchableOpacity>
             </View>
         );
     };
