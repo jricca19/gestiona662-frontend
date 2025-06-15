@@ -8,6 +8,9 @@ import PerfilMaestro from '../components/maestro/PerfilMaestro'
 import PerfilDirector from '../components/director/PerfilDirector'
 import PostulacionesMaestro  from '../components/maestro/PostulacionesMaestro'
 import PublicacionesDirector from '../components/director/PublicacionesDirector'
+import Publicaciones from '../components/maestro/Publicaciones'
+import DetallesPublicacion from '../components/maestro/DetallesPublicacion'
+import PostulacionExitosa from '../components/maestro/PostulacionExitosa'
 import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
 import { Dimensions } from 'react-native'
@@ -31,12 +34,14 @@ function MaestroTabs() {
         },
         tabBarIcon: ({ color, size }) => {
           if (route.name === 'homeMaestro') return <Ionicons name="home" size={size} color={color} />;
+          if (route.name === 'publicaciones') return <Ionicons name="search-outline" size={size} color={color} />;
           if (route.name === 'misPostulaciones') return <Ionicons name="list-outline" size={size} color={color} />;
           if (route.name === 'perfilMaestro') return <Ionicons name="person-circle-outline" size={size} color={color} />;
         },
       })}
     >
       <Tab.Screen name="homeMaestro" component={HomeMaestro} options={{ title: 'Inicio' }} />
+      <Tab.Screen name="publicaciones" component={Publicaciones} options={{ title: 'Publicaciones' }} />
       <Tab.Screen name="misPostulaciones" component={PostulacionesMaestro} options={{ title: 'Postulaciones' }} />
       <Tab.Screen name="perfilMaestro" component={PerfilMaestro} options={{ title: 'Perfil' }} />
     </Tab.Navigator>
@@ -77,11 +82,21 @@ function PilaInicio() {
   );
 }
 
+function MaestroStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="maestroTabs" component={MaestroTabs} options={{ headerShown: false }} />
+      <Stack.Screen name="detallesPublicacion" component={DetallesPublicacion} options={{ headerShown: false }} />
+      <Stack.Screen name="postulacionExitosa" component={PostulacionExitosa} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}
+
 const Pantallas = () => {
   const { logueado, role } = useSelector(state => state.usuario);
 
   if (!logueado) return <PilaInicio />;
-  if (role === 'TEACHER') return <MaestroTabs />;
+  if (role === 'TEACHER') return <MaestroStack />;
   return <DirectorTabs />;
 }
 

@@ -13,8 +13,7 @@ export const stylesPerfil = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     botonAtras: {
-        marginLeft: width * 0.04,
-        marginRight: width * 0.04,
+        marginHorizontal: width * 0.04,
     },
     contenedor: {
         flex: 1,
