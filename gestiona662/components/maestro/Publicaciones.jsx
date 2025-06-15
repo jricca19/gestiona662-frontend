@@ -114,7 +114,10 @@ const Publicaciones = ({ navigation }) => {
                             {item.schoolId?.departmentId?.name || 'Sin Departamento'}
                         </Text>
                     </View>
-                    <TouchableOpacity style={estilosPublicaciones.botonDetalles}>
+                    <TouchableOpacity
+                        style={estilosPublicaciones.botonDetalles}
+                        onPress={() => navigation.navigate('detallesPublicacion', { publicacion: item })}
+                    >
                         <Ionicons name="eye-outline" size={18} color="#fff" />
                         <Text style={estilosPublicaciones.textoDetalles}>Ver Detalles</Text>
                     </TouchableOpacity>
