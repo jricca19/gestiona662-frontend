@@ -32,12 +32,14 @@ function MaestroTabs() {
         },
         tabBarIcon: ({ color, size }) => {
           if (route.name === 'homeMaestro') return <Ionicons name="home" size={size} color={color} />;
+          if (route.name === 'publicaciones') return <Ionicons name="search-outline" size={size} color={color} />;
           if (route.name === 'misPostulaciones') return <Ionicons name="list-outline" size={size} color={color} />;
           if (route.name === 'perfilMaestro') return <Ionicons name="person-circle-outline" size={size} color={color} />;
         },
       })}
     >
       <Tab.Screen name="homeMaestro" component={HomeMaestro} options={{ title: 'Inicio' }} />
+      <Tab.Screen name="publicaciones" component={Publicaciones} options={{ title: 'Publicaciones' }} />
       <Tab.Screen name="misPostulaciones" component={PostulacionesMaestro} options={{ title: 'Postulaciones' }} />
       <Tab.Screen name="perfilMaestro" component={PerfilMaestro} options={{ title: 'Perfil' }} />
     </Tab.Navigator>
@@ -81,8 +83,7 @@ function PilaInicio() {
 function MaestroStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="MaestroTabs" component={MaestroTabs} options={{ headerShown: false }} />
-      <Stack.Screen name="Publicaciones" component={Publicaciones} options={{ headerShown: false }} />
+      <Stack.Screen name="maestroTabs" component={MaestroTabs} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

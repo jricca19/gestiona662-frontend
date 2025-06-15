@@ -4,6 +4,8 @@ import * as SecureStore from 'expo-secure-store';
 import { MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 import { colores } from '../styles/fuentesyColores'
 import { estilosPublicaciones } from '../styles/stylesPublicaciones'
+import { format, parseISO } from 'date-fns'
+import { es } from 'date-fns/locale'
 
 const PAGE_SIZE = 4;
 
@@ -65,50 +67,64 @@ const Publicaciones = ({ navigation }) => {
         fetchPublicaciones(1, true).then(() => setRefreshing(false));
     };
 
-    const renderItem = ({ item }) => (
-        <View style={estilosPublicaciones.tarjeta} key={item._id}>
-            <View style={estilosPublicaciones.encabezadoTarjeta}>
-                <Text style={estilosPublicaciones.nombreEscuela}>Escuela Nº{item.schoolId?.slice(-3)}</Text>
-                <View style={estilosPublicaciones.calificacion}>
-                    <FontAwesome name="star" size={20} color="#FFD700" />
-                    <Text style={estilosPublicaciones.textoCalificacion}>{item.rating ?? '4.5'}</Text>
+    const renderItem = ({ item }) => {
+        // Formateo de fechas usando date-fns
+        let fechaFormateada = '';
+        if (item.startDate && item.endDate) {
+            const inicio = parseISO(item.startDate);
+            const fin = parseISO(item.endDate);
+            fechaFormateada =
+                format(inicio, 'dd', { locale: es }) +
+                '-' +
+                format(fin, 'dd MMM yyyy', { locale: es }).toUpperCase();
+        }
+
+        return (
+            <View style={estilosPublicaciones.tarjeta} key={item._id}>
+                <View style={estilosPublicaciones.encabezadoTarjeta}>
+                    <Text style={estilosPublicaciones.nombreEscuela}>Escuela Nº{item.schoolId?.schoolNumber}</Text>
+                    <View style={estilosPublicaciones.calificacion}>
+                        <FontAwesome name="star" size={20} color="#FFD700" />
+                        <Text style={estilosPublicaciones.textoCalificacion}>{item.rating ?? '0'}</Text>
+                    </View>
                 </View>
+                <View style={estilosPublicaciones.filaTarjeta}>
+                    <MaterialIcons name="access-time" size={18} color={colores.primario} />
+                    <View style={{ flexDirection: 'column' }}>
+                        <Text style={estilosPublicaciones.textoTarjeta}>
+                            {item.grade}° - {item.shift === 'MORNING' ? 'Mañana' : item.shift === 'AFTERNOON' ? 'Tarde' : item.shift === 'FULL' ? 'Tiempo Completo' : item.shift}
+                        </Text>
+                        <Text style={estilosPublicaciones.textoTarjeta}>
+                            {item.shift === 'MORNING' && '08:00 a 12:00'}
+                            {item.shift === 'AFTERNOON' && '12:00 a 17:00'}
+                            {item.shift === 'FULL' && '09:00 a 15:00'}
+                        </Text>
+                    </View>
+                </View>
+                <View style={estilosPublicaciones.filaTarjeta}>
+                    <MaterialIcons name="event" size={18} color={colores.primario} />
+                    <Text style={estilosPublicaciones.textoTarjeta}>
+                        {fechaFormateada}
+                    </Text>
+                </View>
+                <View style={estilosPublicaciones.filaTarjeta}>
+                    <MaterialIcons name="place" size={18} color={colores.primario} />
+                    <Text style={estilosPublicaciones.textoTarjeta}>
+                        {item.schoolId?.departmentId?.name || 'Sin Departamento'}
+                    </Text>
+                </View>
+                <TouchableOpacity style={estilosPublicaciones.botonDetalles}>
+                    <Ionicons name="eye-outline" size={18} color="#fff" />
+                    <Text style={estilosPublicaciones.textoDetalles}>Ver Detalles</Text>
+                </TouchableOpacity>
             </View>
-            <View style={estilosPublicaciones.filaTarjeta}>
-                <MaterialIcons name="trending-up" size={18} color={colores.primario} />
-                <Text style={estilosPublicaciones.textoTarjeta}>{item.grade}° - {item.shift === 'MORNING' ? 'Mañana' : item.shift === 'AFTERNOON' ? 'Tarde' : item.shift === 'FULL' ? 'Tiempo Completo' : item.shift}</Text>
-            </View>
-            <View style={estilosPublicaciones.filaTarjeta}>
-                <MaterialIcons name="access-time" size={18} color={colores.primario} />
-                <Text style={estilosPublicaciones.textoTarjeta}>
-                    {item.shift === 'MORNING' && '08:00 a 12:00'}
-                    {item.shift === 'AFTERNOON' && '12:00 a 17:00'}
-                    {item.shift === 'FULL' && '09:00 a 15:00'}
-                </Text>
-            </View>
-            <View style={estilosPublicaciones.filaTarjeta}>
-                <MaterialIcons name="event" size={18} color={colores.primario} />
-                <Text style={estilosPublicaciones.textoTarjeta}>
-                    {item.startDate?.slice(8, 10)}-{item.endDate?.slice(8, 10)} {item.endDate?.slice(5, 8).toUpperCase()} {item.endDate?.slice(0, 4)}
-                </Text>
-            </View>
-            <View style={estilosPublicaciones.filaTarjeta}>
-                <MaterialIcons name="person" size={18} color={colores.primario} />
-                <Text style={estilosPublicaciones.textoTarjeta}>
-                    {item.schoolAddress || 'Calle ...'}
-                </Text>
-            </View>
-            <TouchableOpacity style={estilosPublicaciones.botonDetalles}>
-                <Ionicons name="eye-outline" size={18} color="#fff" />
-                <Text style={estilosPublicaciones.textoDetalles}>Ver Detalles</Text>
-            </TouchableOpacity>
-        </View>
-    );
+        );
+    };
 
     return (
         <View style={{ flex: 1 }}>
             <View style={estilosPublicaciones.encabezado}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity style={estilosPublicaciones.botonAtras} onPress={() => navigation.goBack()}>
                     <Ionicons name="arrow-back" size={28} color="#fff" />
                 </TouchableOpacity>
                 <Text style={estilosPublicaciones.tituloEncabezado}>Búsqueda</Text>
@@ -123,7 +139,19 @@ const Publicaciones = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     {error ? (
-                        <Text style={estilosPublicaciones.error}>{error}</Text>
+                        <View style={{ alignItems: 'center', marginTop: 32 }}>
+                            <Text style={estilosPublicaciones.error}>{error}</Text>
+                            <TouchableOpacity
+                                style={[estilosPublicaciones.botonFiltrar, { marginTop: 16 }]}
+                                onPress={() => {
+                                    setError(null);
+                                    fetchPublicaciones(1, true);
+                                    setPage(1);
+                                }}
+                            >
+                                <Text style={estilosPublicaciones.textoFiltrar}>Reintentar</Text>
+                            </TouchableOpacity>
+                        </View>
                     ) : (
                         <FlatList
                             data={datos}
