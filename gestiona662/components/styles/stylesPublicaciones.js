@@ -3,14 +3,14 @@ import { colores, tamanos } from './fuentesyColores'
 
 const { width, height } = Dimensions.get('window');
 
-export const stylesPublicaciones = StyleSheet.create({
-    container: {
+export const estilosPublicaciones = StyleSheet.create({
+    contenedor: {
         flex: 1,
         width: '90%',
         backgroundColor: colores.terceario,
         paddingTop: 0,
     },
-    header: {
+    encabezado: {
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: colores.primario,
@@ -18,13 +18,13 @@ export const stylesPublicaciones = StyleSheet.create({
         marginBottom: 8,
         justifyContent: 'space-between'
     },
-    headerTitle: {
+    tituloEncabezado: {
         color: '#fff',
         fontSize: tamanos.titulo2,
         fontWeight: 'bold',
         textAlign: 'center',
     },
-    row: {
+    fila: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -36,19 +36,19 @@ export const stylesPublicaciones = StyleSheet.create({
         fontWeight: 'bold',
         color: colores.quinto,
     },
-    filtrarBtn: {
+    botonFiltrar: {
         backgroundColor: colores.primario,
         borderRadius: 12,
         paddingVertical: 4,
         paddingHorizontal: 16,
         elevation: 2,
     },
-    filtrarTxt: {
+    textoFiltrar: {
         color: '#fff',
         fontWeight: 'bold',
         fontSize: tamanos.texto,
     },
-    card: {
+    tarjeta: {
         backgroundColor: colores.secundarioClaro,
         borderRadius: 16,
         padding: 16,
@@ -59,7 +59,7 @@ export const stylesPublicaciones = StyleSheet.create({
         shadowRadius: 4,
         elevation: 3,
     },
-    cardHeader: {
+    encabezadoTarjeta: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -70,29 +70,29 @@ export const stylesPublicaciones = StyleSheet.create({
         fontWeight: 'bold',
         color: colores.primarioOscuro,
     },
-    rating: {
+    calificacion: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 4,
     },
-    ratingTxt: {
+    textoCalificacion: {
         marginLeft: 4,
         fontWeight: 'bold',
         color: colores.quinto,
         fontSize: tamanos.texto,
     },
-    cardRow: {
+    filaTarjeta: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 4,
         gap: 8,
     },
-    cardText: {
+    textoTarjeta: {
         marginLeft: 8,
         fontSize: tamanos.texto,
         color: colores.quinto,
     },
-    detallesBtn: {
+    botonDetalles: {
         flexDirection: 'row',
         alignItems: 'center',
         alignSelf: 'flex-end',
@@ -102,7 +102,7 @@ export const stylesPublicaciones = StyleSheet.create({
         paddingHorizontal: 12,
         marginTop: 8,
     },
-    detallesTxt: {
+    textoDetalles: {
         color: '#fff',
         fontWeight: 'bold',
         marginLeft: 4,
