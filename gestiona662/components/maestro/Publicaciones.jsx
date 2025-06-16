@@ -40,7 +40,7 @@ const Publicaciones = ({ navigation }) => {
                     setDatos(prev => [...prev, ...data.publications]);
                 }
             } else {
-                setError('Error al obtener publicaciones');
+                setError('Error al obtener publicaciones', data.message);
             }
         } catch (err) {
             setError('Error de red o servidor');

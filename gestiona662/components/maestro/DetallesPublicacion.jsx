@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { estilosDetalles } from '../styles/stylesDetalles'
+import { estilosDetalles } from '../styles/stylesDetallesPublicacion'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import * as SecureStore from 'expo-secure-store'
