@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Pantallas from './routes/Pantallas';
 import { store } from './store/store';
@@ -60,6 +60,7 @@ function AppContent() {
     return (
       <SafeAreaProvider>
         <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color="#009BDB" />
           <Text>Cargando...</Text>
         </SafeAreaView>
       </SafeAreaProvider>

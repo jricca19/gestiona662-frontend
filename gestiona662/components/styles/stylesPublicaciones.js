@@ -109,16 +109,20 @@ export const estilosPublicaciones = StyleSheet.create({
         marginLeft: width * 0.03,
         fontSize: tamanos.menu,
     },
-    cargando: {
-        marginTop: height * 0.2,
-        textAlign: 'center',
-        fontSize: tamanos.texto,
-        color: colores.quinto,
-    },
     error: {
         marginTop: height * 0.2,
         textAlign: 'center',
         fontSize: tamanos.texto,
         color: 'red',
+    },
+    spinnerCargando: {
+        marginTop: height * 0.01,
+        alignItems: 'center',
+    },
+    textoFinalLista: {
+        marginTop: height * 0.01,
+        alignItems: 'center',
+        fontSize: tamanos.textoMayor,
+        color: colores.primario,
     }
 });

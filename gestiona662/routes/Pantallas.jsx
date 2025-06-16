@@ -42,7 +42,7 @@ function MaestroTabs() {
     >
       <Tab.Screen name="homeMaestro" component={HomeMaestro} options={{ title: 'Inicio' }} />
       <Tab.Screen name="publicaciones" component={Publicaciones} options={{ title: 'Publicaciones' }} />
-      <Tab.Screen name="misPostulaciones" component={PostulacionesMaestro} options={{ title: 'Postulaciones' }} />
+      <Tab.Screen name="misPostulaciones" component={PostulacionesMaestro} options={{ title: 'Mis Postulaciones' }} />
       <Tab.Screen name="perfilMaestro" component={PerfilMaestro} options={{ title: 'Perfil' }} />
     </Tab.Navigator>
   );

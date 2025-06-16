@@ -164,9 +164,20 @@ const Publicaciones = ({ navigation }) => {
                             keyExtractor={item => item._id}
                             onEndReached={handleLoadMore}
                             onEndReachedThreshold={0.5}
-                            ListFooterComponent={loading && !refreshing ? <ActivityIndicator size="small" color={colores.primario} /> : null}
+                            ListFooterComponent={
+                                loading && !refreshing ? (
+                                    <View style={estilosPublicaciones.spinnerCargando}>
+                                        <ActivityIndicator size="large" color={colores.primario} />
+                                    </View>
+                                ) : datos.length >= total && total > 0 ? (
+                                    <View style={estilosPublicaciones.spinnerCargando}>
+                                        <Text style={estilosPublicaciones.textoFinalLista}>No hay más publicaciones para mostrar</Text>
+                                    </View>
+                                ) : null
+                            }
                             refreshing={refreshing}
                             onRefresh={handleRefresh}
+                            contentContainerStyle={{ paddingBottom: 50 }}
                         />
                     )}
                 </View>
