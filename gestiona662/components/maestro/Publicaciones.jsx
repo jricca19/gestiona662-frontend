@@ -90,16 +90,13 @@ const Publicaciones = ({ navigation }) => {
                 </View>
                 <View style={estilosPublicaciones.filaTarjeta}>
                     <MaterialIcons name="access-time" size={18} color={colores.primario} />
-                    <View style={{ flexDirection: 'column' }}>
-                        <Text style={estilosPublicaciones.textoTarjeta}>
-                            {item.grade}° - {item.shift === 'MORNING' ? 'Mañana' : item.shift === 'AFTERNOON' ? 'Tarde' : item.shift === 'FULL' ? 'Tiempo Completo' : item.shift}
-                        </Text>
-                        <Text style={estilosPublicaciones.textoTarjeta}>
-                            {item.shift === 'MORNING' && '08:00 a 12:00'}
-                            {item.shift === 'AFTERNOON' && '12:00 a 17:00'}
-                            {item.shift === 'FULL' && '09:00 a 15:00'}
-                        </Text>
-                    </View>
+                    <Text style={estilosPublicaciones.textoTarjeta}>
+                        {item.grade}° - 
+                        {item.shift === 'MORNING' ? ' Mañana - ' : item.shift === 'AFTERNOON' ? ' Tarde - ' : item.shift === 'FULL' ? ' Tiempo Completo - ' : ` ${item.shift}`}
+                        {item.shift === 'MORNING' && '08:00 a 12:00'}
+                        {item.shift === 'AFTERNOON' && '12:00 a 17:00'}
+                        {item.shift === 'FULL' && '09:00 a 15:00'}
+                    </Text>
                 </View>
                 <View style={estilosPublicaciones.filaTarjeta}>
                     <MaterialIcons name="event" size={18} color={colores.primario} />
@@ -129,7 +126,7 @@ const Publicaciones = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }}>
             <View style={estilosPublicaciones.encabezado}>
-                <TouchableOpacity style={estilosPublicaciones.botonAtras} onPress={() => navigation.goBack()}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Ionicons name="arrow-back" size={28} color="#fff" />
                 </TouchableOpacity>
                 <Text style={estilosPublicaciones.tituloEncabezado}>Búsqueda</Text>

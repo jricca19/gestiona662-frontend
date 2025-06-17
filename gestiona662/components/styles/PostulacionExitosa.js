@@ -1,87 +1,67 @@
 import { StyleSheet, Dimensions } from 'react-native'
+import { colores, tamanos } from './fuentesyColores'
 const { width, height } = Dimensions.get('window')
 
 export const estilosPostulacionExitosa = StyleSheet.create({
     contenedor: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: colores.terceario,
         alignItems: 'center',
         paddingTop: 0,
     },
     encabezado: {
         width: '100%',
-        backgroundColor: '#009BDB',
-        paddingVertical: height * 0.035,
-        alignItems: 'center',
-        marginBottom: 16,
-    },
-    tituloEncabezado: {
-        color: '#fff',
-        fontSize: 26,
-        fontWeight: 'bold',
-    },
-    iconoContainer: {
-        marginVertical: 16,
+        backgroundColor: colores.primario,
+        paddingVertical: height * 0.01,
+        paddingHorizontal: width * 0.04,
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    mensajePrincipal: {
-        fontSize: 18,
+    tituloEncabezado: {
+        color: colores.terceario,
+        fontSize: tamanos.titulo1,
+        fontWeight: 'bold',
+    },
+    iconoContainer: {
+        marginVertical: height * 0.02,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    titulo1: {
+        fontSize: tamanos.subtitulo,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: 8,
-        marginHorizontal: 16,
+        marginBottom: height * 0.05,
+        marginHorizontal: width * 0.04,
+        color: colores.quinto,
     },
-    mensajeSecundario: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginBottom: 18,
-        marginHorizontal: 16,
-    },
-    tituloDetalle: {
-        fontSize: 16,
+    titulo2: {
+        fontSize: tamanos.subtitulo,
         fontWeight: 'bold',
-        marginTop: 10,
-        marginBottom: 4,
         textAlign: 'center',
+        marginTop: height * 0.02,
+        marginHorizontal: width * 0.04,
+        color: colores.quinto,
     },
     detalle: {
-        fontSize: 15,
+        fontSize: tamanos.texto,
         textAlign: 'center',
-        marginBottom: 2,
-        marginHorizontal: 16,
-    },
-    tituloDias: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginTop: 16,
-        marginBottom: 4,
-        textAlign: 'center',
-    },
-    dia: {
-        fontSize: 15,
-        textAlign: 'center',
-        marginBottom: 2,
-    },
-    mensajeCancelar: {
-        fontSize: 15,
-        textAlign: 'center',
-        marginTop: 18,
-        marginBottom: 18,
-        marginHorizontal: 16,
+        marginBottom: height * 0.01,
+        color: colores.quinto,
     },
     boton: {
-        backgroundColor: '#009BDB',
-        borderRadius: 8,
-        paddingVertical: 12,
-        paddingHorizontal: 32,
+        backgroundColor: colores.primario,
+        borderRadius: width * 0.025,
+        paddingVertical: height * 0.018,
+        paddingHorizontal: width * 0.08,
         alignItems: 'center',
-        marginBottom: 24,
         elevation: 2,
+        marginVertical: height * 0.04,
     },
     textoBoton: {
-        color: '#fff',
+        color: colores.terceario,
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: tamanos.texto,
     },
 })

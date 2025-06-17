@@ -14,17 +14,15 @@ export const estilosPublicaciones = StyleSheet.create({
     encabezado: {
         backgroundColor: colores.primario,
         paddingVertical: height * 0.01,
-        alignItems: 'center',
+        paddingHorizontal: width * 0.04,
         flexDirection: 'row',
-        justifyContent: 'flex-start'
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
     tituloEncabezado: {
         color: colores.terceario,
         fontSize: tamanos.titulo1,
         fontWeight: 'bold',
-    },
-    botonAtras: {
-        marginHorizontal: width * 0.04,
     },
     fila: {
         flexDirection: 'row',
@@ -44,9 +42,9 @@ export const estilosPublicaciones = StyleSheet.create({
     },
     botonFiltrar: {
         backgroundColor: colores.primario,
-        borderRadius: 12,
-        paddingVertical: 4,
-        paddingHorizontal: 16,
+        borderRadius: width * 0.03,
+        paddingVertical: height * 0.005,
+        paddingHorizontal: width * 0.04,
         elevation: 6,
     },
     textoFiltrar: {
@@ -56,8 +54,8 @@ export const estilosPublicaciones = StyleSheet.create({
     },
     tarjeta: {
         backgroundColor: colores.secundarioClaro,
-        borderRadius: 16,
-        padding: 12,
+        borderRadius: width * 0.04,
+        padding: width * 0.03,
         marginHorizontal: width * 0.04,
         marginVertical: height * 0.01,
         elevation: 6,
@@ -66,7 +64,7 @@ export const estilosPublicaciones = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8,
+        marginBottom: height * 0.01,
     },
     nombreEscuela: {
         fontSize: tamanos.subtitulo,
@@ -76,10 +74,10 @@ export const estilosPublicaciones = StyleSheet.create({
     calificacion: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 4,
+        gap: width * 0.01,
     },
     textoCalificacion: {
-        marginLeft: 4,
+        marginLeft: width * 0.01,
         fontWeight: 'bold',
         color: colores.quinto,
         fontSize: tamanos.texto,
@@ -99,8 +97,8 @@ export const estilosPublicaciones = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'flex-end',
         backgroundColor: colores.primario,
-        borderRadius: 8,
-        paddingHorizontal: 15,
+        borderRadius: width * 0.02,
+        paddingHorizontal: width * 0.04,
         elevation: 6,
     },
     textoDetalles: {
