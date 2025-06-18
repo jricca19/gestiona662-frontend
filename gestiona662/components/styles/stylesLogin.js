@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { fuentes, colores, tamanos } from './fuentesyColores';
 
 export const stylesLogin = StyleSheet.create({
     logo: {
@@ -55,7 +56,7 @@ export const stylesLogin = StyleSheet.create({
         padding: 20,
         justifyContent: 'center',
         marginTop: 40,
-        backgroundColor: '#f7f7f7'
+        backgroundColor: colores.terceario
     },
     input: {
         borderColor: '#ccc',

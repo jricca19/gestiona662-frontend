@@ -116,7 +116,7 @@ const FormularioLogin = ({ navigation }) => {
           />
         )}
       />
-      {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
+      {errors.password && <Text style={stylesLogin.error}>{errors.password.message}</Text>}
       <TouchableOpacity style={stylesLogin.botonRecuperar}>
         <Text style={stylesLogin.textoBotonRecuperar}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
