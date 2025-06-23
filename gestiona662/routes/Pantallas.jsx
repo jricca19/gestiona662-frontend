@@ -95,12 +95,20 @@ function MaestroStack() {
   );
 }
 
+function DirectorStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="directorTabs" component={DirectorTabs} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}
+
 const Pantallas = () => {
   const { logueado, role } = useSelector(state => state.usuario);
 
   if (!logueado) return <PilaInicio />;
   if (role === 'TEACHER') return <MaestroStack />;
-  return <DirectorTabs />;
+  return <DirectorStack />;
 }
 
 export default Pantallas
