@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { estilosDetalles } from '../styles/stylesDetalles'
+import { estilosDetalles } from '../styles/stylesDetallesPublicacion'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import * as SecureStore from 'expo-secure-store'
@@ -59,10 +59,34 @@ const DetallesPublicacion = ({ route, navigation }) => {
             })
             const data = await res.json()
             if (res.status === 201) {
+                // Preparar detalles para pasar a la pantalla de éxito
+                const detalles = {
+                    escuela: publicacion.schoolId,
+                    clase: publicacion.grade + (publicacion.division || ''),
+                    turno: publicacion.shift === 'MORNING'
+                        ? 'matutino'
+                        : publicacion.shift === 'AFTERNOON'
+                        ? 'vespertino'
+                        : publicacion.shift === 'FULL'
+                        ? 'completo'
+                        : publicacion.shift
+                }
+                // Días seleccionados en texto
+                const diasSeleccionadosTexto = appliesToAllDays
+                    ? (publicacion.publicationDays || []).map(d => format(parseISO(d.date), 'dd/MM/yyyy'))
+                    : seleccionadosArray.map(date => format(parseISO(date), 'dd/MM/yyyy'))
+
                 navigation.reset({
                     index: 0,
                     routes: [
-                        { name: 'postulacionExitosa', params: { postulation: data } }
+                        {
+                            name: 'postulacionExitosa',
+                            params: {
+                                postulation: data,
+                                detalles,
+                                diasSeleccionadosTexto
+                            }
+                        }
                     ]
                 })
             } else {
@@ -109,27 +133,29 @@ const DetallesPublicacion = ({ route, navigation }) => {
                     </View>
                 </View>
                 {fechas.length > 0 && (
-                    <Text style={estilosDetalles.tituloMes}>
-                        {format(parseISO(fechas[0].value), 'MMMM - yyyy', { locale: es }).replace(/^\w/, c => c.toUpperCase())}
-                    </Text>
-                )}
-                {fechas.map(f => (
-                    <View key={f.value} style={estilosDetalles.filaDia}>
-                        <TouchableOpacity
-                            onPress={() => toggleCheckbox(f.value)}
-                            style={[estilosDetalles.checkbox, { justifyContent: 'center', alignItems: 'center' }]}
-                        >
-                            {seleccionados[f.value] ? (
-                                <Ionicons name="checkbox" size={24} color="#009BDB" />
-                            ) : (
-                                <Ionicons name="square-outline" size={24} color="#B3E0F7" />
-                            )}
-                        </TouchableOpacity>
-                        <Text style={estilosDetalles.etiquetaDia}>
-                            {f.label.charAt(0).toUpperCase() + f.label.slice(1)}
+                    <View style={estilosDetalles.tarjetaFechas}>
+                        <Text style={estilosDetalles.etiquetaTarjeta}>Selección de días</Text>
+                        <Text style={estilosDetalles.tituloMes}>
+                            {format(parseISO(fechas[0].value), 'MMMM - yyyy', { locale: es }).replace(/^\w/, c => c.toUpperCase())}
                         </Text>
+                        {fechas.map(f => (
+                            <View key={f.value} style={estilosDetalles.filaDia}>
+                                <TouchableOpacity
+                                    onPress={() => toggleCheckbox(f.value)}
+                                >
+                                    {seleccionados[f.value] ? (
+                                        <Ionicons name="checkbox" size={35} color="#009BDB" />
+                                    ) : (
+                                        <Ionicons name="square-outline" size={35} color="#B3E0F7" />
+                                    )}
+                                </TouchableOpacity>
+                                <Text style={estilosDetalles.etiquetaDia}>
+                                    {f.label.charAt(0).toUpperCase() + f.label.slice(1)}
+                                </Text>
+                            </View>
+                        ))}
                     </View>
-                ))}
+                )}
                 <TouchableOpacity
                     style={[estilosDetalles.boton, loading && { opacity: 0.6 }]}
                     onPress={handlePostularse}

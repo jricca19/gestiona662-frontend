@@ -69,11 +69,7 @@ const HomeDirector = ({ navigation }) => {
                             </View>
                         </View>
                     </View>
-
-                    <TouchableOpacity style={estilosHome.boton}>
-                        <MaterialIcons name="post-add" size={24} color="#fff" />
-                        <Text style={estilosHome.textoBoton}>Crear Publicación</Text>
-                    </TouchableOpacity>
+                    
                 </View>
             </ScrollView>
         </View>
