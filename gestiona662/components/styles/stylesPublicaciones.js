@@ -99,6 +99,7 @@ export const estilosPublicaciones = StyleSheet.create({
         backgroundColor: colores.primario,
         borderRadius: width * 0.02,
         paddingHorizontal: width * 0.04,
+        paddingVertical: height * 0.005,
         elevation: 6,
     },
     textoDetalles: {

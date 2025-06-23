@@ -54,7 +54,6 @@ const PerfilDirector = ({ navigation }) => {
                             </View>
                         </View>
 
-                        {/* Datos */}
                         <View>
                             <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
                             <View style={stylesPerfil.datosSeccion}>
@@ -73,12 +72,10 @@ const PerfilDirector = ({ navigation }) => {
                             </View>
                         </View>
 
-                        {/* Botón Editar Datos */}
                         <TouchableOpacity style={stylesPerfil.botonEditar}>
                             <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
                         </TouchableOpacity>
 
-                        {/* Escuelas */}
                         <Text style={stylesPerfil.tituloSeccion}>Tus Escuelas</Text>
                         <View style={stylesPerfil.escuelasContainer}>
                             <View style={stylesPerfil.filaEscuelaInput}>
@@ -103,13 +100,11 @@ const PerfilDirector = ({ navigation }) => {
                             ))}
                         </View>
 
-                        {/* Calificación */}
                         <View style={stylesPerfil.filaCalificacion}>
                             <FontAwesome name="star" size={20} color="#009fe3" style={stylesPerfil.icono} />
                             <Text style={stylesPerfil.textoCalificacion}>4.9</Text>
                         </View>
 
-                        {/* Cerrar sesión */}
                         <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
                             <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
                         </TouchableOpacity>

@@ -54,13 +54,6 @@ const HomeMaestro = ({ navigation }) => {
                         </View>
                     </View>
 
-                    <TouchableOpacity
-                        style={estilosHome.boton}
-                        onPress={() => navigation.navigate('publicaciones')}
-                    >
-                        <MaterialIcons name="search" size={24} color="#fff" />
-                        <Text style={estilosHome.textoBoton}>Buscar Publicación</Text>
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </View>

@@ -11,6 +11,7 @@ import PublicacionesDirector from '../components/director/PublicacionesDirector'
 import Publicaciones from '../components/maestro/Publicaciones'
 import DetallesPublicacion from '../components/maestro/DetallesPublicacion'
 import PostulacionExitosa from '../components/maestro/PostulacionExitosa'
+import CrearPublicacionDirector from '../components/director/CrearPublicacionDirector'
 import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
 import { Dimensions } from 'react-native'
@@ -41,7 +42,7 @@ function MaestroTabs() {
       })}
     >
       <Tab.Screen name="homeMaestro" component={HomeMaestro} options={{ title: 'Inicio' }} />
-      <Tab.Screen name="publicaciones" component={Publicaciones} options={{ title: 'Publicaciones' }} />
+      <Tab.Screen name="publicaciones" component={Publicaciones} options={{ title: 'Buscar Suplencias' }} />
       <Tab.Screen name="misPostulaciones" component={PostulacionesMaestro} options={{ title: 'Mis Postulaciones' }} />
       <Tab.Screen name="perfilMaestro" component={PerfilMaestro} options={{ title: 'Perfil' }} />
     </Tab.Navigator>
@@ -61,13 +62,15 @@ function DirectorTabs() {
         },
         tabBarIcon: ({ color, size }) => {
           if (route.name === 'homeDirector') return <Ionicons name="home" size={size} color={color} />;
+          if (route.name === 'crearPublicacion') return <Ionicons name="add-circle-outline" size={size} color={color} />;
           if (route.name === 'misPublicaciones') return <Ionicons name="list-outline" size={size} color={color} />;
           if (route.name === 'perfilDirector') return <Ionicons name="person-circle-outline" size={size} color={color} />;
         },
       })}
     >
       <Tab.Screen name="homeDirector" component={HomeDirector} options={{ title: 'Inicio' }} />
-      <Tab.Screen name="misPublicaciones" component={PublicacionesDirector} options={{ title: 'Publicaciones' }} />
+      <Tab.Screen name="crearPublicacion" component={CrearPublicacionDirector} options={{ title: 'Crear Publicación' }} />
+      <Tab.Screen name="misPublicaciones" component={PublicacionesDirector} options={{ title: 'Mis Publicaciones' }} />
       <Tab.Screen name="perfilDirector" component={PerfilDirector} options={{ title: 'Perfil' }} />
     </Tab.Navigator>
   );

@@ -19,7 +19,7 @@ export const estilosHome = StyleSheet.create({
         flex: 1,
         backgroundColor: colores.terceario,
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'space-evenly',
     },
     bienvenida: {
         padding: height * 0.025,
@@ -59,13 +59,9 @@ export const estilosHome = StyleSheet.create({
     indicador: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: colores.secundarioClaro,
+        backgroundColor: colores.terceario,
         width: width * 0.25,
         height: width * 0.25,
-        elevation: 5,
-        borderRadius: (width * 0.25),
-        borderWidth: 2,
-        borderColor: colores.primario,
     },
     numeroIndicador: {
         color: colores.primario,
@@ -77,22 +73,5 @@ export const estilosHome = StyleSheet.create({
         color: colores.primarioOscuro,
         fontWeight: '500',
         fontSize: tamanos.menu,
-    },
-    boton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: colores.primario,
-        borderRadius: width * 0.02,
-        paddingVertical: height * 0.015,
-        paddingHorizontal: width * 0.08,
-        marginTop: height * 0.012,
-        marginBottom: height * 0.037,
-        elevation: 2,
-    },
-    textoBoton: {
-        color: colores.terceario,
-        fontWeight: 'bold',
-        marginLeft: width * 0.02,
-        fontSize: tamanos.texto,
     },
 });
