@@ -107,7 +107,7 @@ export const estilosDetalles = StyleSheet.create({
         backgroundColor: colores.cuarto,
         borderRadius: width * 0.02,
         borderWidth: 1,
-        borderColor: colores.secundario,
+        borderColor: colores.tercearioOscuro,
         paddingVertical: height * 0.012,
         paddingHorizontal: width * 0.04,
         marginBottom: height * 0.012,

@@ -66,10 +66,10 @@ const DetallesPublicacion = ({ route, navigation }) => {
                     turno: publicacion.shift === 'MORNING'
                         ? 'matutino'
                         : publicacion.shift === 'AFTERNOON'
-                        ? 'vespertino'
-                        : publicacion.shift === 'FULL'
-                        ? 'completo'
-                        : publicacion.shift
+                            ? 'vespertino'
+                            : publicacion.shift === 'FULL'
+                                ? 'completo'
+                                : publicacion.shift
                 }
                 // Días seleccionados en texto
                 const diasSeleccionadosTexto = appliesToAllDays
@@ -146,7 +146,7 @@ const DetallesPublicacion = ({ route, navigation }) => {
                                     {seleccionados[f.value] ? (
                                         <Ionicons name="checkbox" size={35} color="#009BDB" />
                                     ) : (
-                                        <Ionicons name="square-outline" size={35} color="#B3E0F7" />
+                                        <Ionicons name="square-outline" size={35} color="#B4B4B4" />
                                     )}
                                 </TouchableOpacity>
                                 <Text style={estilosDetalles.etiquetaDia}>
