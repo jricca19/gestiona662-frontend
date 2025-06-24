@@ -30,6 +30,13 @@ const estados = {
     },
 }
 
+const statusOrder = {
+    ACCEPTED: 0,
+    PENDING: 1,
+    REJECTED: 2,
+    FINALIZED: 3,
+}
+
 const PostulacionesMaestro = ({ navigation }) => {
     const [datos, setDatos] = useState([])
     const [loading, setLoading] = useState(false)
@@ -139,7 +146,9 @@ const PostulacionesMaestro = ({ navigation }) => {
                         </View>
                     ) : (
                         <FlatList
-                            data={datos}
+                            data={[...datos].sort((a, b) => 
+                                (statusOrder[a.status] ?? 99) - (statusOrder[b.status] ?? 99)
+                            )}
                             renderItem={renderItem}
                             keyExtractor={item => item._id}
                             ListEmptyComponent={
