@@ -77,14 +77,14 @@ const PostulacionesMaestro = ({ navigation }) => {
     }
 
     const renderItem = ({ item }) => {
-        // Formatear días de postulación
         let fechas = ''
-        if (item.appliesToAllDays) {
-            fechas = 'Todos los días'
-        } else if (item.postulationDays && item.postulationDays.length > 0) {
-            fechas = item.postulationDays
-                .map(d => format(parseISO(d.date), "d 'de' MMMM 'de' yyyy", { locale: es }))
-                .join(', ')
+        if (item.postulationDays && item.postulationDays.length > 0) {
+            const dias = item.postulationDays.map(d =>
+                format(parseISO(d.date), 'd', { locale: es })
+            )
+            const mes = format(parseISO(item.postulationDays[0].date), 'MMMM', { locale: es })
+            const anio = format(parseISO(item.postulationDays[0].date), 'yyyy', { locale: es })
+            fechas = `${dias.join(', ')} de ${mes} de ${anio}`
         }
 
         const estado = estados[item.status] || { label: item.status, style: estilosPostulaciones.estadoPendiente, color: colores.quinto }
@@ -146,7 +146,7 @@ const PostulacionesMaestro = ({ navigation }) => {
                         </View>
                     ) : (
                         <FlatList
-                            data={[...datos].sort((a, b) => 
+                            data={[...datos].sort((a, b) =>
                                 (statusOrder[a.status] ?? 99) - (statusOrder[b.status] ?? 99)
                             )}
                             renderItem={renderItem}

@@ -16,7 +16,6 @@ const DetallesPostulacion = ({ navigation, route }) => {
     const pub = postulacion.publicationId || {}
     const escuela = pub.schoolId || {}
 
-    // Días a cubrir
     let diasCubrir = ''
     if (postulacion.appliesToAllDays) {
         diasCubrir = 'Todos los días'
@@ -29,10 +28,8 @@ const DetallesPostulacion = ({ navigation, route }) => {
         diasCubrir = `${dias.join(', ')}\n${mes.charAt(0).toUpperCase() + mes.slice(1)} ${anio}`
     }
 
-    // Turno
     const turno = shiftLabels[pub.shift] || { label: pub.shift, hours: '' }
 
-    // Comentarios del director (simulado)
     const comentarioDirector = 'Ingresar por calle 123. Te recibirá la secretaria María para llevarte a tu salón.'
 
     return (
