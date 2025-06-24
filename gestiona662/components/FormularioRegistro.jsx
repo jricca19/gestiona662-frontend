@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Button, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -42,27 +42,104 @@ const schema = yup.object().shape({
 const FormularioRegistro = ({ navigation }) => {
   const dispatch = useDispatch();
   const [escuelas, setEscuelas] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [mostrarConfirmPassword, setMostrarConfirmPassword] = useState(false);
+  const [departamentos, setDepartamentos] = useState([]);
+  const [defaultDeptId, setDefaultDeptId] = useState('');
+  const [newSchoolNumber, setNewSchoolNumber] = useState('');
+  const [newAddress, setNewAddress] = useState('');
+  const [ciudades, setCiudades] = useState([]);
+  const [selectedCity, setSelectedCity] = useState('');
+
   useEffect(() => {
-    const obtenerEscuelas = async () => {
-      try {
-        const res = await fetch('https://gestiona662-backend.vercel.app/schoolsSelect', {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        const data = await res.json();
-        console.log("Escuelas:", data);
-        setEscuelas(data);
-      } catch (err) {
-        console.error("Error cargando escuelas", err);
+    const cargarCiudades = async () => {
+      if (modalVisible && defaultDeptId) {
+        try {
+          const res = await fetch(`https://gestiona662-backend.vercel.app/departments/${defaultDeptId}`);
+          const data = await res.json();
+          setCiudades(data || []);
+        } catch (error) {
+          console.error("Error al cargar ciudades por defecto:", error);
+          setCiudades([]);
+        }
       }
     };
 
-    obtenerEscuelas();
+    cargarCiudades();
+  }, [modalVisible, defaultDeptId]);
+
+  const handleCreateSchool = async () => {
+    if (!newSchoolNumber || !selectedCity || !newAddress || !defaultDeptId) {
+      Alert.alert("Error", "Completa todos los campos");
+      return;
+    }
+    console.log("Enviando:", {
+      schoolNumber: newSchoolNumber,
+      cityName: selectedCity,
+      address: newAddress,
+      departmentId: defaultDeptId,
+    });
+    try {
+      const res = await fetch(`https://gestiona662-backend.vercel.app/schools`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          schoolNumber: newSchoolNumber,
+          cityName: selectedCity,
+          address: newAddress,
+          departmentId: defaultDeptId,
+        })
+      });
+
+      const data = await res.json();
+      console.log("Respuesta del servidor:", data);
+      if (!res.ok) {
+        throw new Error(data.message || 'Error al crear escuela');
+      }
+
+      const createdSchool = data.school;
+      setEscuelas((prev) => [...prev, createdSchool]);
+      setValue("schoolId", createdSchool._id);
+      setModalVisible(false);
+      setNewSchoolNumber('');
+      setNewAddress('');
+      setSelectedCity('');
+    } catch (err) {
+      console.error("Error al crear escuela:", err);
+      Alert.alert("Error", err.message || "Error al crear escuela");
+    }
+  };
+
+
+  useEffect(() => {
+    const obtenerDatos = async () => {
+      try {
+        const [resEscuelas, resDeptos] = await Promise.all([
+          fetch('https://gestiona662-backend.vercel.app/schoolsSelect'),
+          fetch('https://gestiona662-backend.vercel.app/departments'),
+        ]);
+
+        const escuelasData = await resEscuelas.json();
+        const departamentosData = await resDeptos.json();
+        console.log(departamentosData);
+
+        setEscuelas(escuelasData);
+        setDepartamentos(departamentosData);
+
+        if (departamentosData.length > 0) {
+          setDefaultDeptId(departamentosData[0]._id); // para usar en nueva escuela
+        }
+      } catch (err) {
+        console.error("Error cargando datos:", err);
+      }
+    };
+
+    obtenerDatos();
   }, []);
-  const { control, handleSubmit, formState: { errors }, watch } = useForm({
+  const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       name: '',
@@ -85,10 +162,10 @@ const FormularioRegistro = ({ navigation }) => {
   const onSubmit = async (formData) => {
     const { confirmPassword, aceptarTerminos, schoolId, ...rest } = formData;
 
-  const dataToSend = {
-    ...rest,
-    ...(formData.role === 'STAFF' && { schoolId }),
-  };
+    const dataToSend = {
+      ...rest,
+      ...(formData.role === 'STAFF' && { schoolId }),
+    };
 
     try {
       const response = await fetch('https://gestiona662-backend.vercel.app/v1/auth/signup', {
@@ -224,77 +301,77 @@ const FormularioRegistro = ({ navigation }) => {
           {errors.email && <Text style={stylesRegistro.error}>{errors.email.message}</Text>}
 
           <Text style={stylesRegistro.label}>Contraseña</Text>
-<View style={stylesRegistro.filaIcono}>
-  <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-  <View style={{ flex: 1, position: 'relative' }}>
-    <Controller
-      control={control}
-      name="password"
-      render={({ field: { onChange, value } }) => (
-        <TextInput
-          style={[stylesRegistro.input, { paddingRight: 40 }]} // espacio para el ojo
-          placeholder="Contraseña"
-          placeholderTextColor="#999"
-          secureTextEntry={!mostrarPassword}
-          onChangeText={onChange}
-          value={value}
-        />
-      )}
-    />
-    <TouchableOpacity
-      style={{
-        position: 'absolute',
-        right: 10,
-        top: '50%',
-        transform: [{ translateY: -12 }],
-      }}
-      onPress={() => setMostrarPassword(!mostrarPassword)}
-    >
-      <Ionicons
-        name={mostrarPassword ? 'eye-off-outline' : 'eye-outline'}
-        size={24}
-        color="#009fe3"
-      />
-    </TouchableOpacity>
-  </View>
-</View>
+          <View style={stylesRegistro.filaIcono}>
+            <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+            <View style={{ flex: 1, position: 'relative' }}>
+              <Controller
+                control={control}
+                name="password"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={[stylesRegistro.input, { paddingRight: 40 }]} // espacio para el ojo
+                    placeholder="Contraseña"
+                    placeholderTextColor="#999"
+                    secureTextEntry={!mostrarPassword}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
+              <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  right: 10,
+                  top: '50%',
+                  transform: [{ translateY: -12 }],
+                }}
+                onPress={() => setMostrarPassword(!mostrarPassword)}
+              >
+                <Ionicons
+                  name={mostrarPassword ? 'eye-off-outline' : 'eye-outline'}
+                  size={24}
+                  color="#009fe3"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
           {errors.password && <Text style={stylesRegistro.error}>{errors.password.message}</Text>}
 
           <Text style={stylesRegistro.label}>Confirmar contraseña</Text>
-<View style={stylesRegistro.filaIcono}>
-  <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-  <View style={{ flex: 1, position: 'relative' }}>
-    <Controller
-      control={control}
-      name="confirmPassword"
-      render={({ field: { onChange, value } }) => (
-        <TextInput
-          style={[stylesRegistro.input, { paddingRight: 40 }]} // espacio para el ojo
-          placeholder="Confirmar contraseña"
-          placeholderTextColor="#999"
-          secureTextEntry={!mostrarConfirmPassword}
-          onChangeText={onChange}
-          value={value}
-        />
-      )}
-    />
-    <TouchableOpacity
-      style={{
-        position: 'absolute',
-        right: 10,
-        top: '50%',
-        transform: [{ translateY: -12 }],
-      }}
-      onPress={() => setMostrarConfirmPassword(!mostrarConfirmPassword)}
-    >
-      <Ionicons
-        name={mostrarConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
-        size={24}
-        color="#009fe3"
-      />
-    </TouchableOpacity>
-  </View>
-</View>
+          <View style={stylesRegistro.filaIcono}>
+            <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+            <View style={{ flex: 1, position: 'relative' }}>
+              <Controller
+                control={control}
+                name="confirmPassword"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={[stylesRegistro.input, { paddingRight: 40 }]} // espacio para el ojo
+                    placeholder="Confirmar contraseña"
+                    placeholderTextColor="#999"
+                    secureTextEntry={!mostrarConfirmPassword}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
+              <TouchableOpacity
+                style={{
+                  position: 'absolute',
+                  right: 10,
+                  top: '50%',
+                  transform: [{ translateY: -12 }],
+                }}
+                onPress={() => setMostrarConfirmPassword(!mostrarConfirmPassword)}
+              >
+                <Ionicons
+                  name={mostrarConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
+                  size={24}
+                  color="#009fe3"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
           {errors.confirmPassword && <Text style={stylesRegistro.error}>{errors.confirmPassword.message}</Text>}
 
           <Text style={stylesRegistro.label}>Teléfono</Text>
@@ -369,10 +446,74 @@ const FormularioRegistro = ({ navigation }) => {
                     </Picker>
                   )}
                 />
+                <TouchableOpacity
+                  style={stylesRegistro.botonAgregarEscuela}
+                  onPress={() => setModalVisible(true)}
+                >
+                  <Text style={stylesRegistro.botonAgregarTexto}>+</Text>
+                </TouchableOpacity>
+                <Modal visible={modalVisible} animationType="slide" transparent={true}>
+                  <View style={stylesRegistro.modalOverlay}>
+                    <View style={stylesRegistro.modalContent}>
+                      <Text style={stylesRegistro.modalTitle}>Agregar escuela</Text>
+                      <TextInput
+                        placeholder="Número"
+                        value={newSchoolNumber}
+                        onChangeText={setNewSchoolNumber}
+                      />
+                      <Text style={stylesRegistro.label}>Departamento</Text>
+                      <Picker
+                        selectedValue={defaultDeptId}
+                        onValueChange={async (deptId) => {
+                          setDefaultDeptId(deptId);
+                          setSelectedCity('');
+
+                          try {
+                            const res = await fetch(`https://gestiona662-backend.vercel.app/departments/${deptId}`);
+                            const data = await res.json();
+                            setCiudades(data || []);
+                          } catch (error) {
+                            console.error("Error al obtener ciudades del departamento:", error);
+                            setCiudades([]);
+                          }
+                        }}
+                      >
+                        <Picker.Item label="Selecciona un departamento" value="" />
+                        {departamentos.map((dep) => (
+                          <Picker.Item key={dep._id} label={dep.name} value={dep._id} />
+                        ))}
+                      </Picker>
+                      {ciudades.length > 0 && (
+                        <>
+                          <Text style={stylesRegistro.label}>Ciudad</Text>
+                          <Picker
+                            selectedValue={selectedCity}
+                            onValueChange={(value) => setSelectedCity(value)}
+                          >
+                            {ciudades.map((city, index) => (
+                              <Picker.Item key={index} label={city.name} value={city.name} />
+                            ))}
+                          </Picker>
+                        </>
+                      )}
+                      <TextInput
+                        placeholder="Dirección"
+                        value={newAddress}
+                        onChangeText={setNewAddress}
+                      />
+                      <View style={stylesRegistro.modalButtons}>
+                        <Button title="Cancelar" onPress={() => setModalVisible(false)} />
+                        <Button title="Crear" onPress={handleCreateSchool} />
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
               </View>
               {errors.schoolId && <Text style={stylesRegistro.error}>{errors.schoolId.message}</Text>}
             </>
+
           )}
+
 
           <Controller
             control={control}

@@ -126,6 +126,47 @@ iconoOjo: {
   right: 10,
   top: 12, // Cálculo manual exacto
   zIndex: 1,
-}
-
+},
+modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)', // Fondo oscuro semitransparente
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5, // sombra para Android
+    shadowColor: '#000', // sombra para iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  botonAgregarEscuela: {
+    width: 40,
+    height: 40,
+    backgroundColor: colores.primario,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10
+  },
+  botonAgregarTexto: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: -2
+  },
 });
