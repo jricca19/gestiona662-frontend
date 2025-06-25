@@ -1,4 +1,4 @@
-import { FlatList, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { FlatList, Text, View, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import * as SecureStore from 'expo-secure-store'
 import { Ionicons } from '@expo/vector-icons'
@@ -152,14 +152,23 @@ const PostulacionesMaestro = ({ navigation }) => {
                             renderItem={renderItem}
                             keyExtractor={item => item._id}
                             ListEmptyComponent={
-                                <Text style={estilosPostulaciones.textoFinalLista}>
-                                    No hay postulaciones para mostrar
-                                </Text>
+                                <View style={estilosPostulaciones.sinPostulaciones}>
+                                    <Text style={estilosPostulaciones.textoFinalLista}>
+                                        No tienes postulaciones en este momento.
+                                    </Text>
+                                    <Image
+                                        source={require('../../assets/sin-resultados.png')}
+                                        style={estilosPostulaciones.sinPostulacionesImagen}
+                                        resizeMode="contain"
+                                    />
+                                </View>
                             }
                             ListFooterComponent={
-                                <Text style={estilosPostulaciones.textoFinalLista}>
-                                    No hay más postulaciones para mostrar
-                                </Text>
+                                datos.length > 0 ? (
+                                    <Text style={estilosPostulaciones.textoFinalLista}>
+                                        No hay más postulaciones para mostrar
+                                    </Text>
+                                ) : null
                             }
                             refreshing={refreshing}
                             onRefresh={handleRefresh}

@@ -123,5 +123,15 @@ export const estilosPublicaciones = StyleSheet.create({
         alignItems: 'center',
         fontSize: tamanos.textoMayor,
         color: colores.primario,
-    }
+    },
+    sinPublicaciones: {
+        alignItems: 'center',
+        marginTop: height * 0.2,
+    },
+    sinPublicacionesImagen: {
+        width: width,
+        height: height * 0.3,
+        marginTop: height * 0.05,
+        opacity: 0.7,
+    },
 });

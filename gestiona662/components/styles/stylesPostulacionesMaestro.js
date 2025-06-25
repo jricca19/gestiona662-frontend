@@ -114,4 +114,14 @@ export const estilosPostulaciones = StyleSheet.create({
         color: colores.primario,
         textAlign: 'center',
     },
+    sinPostulaciones: {
+        alignItems: 'center',
+        marginTop: height * 0.2,
+    },
+    sinPostulacionesImagen: {
+        width: width,
+        height: height * 0.3,
+        marginTop: height * 0.05,
+        opacity: 0.7,
+    },
 })
