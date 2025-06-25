@@ -12,6 +12,7 @@ import Publicaciones from '../components/maestro/Publicaciones'
 import DetallesPublicacion from '../components/maestro/DetallesPublicacion'
 import PostulacionExitosa from '../components/maestro/PostulacionExitosa'
 import CrearPublicacionDirector from '../components/director/CrearPublicacionDirector'
+import DetallesPostulacion from '../components/maestro/DetallesPostulacion'
 import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
 import { Dimensions } from 'react-native'
@@ -91,6 +92,7 @@ function MaestroStack() {
       <Stack.Screen name="maestroTabs" component={MaestroTabs} options={{ headerShown: false }} />
       <Stack.Screen name="detallesPublicacion" component={DetallesPublicacion} options={{ headerShown: false }} />
       <Stack.Screen name="postulacionExitosa" component={PostulacionExitosa} options={{ headerShown: false }} />
+      <Stack.Screen name="detallesPostulacion" component={DetallesPostulacion} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

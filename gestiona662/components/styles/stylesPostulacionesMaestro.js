@@ -1,10 +1,9 @@
 import { StyleSheet, Dimensions } from 'react-native'
 import { colores, tamanos } from './fuentesyColores'
-import { he } from 'date-fns/locale';
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window')
 
-export const estilosPublicaciones = StyleSheet.create({
+export const estilosPostulaciones = StyleSheet.create({
     contenedor: {
         flex: 1,
         width: '100%',
@@ -23,34 +22,6 @@ export const estilosPublicaciones = StyleSheet.create({
         color: colores.terceario,
         fontSize: tamanos.titulo1,
         fontWeight: 'bold',
-    },
-    fila: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: height * 0.02,
-        paddingHorizontal: width * 0.04,
-        elevation: 6,
-        backgroundColor: colores.terceario,
-        borderBottomWidth: 1,
-        borderColor: colores.tercearioOscuro,
-    },
-    titulo: {
-        fontSize: tamanos.titulo2,
-        fontWeight: 'bold',
-        color: colores.quinto,
-    },
-    botonFiltrar: {
-        backgroundColor: colores.primario,
-        borderRadius: width * 0.03,
-        paddingVertical: height * 0.005,
-        paddingHorizontal: width * 0.04,
-        elevation: 6,
-    },
-    textoFiltrar: {
-        color: colores.terceario,
-        fontWeight: 'bold',
-        fontSize: tamanos.texto,
     },
     tarjeta: {
         backgroundColor: colores.secundarioClaro,
@@ -71,42 +42,60 @@ export const estilosPublicaciones = StyleSheet.create({
         fontWeight: 'bold',
         color: colores.primarioOscuro,
     },
-    calificacion: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: width * 0.01,
-    },
-    textoCalificacion: {
-        marginLeft: width * 0.01,
-        fontWeight: 'bold',
-        color: colores.quinto,
-        fontSize: tamanos.texto,
-    },
-    filaTarjeta: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: height * 0.005,
-    },
-    textoTarjeta: {
-        marginHorizontal: width * 0.02,
+    fechaTarjeta: {
         fontSize: tamanos.texto,
         color: colores.quinto,
+        marginBottom: height * 0.01,
     },
     botonDetalles: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignSelf: 'flex-end',
+        alignSelf: 'flex-start',
         backgroundColor: colores.primario,
-        borderRadius: width * 0.02,
+        borderRadius: width * 0.1,
         paddingHorizontal: width * 0.04,
         paddingVertical: height * 0.005,
-        elevation: 6,
+        elevation: 3,
+        marginTop: height * 0.01,
     },
     textoDetalles: {
         color: colores.terceario,
-        fontWeight: 'bold',
-        marginLeft: width * 0.03,
+        fontWeight: 'medium',
         fontSize: tamanos.menu,
+    },
+    estadoAceptada: {
+        backgroundColor: colores.cartelExito,
+        borderRadius: width * 0.02,
+        paddingHorizontal: width * 0.03,
+        paddingVertical: height * 0.003,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    estadoPendiente: {
+        backgroundColor: colores.cartelAdvertencia,
+        borderRadius: width * 0.02,
+        paddingHorizontal: width * 0.03,
+        paddingVertical: height * 0.003,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    estadoFinalizada: {
+        backgroundColor: colores.terceario,
+        borderRadius: width * 0.02,
+        paddingHorizontal: width * 0.03,
+        paddingVertical: height * 0.003,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    estadoRechazada: {
+        backgroundColor: colores.cartelError,
+        borderRadius: width * 0.02,
+        paddingHorizontal: width * 0.03,
+        paddingVertical: height * 0.003,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    textoEstado: {
+        fontWeight: 'bold',
+        fontSize: tamanos.texto,
     },
     error: {
         marginTop: height * 0.2,
@@ -123,15 +112,16 @@ export const estilosPublicaciones = StyleSheet.create({
         alignItems: 'center',
         fontSize: tamanos.textoMayor,
         color: colores.primario,
+        textAlign: 'center',
     },
-    sinPublicaciones: {
+    sinPostulaciones: {
         alignItems: 'center',
         marginTop: height * 0.2,
     },
-    sinPublicacionesImagen: {
+    sinPostulacionesImagen: {
         width: width,
         height: height * 0.3,
         marginTop: height * 0.05,
         opacity: 0.7,
     },
-});
+})
