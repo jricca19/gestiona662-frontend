@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { desloguear } from '../../store/slices/usuarioSlice';
 import * as SecureStore from 'expo-secure-store';
 import { stylesPerfil } from '../styles/stylesPerfil';
+import FotoPerfilUploader from '../FotoPerfilUploader';
 
 const PerfilDirector = ({ navigation }) => {
     const usuario = useSelector(state => state.usuario);
@@ -13,6 +14,23 @@ const PerfilDirector = ({ navigation }) => {
     // Estado para escuelas (simulado, deberías traerlo de tu backend)
     const [escuelas, setEscuelas] = useState(['335']);
     const [nuevaEscuela, setNuevaEscuela] = useState('');
+    const [perfil, setPerfil] = useState(null);
+
+    useEffect(() => {
+        const fetchPerfil = async () => {
+            const token = await SecureStore.getItemAsync('token');
+            const resp = await fetch('https://gestiona662-backend.vercel.app/v1/users/profile', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await resp.json();
+            setPerfil(data);
+        };
+        fetchPerfil();
+    }, []);
 
     const handleLogout = async () => {
         await SecureStore.deleteItemAsync("token");
@@ -45,9 +63,11 @@ const PerfilDirector = ({ navigation }) => {
                     <ScrollView contentContainerStyle={stylesPerfil.contenidoScroll}>
                         {/* Foto y nombre */}
                         <View style={stylesPerfil.avatarContainer}>
-                            <View style={stylesPerfil.avatar}>
-                                <Ionicons name="person" size={60} color="#009fe3" />
-                            </View>
+                            <FotoPerfilUploader
+                                avatarStyle={stylesPerfil.avatar}
+                                ciUsuario={usuario.ci}
+                                profilePhoto={perfil?.profilePhoto}
+                            />
                             <View>
                                 <Text style={stylesPerfil.nombre}>{usuario.name} {usuario.lastName}</Text>
                                 <Text style={stylesPerfil.rol}>Director</Text>

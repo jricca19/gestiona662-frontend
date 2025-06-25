@@ -5,10 +5,28 @@ import { desloguear } from '../../store/slices/usuarioSlice';
 import * as SecureStore from 'expo-secure-store';
 import { stylesPerfil } from '../styles/stylesPerfil';
 import FotoPerfilUploader from '../FotoPerfilUploader';
+import { useEffect, useState } from 'react';
 
 const PerfilMaestro = ({ navigation }) => {
     const usuario = useSelector(state => state.usuario);
     const dispatch = useDispatch();
+    const [perfil, setPerfil] = useState(null);
+
+    useEffect(() => {
+        const fetchPerfil = async () => {
+            const token = await SecureStore.getItemAsync('token');
+            const resp = await fetch('https://gestiona662-backend.vercel.app/v1/users/profile', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await resp.json();
+            setPerfil(data);
+        };
+        fetchPerfil();
+    }, []);
 
     const handleLogout = async () => {
         await SecureStore.deleteItemAsync("token");
@@ -30,9 +48,8 @@ const PerfilMaestro = ({ navigation }) => {
                         <View style={stylesPerfil.avatarContainer}>
                             <FotoPerfilUploader
                                 avatarStyle={stylesPerfil.avatar}
-                                initialUrl={usuario.address}
-                                userId={usuario.id}
-                                token={usuario.token}
+                                ciUsuario={usuario.ci}
+                                profilePhoto={perfil?.profilePhoto}
                             />
                             <View>
                                 <Text style={stylesPerfil.nombre}>{usuario.name} {usuario.lastName}</Text>
