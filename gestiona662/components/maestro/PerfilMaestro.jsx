@@ -4,10 +4,29 @@ import { useSelector, useDispatch } from 'react-redux';
 import { desloguear } from '../../store/slices/usuarioSlice';
 import * as SecureStore from 'expo-secure-store';
 import { stylesPerfil } from '../styles/stylesPerfil';
+import FotoPerfilUploader from '../FotoPerfilUploader';
+import { useEffect, useState } from 'react';
 
 const PerfilMaestro = ({ navigation }) => {
     const usuario = useSelector(state => state.usuario);
     const dispatch = useDispatch();
+    const [perfil, setPerfil] = useState(null);
+
+    useEffect(() => {
+        const fetchPerfil = async () => {
+            const token = await SecureStore.getItemAsync('token');
+            const resp = await fetch('https://gestiona662-backend.vercel.app/v1/users/profile', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await resp.json();
+            setPerfil(data);
+        };
+        fetchPerfil();
+    }, []);
 
     const handleLogout = async () => {
         await SecureStore.deleteItemAsync("token");
@@ -26,73 +45,71 @@ const PerfilMaestro = ({ navigation }) => {
             <ScrollView>
                 <View style={stylesPerfil.contenedor}>
                     <ScrollView contentContainerStyle={stylesPerfil.contenidoScroll}>
-                        {/* Foto y nombre */}
                         <View style={stylesPerfil.avatarContainer}>
-                            <View style={stylesPerfil.avatar}>
-                                <Ionicons name="person" size={60} color="#009fe3" />
-                            </View>
+                            <FotoPerfilUploader
+                                avatarStyle={stylesPerfil.avatar}
+                                ciUsuario={usuario.ci}
+                                profilePhoto={perfil?.profilePhoto}
+                            />
                             <View>
                                 <Text style={stylesPerfil.nombre}>{usuario.name} {usuario.lastName}</Text>
                                 <Text style={stylesPerfil.rol}>Maestra</Text>
                             </View>
                         </View>
-                        {/* Datos */}
                         <View>
                             <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
                             <View style={stylesPerfil.datosSeccion}>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="email" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.email || 'No disponible'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="phone" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59800000000'}</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+No disponible'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="badge" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.ci || '12345678'}</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.ci || 'No disponible'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <Entypo name="location-pin" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>Calle 1234</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.address || 'No disponible'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="event" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>10/05/2024</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.birthDate || 'No disponible'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>90</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.competitionNumber || 'No disponible'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="verified-user" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>Efectivo</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.isEffectiveTeacher ? 'Efectivo' : 'No Efectivo'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="health-and-safety" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>Vigente</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.healthCertificateStatus || 'No disponible'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="description" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>20/06/2025</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.criminalRecordDate || 'No disponible'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="schedule" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>Tarde</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.shift || 'No disponible'}</Text>
                                 </View>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <FontAwesome name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>4.9</Text>
+                                    <Text style={stylesPerfil.textoFila}>{usuario.rating || '0'}</Text>
                                 </View>
                             </View>
                         </View>
 
-                        {/* Botón Editar Datos */}
                         <TouchableOpacity style={stylesPerfil.botonEditar}>
                             <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
                         </TouchableOpacity>
 
-                        {/* Cerrar sesión */}
                         <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
                             <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
                         </TouchableOpacity>

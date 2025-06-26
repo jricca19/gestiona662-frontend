@@ -124,6 +124,7 @@ export const estilosPublicaciones = StyleSheet.create({
         fontSize: tamanos.textoMayor,
         color: colores.primario,
     },
+<<<<<<< HEAD
     selectEscuelasDirector: {
         color: 'white',
         width: '100%',
@@ -139,4 +140,16 @@ export const estilosPublicaciones = StyleSheet.create({
         height: height * 0.05,
         justifyContent: 'center',
     }
+=======
+    sinPublicaciones: {
+        alignItems: 'center',
+        marginTop: height * 0.2,
+    },
+    sinPublicacionesImagen: {
+        width: width,
+        height: height * 0.3,
+        marginTop: height * 0.05,
+        opacity: 0.7,
+    },
+>>>>>>> 0d130828d970ead57d9e04438939bc2a7791c01d
 });

@@ -1,4 +1,4 @@
-import { FlatList, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { FlatList, Text, View, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
 import React, { useEffect, useState, useCallback } from 'react'
 import * as SecureStore from 'expo-secure-store';
 import { MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
@@ -91,7 +91,7 @@ const Publicaciones = ({ navigation }) => {
                 <View style={estilosPublicaciones.filaTarjeta}>
                     <MaterialIcons name="access-time" size={18} color={colores.primario} />
                     <Text style={estilosPublicaciones.textoTarjeta}>
-                        {item.grade}° - 
+                        {item.grade}° -
                         {item.shift === 'MORNING' ? ' Mañana - ' : item.shift === 'AFTERNOON' ? ' Tarde - ' : item.shift === 'FULL' ? ' Tiempo Completo - ' : ` ${item.shift}`}
                         {item.shift === 'MORNING' && '08:00 a 12:00'}
                         {item.shift === 'AFTERNOON' && '12:00 a 17:00'}
@@ -161,6 +161,20 @@ const Publicaciones = ({ navigation }) => {
                             keyExtractor={item => item._id}
                             onEndReached={handleLoadMore}
                             onEndReachedThreshold={0.5}
+                            ListEmptyComponent={
+                                (!loading && !refreshing) ? (
+                                    <View style={estilosPublicaciones.sinPublicaciones}>
+                                        <Text style={estilosPublicaciones.textoFinalLista}>
+                                            No existen publicaciones activas en este momento. Intenta mas tarde o prueba con otros filtros de búsqueda.
+                                        </Text>
+                                        <Image
+                                            source={require('../../assets/sin-resultados.png')}
+                                            style={estilosPublicaciones.sinPublicacionesImagen}
+                                            resizeMode="contain"
+                                        />
+                                    </View>
+                                ) : null
+                            }
                             ListFooterComponent={
                                 loading && !refreshing ? (
                                     <View style={estilosPublicaciones.spinnerCargando}>
