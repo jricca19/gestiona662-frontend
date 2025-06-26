@@ -123,5 +123,20 @@ export const estilosPublicaciones = StyleSheet.create({
         alignItems: 'center',
         fontSize: tamanos.textoMayor,
         color: colores.primario,
+    },
+    selectEscuelasDirector: {
+        color: 'white',
+        width: '100%',
+        fontSize: 16,
+    },
+
+    pickerWrapper: {
+        borderWidth: 1,
+        borderColor: 'white',
+        borderRadius: 6,
+        overflow: 'hidden',
+        width: width * 0.35,
+        height: height * 0.05,
+        justifyContent: 'center',
     }
 });
