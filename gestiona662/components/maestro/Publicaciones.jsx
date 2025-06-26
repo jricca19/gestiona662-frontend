@@ -6,6 +6,7 @@ import { colores } from '../styles/fuentesyColores'
 import { estilosPublicaciones } from '../styles/stylesPublicaciones'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
+import ModalBusquedaPublicaciones from './ModalBusquedaPublicaciones'
 
 const PAGE_SIZE = 4;
 
@@ -16,6 +17,7 @@ const Publicaciones = ({ navigation }) => {
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const fetchPublicaciones = useCallback(async (pageToLoad = 1, refreshing = false) => {
         if (loading) return;
@@ -65,6 +67,16 @@ const Publicaciones = ({ navigation }) => {
         setRefreshing(true);
         setPage(1);
         fetchPublicaciones(1, true).then(() => setRefreshing(false));
+    };
+
+    const handleApplyFilters = (filteredData) => {
+        setDatos(filteredData.publications || []);
+        setTotal(filteredData.total || 0);
+        setPage(1);
+    };
+
+    const handleCloseModal = () => {
+        setModalVisible(false);
     };
 
     const renderItem = ({ item }) => {
@@ -136,7 +148,10 @@ const Publicaciones = ({ navigation }) => {
                 <View style={estilosPublicaciones.contenedor}>
                     <View style={estilosPublicaciones.fila}>
                         <Text style={estilosPublicaciones.titulo}>Publicaciones</Text>
-                        <TouchableOpacity style={estilosPublicaciones.botonFiltrar}>
+                        <TouchableOpacity 
+                            style={estilosPublicaciones.botonFiltrar}
+                            onPress={() => setModalVisible(true)}
+                        >
                             <Text style={estilosPublicaciones.textoFiltrar}>Filtrar</Text>
                         </TouchableOpacity>
                     </View>
@@ -193,6 +208,12 @@ const Publicaciones = ({ navigation }) => {
                     )}
                 </View>
             </View>
+            
+            <ModalBusquedaPublicaciones
+                visible={modalVisible}
+                onClose={handleCloseModal}
+                onApplyFilters={handleApplyFilters}
+            />
         </View>
     )
 }

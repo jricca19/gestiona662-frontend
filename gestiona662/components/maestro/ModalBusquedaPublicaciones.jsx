@@ -1,0 +1,249 @@
+import React, { useState, useEffect } from 'react';
+import {
+    View,
+    Text,
+    Modal,
+    TouchableOpacity,
+    ScrollView,
+    Alert
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { MaterialIcons } from '@expo/vector-icons';
+import * as SecureStore from 'expo-secure-store';
+import { estilosModalBusqueda } from '../styles/stylesModalBusquedaPublicaciones';
+
+const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters }) => {
+    const [departamentoSeleccionado, setDepartamentoSeleccionado] = useState('');
+    const [escuelaSeleccionada, setEscuelaSeleccionada] = useState('');
+    const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
+    const [mostrarDatePicker, setMostrarDatePicker] = useState(false);
+    
+    // Estados para los datos de los dropdowns
+    const [departamentos, setDepartamentos] = useState([]);
+    const [escuelas, setEscuelas] = useState([]);
+
+    useEffect(() => {
+        if (visible) {
+            cargarDepartamentos();
+            cargarEscuelas();
+        }
+    }, [visible]);
+
+    const cargarDepartamentos = async () => {
+        try {
+            const token = await SecureStore.getItemAsync('token');
+            const response = await fetch('https://gestiona662-backend.vercel.app/v1/departments', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            setDepartamentos(data || []);
+        } catch (error) {
+            console.error('Error al cargar departamentos:', error);
+        }
+    };
+
+    const cargarEscuelas = async () => {
+        try {
+            const token = await SecureStore.getItemAsync('token');
+            const response = await fetch('https://gestiona662-backend.vercel.app/v1/schools', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            setEscuelas(data || []);
+        } catch (error) {
+            console.error('Error al cargar escuelas:', error);
+        }
+    };
+
+    const aplicarFiltros = async () => {
+        try {
+            let url = 'https://gestiona662-backend.vercel.app/v1/publications?page=1&limit=2';
+            
+            if (departamentoSeleccionado) {
+                url += `&departmentName=${encodeURIComponent(departamentoSeleccionado)}`;
+            }
+            
+            if (escuelaSeleccionada) {
+                url += `&schoolId=${escuelaSeleccionada}`;
+            }
+            
+            if (fechaSeleccionada) {
+                const fechaFormateada = fechaSeleccionada.toISOString().split('T')[0];
+                url += `&startDate=${fechaFormateada}`;
+            }
+
+            const token = await SecureStore.getItemAsync('token');
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                onApplyFilters(data);
+                onClose();
+            } else {
+                Alert.alert('Error', 'No se pudieron aplicar los filtros.');
+            }
+        } catch (error) {
+            console.error('Error al aplicar filtros:', error);
+            Alert.alert('Error', 'Ocurrió un error al aplicar los filtros.');
+        }
+    };
+
+    const limpiarFiltros = () => {
+        setDepartamentoSeleccionado('');
+        setEscuelaSeleccionada('');
+        setFechaSeleccionada(new Date());
+    };
+
+    const onDateChange = (event, selectedDate) => {
+        setMostrarDatePicker(false);
+        if (selectedDate) {
+            setFechaSeleccionada(selectedDate);
+        }
+    };
+
+    const formatearFecha = (fecha) => {
+        return fecha.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+    };
+
+    return (
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={visible}
+            onRequestClose={onClose}
+        >
+            <View style={estilosModalBusqueda.overlay}>
+                <View style={estilosModalBusqueda.contenedorModal}>
+                    {/* Header */}
+                    <View style={estilosModalBusqueda.header}>
+                        <Text style={estilosModalBusqueda.tituloModal}>Filtros</Text>
+                        <TouchableOpacity onPress={onClose} style={estilosModalBusqueda.botonCerrar}>
+                            <MaterialIcons name="close" size={24} color="#fff" />
+                        </TouchableOpacity>
+                    </View>
+
+                    <ScrollView style={estilosModalBusqueda.contenidoScroll}>
+                        {/* Selector de Departamento */}
+                        <View style={estilosModalBusqueda.contenedorCampo}>
+                            <View style={estilosModalBusqueda.selectorContainer}>
+                                <Picker
+                                    selectedValue={departamentoSeleccionado}
+                                    onValueChange={(itemValue) => setDepartamentoSeleccionado(itemValue)}
+                                    style={estilosModalBusqueda.picker}
+                                >
+                                    <Picker.Item label="Seleccione Departamento..." value="" />
+                                    {departamentos.map((dept, index) => (
+                                        <Picker.Item 
+                                            key={index} 
+                                            label={dept.name || dept} 
+                                            value={dept.name || dept} 
+                                        />
+                                    ))}
+                                </Picker>
+                                <MaterialIcons 
+                                    name="keyboard-arrow-down" 
+                                    size={24} 
+                                    color="#009fe3" 
+                                    style={estilosModalBusqueda.iconoDropdown}
+                                />
+                            </View>
+                        </View>
+
+                        {/* Selector de Escuela */}
+                        <View style={estilosModalBusqueda.contenedorCampo}>
+                            <View style={estilosModalBusqueda.selectorContainer}>
+                                <Picker
+                                    selectedValue={escuelaSeleccionada}
+                                    onValueChange={(itemValue) => setEscuelaSeleccionada(itemValue)}
+                                    style={estilosModalBusqueda.picker}
+                                >
+                                    <Picker.Item label="Seleccione escuela..." value="" />
+                                    {escuelas.map((escuela) => (
+                                        <Picker.Item 
+                                            key={escuela._id || escuela.id} 
+                                            label={escuela.name} 
+                                            value={escuela._id || escuela.id} 
+                                        />
+                                    ))}
+                                </Picker>
+                                <MaterialIcons 
+                                    name="keyboard-arrow-down" 
+                                    size={24} 
+                                    color="#009fe3" 
+                                    style={estilosModalBusqueda.iconoDropdown}
+                                />
+                            </View>
+                        </View>
+
+                        {/* Título Buscar desde */}
+                        <Text style={estilosModalBusqueda.tituloBuscarDesde}>Buscar desde</Text>
+
+                        {/* Selector de Fecha */}
+                        <View style={estilosModalBusqueda.contenedorCampo}>
+                            <TouchableOpacity 
+                                style={estilosModalBusqueda.selectorFecha}
+                                onPress={() => setMostrarDatePicker(true)}
+                            >
+                                <Text style={estilosModalBusqueda.textoFecha}>
+                                    {formatearFecha(fechaSeleccionada)}
+                                </Text>
+                                <MaterialIcons name="event" size={24} color="#009fe3" />
+                            </TouchableOpacity>
+                        </View>
+
+                        {mostrarDatePicker && (
+                            <DateTimePicker
+                                value={fechaSeleccionada}
+                                mode="date"
+                                display="default"
+                                onChange={onDateChange}
+                            />
+                        )}
+
+                        {/* Botones */}
+                        <View style={estilosModalBusqueda.contenedorBotones}>
+                            <TouchableOpacity 
+                                style={estilosModalBusqueda.botonAplicar} 
+                                onPress={aplicarFiltros}
+                            >
+                                <Text style={estilosModalBusqueda.textoBotonAplicar}>
+                                    Aplicar Filtros
+                                </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity 
+                                style={estilosModalBusqueda.botonLimpiar} 
+                                onPress={limpiarFiltros}
+                            >
+                                <Text style={estilosModalBusqueda.textoBotonLimpiar}>
+                                    Limpiar Filtros
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                </View>
+            </View>
+        </Modal>
+    );
+};
+
+export default ModalBusquedaPublicaciones;
