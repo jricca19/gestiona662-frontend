@@ -124,6 +124,21 @@ export const estilosPublicaciones = StyleSheet.create({
         fontSize: tamanos.textoMayor,
         color: colores.primario,
     },
+    selectEscuelasDirector: {
+        color: 'white',
+        width: '100%',
+        fontSize: 16,
+    },
+
+    pickerWrapper: {
+        borderWidth: 1,
+        borderColor: 'white',
+        borderRadius: 6,
+        overflow: 'hidden',
+        width: width * 0.35,
+        height: height * 0.05,
+        justifyContent: 'center',
+    },
     sinPublicaciones: {
         alignItems: 'center',
         marginTop: height * 0.2,
@@ -133,5 +148,5 @@ export const estilosPublicaciones = StyleSheet.create({
         height: height * 0.3,
         marginTop: height * 0.05,
         opacity: 0.7,
-    },
+    }
 });
