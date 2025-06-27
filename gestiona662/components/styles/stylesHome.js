@@ -19,7 +19,7 @@ export const estilosHome = StyleSheet.create({
         flex: 1,
         backgroundColor: colores.terceario,
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'flex-start',
     },
     bienvenida: {
         padding: height * 0.025,
@@ -41,6 +41,7 @@ export const estilosHome = StyleSheet.create({
         alignSelf: 'center',
     },
     contenedorIndicadores: {
+        marginTop: height * 0.03,
         width: '100%',
         alignItems: 'center',
     },

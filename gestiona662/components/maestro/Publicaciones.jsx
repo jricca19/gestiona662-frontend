@@ -30,14 +30,11 @@ const Publicaciones = ({ navigation }) => {
             
             let url = `https://gestiona662-backend.vercel.app/v1/publications?page=${pageToLoad}&limit=${PAGE_SIZE}`;
             
-            // Determinar qué filtros usar:
-            // - Si filtros está definido (no undefined), usar ese valor (puede ser null o un objeto)
-            // - Si filtros es undefined, usar filtrosActivos
             let filtrosAUsar;
             if (filtros !== undefined) {
-                filtrosAUsar = filtros; // Puede ser null o un objeto con filtros
+                filtrosAUsar = filtros;
             } else {
-                filtrosAUsar = filtrosActivos; // Usar filtros activos del estado
+                filtrosAUsar = filtrosActivos;
             }
             
             if (filtrosAUsar) {

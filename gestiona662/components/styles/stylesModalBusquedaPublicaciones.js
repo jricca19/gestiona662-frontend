@@ -63,7 +63,7 @@ export const estilosModalBusqueda = StyleSheet.create({
         justifyContent: 'center',
     },
     picker: {
-        height: 50,
+        height: height * 0.06,
         color: '#333',
         backgroundColor: 'transparent',
     },
@@ -94,20 +94,16 @@ export const estilosModalBusqueda = StyleSheet.create({
     contenedorBotones: {
         marginTop: height * 0.03,
         gap: height * 0.015,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     botonAplicar: {
         backgroundColor: colores.primario,
-        borderRadius: 25,
+        borderRadius: width * 0.04,
         paddingVertical: height * 0.018,
         alignItems: 'center',
         elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.22,
-        shadowRadius: 2.22,
+        width: '70%',
     },
     textoBotonAplicar: {
         color: '#fff',
@@ -116,14 +112,14 @@ export const estilosModalBusqueda = StyleSheet.create({
     },
     botonLimpiar: {
         backgroundColor: 'transparent',
-        borderRadius: 25,
         paddingVertical: height * 0.018,
         alignItems: 'center',
+        width: '70%',
     },
     textoBotonLimpiar: {
         color: colores.primario,
         fontSize: tamanos.textoMayor,
         fontWeight: '600',
-        textDecorationLine: 'underline',
+        textDecorationLine: 'none',
     },
 });

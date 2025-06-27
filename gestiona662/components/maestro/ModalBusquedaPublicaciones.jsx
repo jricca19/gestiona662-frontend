@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -9,8 +9,9 @@ import { estilosModalBusqueda } from '../styles/stylesModalBusquedaPublicaciones
 const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearFilters }) => {
     const [departamentoSeleccionado, setDepartamentoSeleccionado] = useState('');
     const [escuelaSeleccionada, setEscuelaSeleccionada] = useState('');
-    const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
+    const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
     const [mostrarDatePicker, setMostrarDatePicker] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [departamentos, setDepartamentos] = useState([]);
     const [escuelas, setEscuelas] = useState([]);
@@ -24,6 +25,7 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearF
 
     const cargarDepartamentos = async () => {
         try {
+            setLoading(true);
             const response = await fetch('https://gestiona662-backend.vercel.app/departments', {
                 method: 'GET',
             });
@@ -32,23 +34,19 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearF
         } catch (error) {
             console.error('Error al cargar departamentos:', error);
         }
+        setLoading(false);
     };
 
     const cargarEscuelas = async () => {
         try {
-            const token = await SecureStore.getItemAsync('token');
-            const response = await fetch('https://gestiona662-backend.vercel.app/v1/schools', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            setLoading(true);
+            const response = await fetch('https://gestiona662-backend.vercel.app/schoolsSelect');
             const data = await response.json();
             setEscuelas(data || []);
         } catch (error) {
             console.error('Error al cargar escuelas:', error);
         }
+        setLoading(false);
     };
 
     const aplicarFiltros = async () => {
@@ -64,7 +62,7 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearF
     const limpiarFiltros = () => {
         setDepartamentoSeleccionado('');
         setEscuelaSeleccionada('');
-        setFechaSeleccionada(new Date());
+        setFechaSeleccionada(null);
         if (onClearFilters) {
             onClearFilters();
         }
@@ -95,7 +93,6 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearF
         >
             <View style={estilosModalBusqueda.overlay}>
                 <View style={estilosModalBusqueda.contenedorModal}>
-                    {/* Header */}
                     <View style={estilosModalBusqueda.header}>
                         <Text style={estilosModalBusqueda.tituloModal}>Filtros</Text>
                         <TouchableOpacity onPress={onClose} style={estilosModalBusqueda.botonCerrar}>
@@ -104,72 +101,75 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearF
                     </View>
 
                     <ScrollView style={estilosModalBusqueda.contenidoScroll}>
-                        {/* Selector de Departamento */}
                         <View style={estilosModalBusqueda.contenedorCampo}>
                             <View style={estilosModalBusqueda.selectorContainer}>
-                                <Picker
-                                    selectedValue={departamentoSeleccionado}
-                                    onValueChange={(itemValue) => setDepartamentoSeleccionado(itemValue)}
-                                    style={estilosModalBusqueda.picker}
-                                >
-                                    <Picker.Item label="Seleccione Departamento..." value="" />
-                                    {departamentos.map((dept, index) => (
-                                        <Picker.Item
-                                            key={index}
-                                            label={dept.name || dept}
-                                            value={dept.name || dept}
-                                        />
-                                    ))}
-                                </Picker>
+                                {loading ? (
+                                    <ActivityIndicator size="small" color="#009fe3" />
+                                ) : (
+                                    <Picker
+                                        selectedValue={departamentoSeleccionado}
+                                        onValueChange={(itemValue) => setDepartamentoSeleccionado(itemValue)}
+                                        style={estilosModalBusqueda.picker}
+                                    >
+                                        <Picker.Item label="Seleccione departamento..." value="" />
+                                        {departamentos.map((dept, index) => (
+                                            <Picker.Item
+                                                key={index}
+                                                label={dept.name || dept}
+                                                value={dept.name || dept}
+                                            />
+                                        ))}
+                                    </Picker>
+                                )}
                             </View>
                         </View>
 
-                        {/* Selector de Escuela */}
                         <View style={estilosModalBusqueda.contenedorCampo}>
                             <View style={estilosModalBusqueda.selectorContainer}>
-                                <Picker
-                                    selectedValue={escuelaSeleccionada}
-                                    onValueChange={(itemValue) => setEscuelaSeleccionada(itemValue)}
-                                    style={estilosModalBusqueda.picker}
-                                >
-                                    <Picker.Item label="Seleccione escuela..." value="" />
-                                    {escuelas.map((escuela) => (
-                                        <Picker.Item
-                                            key={escuela._id || escuela.id}
-                                            label={escuela.name}
-                                            value={escuela._id || escuela.id}
-                                        />
-                                    ))}
-                                </Picker>
+                                {loading ? (
+                                    <ActivityIndicator size="small" color="#009fe3" />
+                                ) : (
+                                    <Picker
+                                        selectedValue={escuelaSeleccionada}
+                                        onValueChange={(itemValue) => setEscuelaSeleccionada(itemValue)}
+                                        style={estilosModalBusqueda.picker}
+                                    >
+                                        <Picker.Item label="Seleccione escuela..." value="" />
+                                        {escuelas.map((escuela) => (
+                                            <Picker.Item
+                                                key={escuela._id}
+                                                label={`Esc. ${escuela.schoolNumber} - ${escuela.cityName}`}
+                                                value={escuela._id}
+                                            />
+                                        ))}
+                                    </Picker>
+                                )}
                             </View>
                         </View>
 
-                        {/* Título Buscar desde */}
                         <Text style={estilosModalBusqueda.tituloBuscarDesde}>Buscar desde</Text>
-
-                        {/* Selector de Fecha */}
                         <View style={estilosModalBusqueda.contenedorCampo}>
                             <TouchableOpacity
                                 style={estilosModalBusqueda.selectorFecha}
                                 onPress={() => setMostrarDatePicker(true)}
                             >
                                 <Text style={estilosModalBusqueda.textoFecha}>
-                                    {formatearFecha(fechaSeleccionada)}
+                                    {fechaSeleccionada
+                                        ? formatearFecha(fechaSeleccionada)
+                                        : 'Seleccione una fecha...'}
                                 </Text>
                                 <MaterialIcons name="event" size={24} color="#009fe3" />
                             </TouchableOpacity>
                         </View>
-
                         {mostrarDatePicker && (
                             <DateTimePicker
-                                value={fechaSeleccionada}
+                                value={fechaSeleccionada || new Date()}
                                 mode="date"
                                 display="default"
                                 onChange={onDateChange}
                             />
                         )}
 
-                        {/* Botones */}
                         <View style={estilosModalBusqueda.contenedorBotones}>
                             <TouchableOpacity
                                 style={estilosModalBusqueda.botonAplicar}
