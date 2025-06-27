@@ -1,25 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import {
-    View,
-    Text,
-    Modal,
-    TouchableOpacity,
-    ScrollView,
-    Alert
-} from 'react-native';
+import { View, Text, Modal, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { estilosModalBusqueda } from '../styles/stylesModalBusquedaPublicaciones';
 
-const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters }) => {
+const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearFilters }) => {
     const [departamentoSeleccionado, setDepartamentoSeleccionado] = useState('');
     const [escuelaSeleccionada, setEscuelaSeleccionada] = useState('');
     const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
     const [mostrarDatePicker, setMostrarDatePicker] = useState(false);
-    
-    // Estados para los datos de los dropdowns
+
     const [departamentos, setDepartamentos] = useState([]);
     const [escuelas, setEscuelas] = useState([]);
 
@@ -32,13 +24,8 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters }) => {
 
     const cargarDepartamentos = async () => {
         try {
-            const token = await SecureStore.getItemAsync('token');
-            const response = await fetch('https://gestiona662-backend.vercel.app/v1/departments', {
+            const response = await fetch('https://gestiona662-backend.vercel.app/departments', {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
             });
             const data = await response.json();
             setDepartamentos(data || []);
@@ -65,48 +52,23 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters }) => {
     };
 
     const aplicarFiltros = async () => {
-        try {
-            let url = 'https://gestiona662-backend.vercel.app/v1/publications?page=1&limit=2';
-            
-            if (departamentoSeleccionado) {
-                url += `&departmentName=${encodeURIComponent(departamentoSeleccionado)}`;
-            }
-            
-            if (escuelaSeleccionada) {
-                url += `&schoolId=${escuelaSeleccionada}`;
-            }
-            
-            if (fechaSeleccionada) {
-                const fechaFormateada = fechaSeleccionada.toISOString().split('T')[0];
-                url += `&startDate=${fechaFormateada}`;
-            }
-
-            const token = await SecureStore.getItemAsync('token');
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                onApplyFilters(data);
-                onClose();
-            } else {
-                Alert.alert('Error', 'No se pudieron aplicar los filtros.');
-            }
-        } catch (error) {
-            console.error('Error al aplicar filtros:', error);
-            Alert.alert('Error', 'Ocurrió un error al aplicar los filtros.');
-        }
+        const filtros = {
+            departmentName: departamentoSeleccionado || null,
+            schoolId: escuelaSeleccionada || null,
+            startDate: fechaSeleccionada ? fechaSeleccionada.toISOString().split('T')[0] : null
+        };
+        onApplyFilters(filtros);
+        onClose();
     };
 
     const limpiarFiltros = () => {
         setDepartamentoSeleccionado('');
         setEscuelaSeleccionada('');
         setFechaSeleccionada(new Date());
+        if (onClearFilters) {
+            onClearFilters();
+        }
+        onClose();
     };
 
     const onDateChange = (event, selectedDate) => {
@@ -152,19 +114,13 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters }) => {
                                 >
                                     <Picker.Item label="Seleccione Departamento..." value="" />
                                     {departamentos.map((dept, index) => (
-                                        <Picker.Item 
-                                            key={index} 
-                                            label={dept.name || dept} 
-                                            value={dept.name || dept} 
+                                        <Picker.Item
+                                            key={index}
+                                            label={dept.name || dept}
+                                            value={dept.name || dept}
                                         />
                                     ))}
                                 </Picker>
-                                <MaterialIcons 
-                                    name="keyboard-arrow-down" 
-                                    size={24} 
-                                    color="#009fe3" 
-                                    style={estilosModalBusqueda.iconoDropdown}
-                                />
                             </View>
                         </View>
 
@@ -178,19 +134,13 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters }) => {
                                 >
                                     <Picker.Item label="Seleccione escuela..." value="" />
                                     {escuelas.map((escuela) => (
-                                        <Picker.Item 
-                                            key={escuela._id || escuela.id} 
-                                            label={escuela.name} 
-                                            value={escuela._id || escuela.id} 
+                                        <Picker.Item
+                                            key={escuela._id || escuela.id}
+                                            label={escuela.name}
+                                            value={escuela._id || escuela.id}
                                         />
                                     ))}
                                 </Picker>
-                                <MaterialIcons 
-                                    name="keyboard-arrow-down" 
-                                    size={24} 
-                                    color="#009fe3" 
-                                    style={estilosModalBusqueda.iconoDropdown}
-                                />
                             </View>
                         </View>
 
@@ -199,7 +149,7 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters }) => {
 
                         {/* Selector de Fecha */}
                         <View style={estilosModalBusqueda.contenedorCampo}>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 style={estilosModalBusqueda.selectorFecha}
                                 onPress={() => setMostrarDatePicker(true)}
                             >
@@ -221,8 +171,8 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters }) => {
 
                         {/* Botones */}
                         <View style={estilosModalBusqueda.contenedorBotones}>
-                            <TouchableOpacity 
-                                style={estilosModalBusqueda.botonAplicar} 
+                            <TouchableOpacity
+                                style={estilosModalBusqueda.botonAplicar}
                                 onPress={aplicarFiltros}
                             >
                                 <Text style={estilosModalBusqueda.textoBotonAplicar}>
@@ -230,8 +180,8 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters }) => {
                                 </Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity 
-                                style={estilosModalBusqueda.botonLimpiar} 
+                            <TouchableOpacity
+                                style={estilosModalBusqueda.botonLimpiar}
                                 onPress={limpiarFiltros}
                             >
                                 <Text style={estilosModalBusqueda.textoBotonLimpiar}>

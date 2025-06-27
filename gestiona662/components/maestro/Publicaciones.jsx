@@ -18,15 +18,41 @@ const Publicaciones = ({ navigation }) => {
     const [total, setTotal] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [filtrosActivos, setFiltrosActivos] = useState(null);
 
-    const fetchPublicaciones = useCallback(async (pageToLoad = 1, refreshing = false) => {
+    const fetchPublicaciones = useCallback(async (pageToLoad = 1, refreshing = false, filtros = undefined) => {
         if (loading) return;
-        if (!refreshing && total && datos.length >= total) return; // No cargar más si ya se cargó todo
+        if (!refreshing && total && datos.length >= total) return;
         setLoading(true);
         setError(null);
         try {
             const token = await SecureStore.getItemAsync('token');
-            const res = await fetch(`https://gestiona662-backend.vercel.app/v1/publications?page=${pageToLoad}&limit=${PAGE_SIZE}`, {
+            
+            let url = `https://gestiona662-backend.vercel.app/v1/publications?page=${pageToLoad}&limit=${PAGE_SIZE}`;
+            
+            // Determinar qué filtros usar:
+            // - Si filtros está definido (no undefined), usar ese valor (puede ser null o un objeto)
+            // - Si filtros es undefined, usar filtrosActivos
+            let filtrosAUsar;
+            if (filtros !== undefined) {
+                filtrosAUsar = filtros; // Puede ser null o un objeto con filtros
+            } else {
+                filtrosAUsar = filtrosActivos; // Usar filtros activos del estado
+            }
+            
+            if (filtrosAUsar) {
+                if (filtrosAUsar.departmentName) {
+                    url += `&departmentName=${filtrosAUsar.departmentName}`;
+                }
+                if (filtrosAUsar.schoolId) {
+                    url += `&schoolId=${filtrosAUsar.schoolId}`;
+                }
+                if (filtrosAUsar.startDate) {
+                    url += `&startDate=${filtrosAUsar.startDate}`;
+                }
+            }
+            
+            const res = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,7 +74,7 @@ const Publicaciones = ({ navigation }) => {
             setError('Error de red o servidor');
         }
         setLoading(false);
-    }, [loading, datos.length, total]);
+    }, [loading, datos.length, total, filtrosActivos]);
 
     useEffect(() => {
         fetchPublicaciones(1, true);
@@ -60,7 +86,7 @@ const Publicaciones = ({ navigation }) => {
         if (datos.length >= total) return;
         const nextPage = page + 1;
         setPage(nextPage);
-        fetchPublicaciones(nextPage);
+        fetchPublicaciones(nextPage, false);
     };
 
     const handleRefresh = () => {
@@ -69,10 +95,22 @@ const Publicaciones = ({ navigation }) => {
         fetchPublicaciones(1, true).then(() => setRefreshing(false));
     };
 
-    const handleApplyFilters = (filteredData) => {
-        setDatos(filteredData.publications || []);
-        setTotal(filteredData.total || 0);
+    const handleApplyFilters = (filtros) => {
+        setFiltrosActivos(filtros);
+        setError(null);
         setPage(1);
+        setDatos([]);
+        setTotal(0);
+        fetchPublicaciones(1, true, filtros);
+    };
+
+    const handleClearFilters = () => {
+        setFiltrosActivos(null);
+        setError(null);
+        setPage(1);
+        setDatos([]);
+        setTotal(0);
+        fetchPublicaciones(1, true, null);
     };
 
     const handleCloseModal = () => {
@@ -213,6 +251,7 @@ const Publicaciones = ({ navigation }) => {
                 visible={modalVisible}
                 onClose={handleCloseModal}
                 onApplyFilters={handleApplyFilters}
+                onClearFilters={handleClearFilters}
             />
         </View>
     )

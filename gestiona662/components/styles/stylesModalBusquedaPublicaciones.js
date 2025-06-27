@@ -67,13 +67,6 @@ export const estilosModalBusqueda = StyleSheet.create({
         color: '#333',
         backgroundColor: 'transparent',
     },
-    iconoDropdown: {
-        position: 'absolute',
-        right: 15,
-        top: '50%',
-        marginTop: -12,
-        pointerEvents: 'none',
-    },
     tituloBuscarDesde: {
         fontSize: tamanos.textoMayor,
         fontWeight: 'bold',

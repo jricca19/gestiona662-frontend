@@ -120,9 +120,9 @@ export const estilosPublicaciones = StyleSheet.create({
     },
     textoFinalLista: {
         marginTop: height * 0.01,
-        alignItems: 'center',
         fontSize: tamanos.textoMayor,
         color: colores.primario,
+        textAlign: 'center',
     },
     selectEscuelasDirector: {
         color: 'white',
@@ -140,8 +140,11 @@ export const estilosPublicaciones = StyleSheet.create({
         justifyContent: 'center',
     },
     sinPublicaciones: {
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
-        marginTop: height * 0.2,
+        paddingHorizontal: width * 0.01,
+        paddingVertical: height * 0.1,
     },
     sinPublicacionesImagen: {
         width: width,
