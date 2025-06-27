@@ -85,14 +85,17 @@ export const stylesPerfil = StyleSheet.create({
         fontSize: tamanos.texto,
         color: colores.primarioOscuro,
     },
+    contenedorBotones: {
+        alignItems: 'center',
+        gap: height * 0.012,
+    },
     botonEditar: {
         backgroundColor: colores.primario,
         borderRadius: width * 0.02,
         paddingVertical: height * 0.018,
         alignItems: 'center',
-        marginBottom: height * 0.025,
-        marginTop: height * 0.012,
         elevation: 2,
+        width: '70%',
     },
     textoBotonEditar: {
         color: colores.terceario,

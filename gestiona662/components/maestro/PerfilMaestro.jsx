@@ -106,13 +106,15 @@ const PerfilMaestro = ({ navigation }) => {
                             </View>
                         </View>
 
-                        <TouchableOpacity style={stylesPerfil.botonEditar}>
-                            <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
-                        </TouchableOpacity>
+                        <View style={stylesPerfil.contenedorBotones}>
+                            <TouchableOpacity style={stylesPerfil.botonEditar}>
+                                <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
+                            </TouchableOpacity>
 
-                        <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
-                            <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
+                                <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
+                            </TouchableOpacity>
+                        </View>
                     </ScrollView>
                 </View>
             </ScrollView>

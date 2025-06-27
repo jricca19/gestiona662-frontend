@@ -61,7 +61,6 @@ const PerfilDirector = ({ navigation }) => {
             <ScrollView>
                 <View style={stylesPerfil.contenedor}>
                     <ScrollView contentContainerStyle={stylesPerfil.contenidoScroll}>
-                        {/* Foto y nombre */}
                         <View style={stylesPerfil.avatarContainer}>
                             <FotoPerfilUploader
                                 avatarStyle={stylesPerfil.avatar}
@@ -120,14 +119,16 @@ const PerfilDirector = ({ navigation }) => {
                             ))}
                         </View>
 
-                        <View style={stylesPerfil.filaCalificacion}>
-                            <FontAwesome name="star" size={20} color="#009fe3" style={stylesPerfil.icono} />
-                            <Text style={stylesPerfil.textoCalificacion}>4.9</Text>
-                        </View>
+                        <View style={stylesPerfil.contenedorBotones}>
+                            <View style={stylesPerfil.filaCalificacion}>
+                                <FontAwesome name="star" size={20} color="#009fe3" style={stylesPerfil.icono} />
+                                <Text style={stylesPerfil.textoCalificacion}>4.9</Text>
+                            </View>
 
-                        <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
-                            <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
+                                <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
+                            </TouchableOpacity>
+                        </View>
                     </ScrollView>
                 </View>
             </ScrollView>
