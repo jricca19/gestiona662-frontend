@@ -16,25 +16,25 @@ const HomeDirector = ({ navigation }) => {
             <View style={estilosHome.encabezado}>
                 <Text style={estilosHome.textoEncabezado}>Gestiona 662</Text>
             </View>
-            <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
+            <ScrollView contentContainerStyle={{ alignItems: 'center', paddingBottom: 32}}>
                 <View style={estilosHome.contenedor}>
-
-                    <View style={estilosHome.bienvenida}>
-                        <Text style={estilosHome.bienvenidaContenido}>Bienvenid@</Text>
-                        <Text style={estilosHome.bienvenidaContenido}>{`${name} ${lastName}`}</Text>
+                    <View>
+                        <View style={estilosHome.bienvenida}>
+                            <Text style={estilosHome.bienvenidaContenido}>Bienvenid@</Text>
+                            <Text style={estilosHome.bienvenidaContenido}>{`${name} ${lastName}`}</Text>
+                        </View>
+                        <Text style={estilosHome.titiloContenedorEscuela}>Tus Escuelas</Text>
+                        <View style={estilosHome.contenedorEscuela}>
+                            <Picker
+                                selectedValue={escuela}
+                                style={{ flex: 1, height: 56, width: '100%' }}
+                                onValueChange={(itemValue) => setEscuela(itemValue)}
+                                dropdownIconColor="#009fe3"
+                            >
+                                {escuelas.map(e => (<Picker.Item key={e} label={e} value={e} />))}
+                            </Picker>
+                        </View>
                     </View>
-
-                    <View style={estilosHome.contenedorEscuela}>
-                        <Picker
-                            selectedValue={escuela}
-                            style={{ flex: 1, height: 56, width: '100%' }}
-                            onValueChange={(itemValue) => setEscuela(itemValue)}
-                            dropdownIconColor="#009fe3"
-                        >
-                            {escuelas.map(e => (<Picker.Item key={e} label={e} value={e} />))}
-                        </Picker>
-                    </View>
-
                     <View style={estilosHome.contenedorIndicadores}>
                         <View style={estilosHome.filaIndicadores}>
                             <View style={estilosHome.indicadorYEtiqueta}>
@@ -69,7 +69,6 @@ const HomeDirector = ({ navigation }) => {
                             </View>
                         </View>
                     </View>
-                    
                 </View>
             </ScrollView>
         </View>

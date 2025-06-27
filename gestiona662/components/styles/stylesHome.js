@@ -19,7 +19,7 @@ export const estilosHome = StyleSheet.create({
         flex: 1,
         backgroundColor: colores.terceario,
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between'
     },
     bienvenida: {
         padding: height * 0.025,
@@ -29,8 +29,16 @@ export const estilosHome = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    titiloContenedorEscuela: {
+        marginTop: height * 0.03,
+        fontSize: tamanos.subtitulo,
+        color: colores.primario,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        paddingBottom: height * 0.01,
+    },
     contenedorEscuela: {
-        margin: height * 0.025,
+        marginHorizontal: height * 0.025,
         backgroundColor: colores.cuarto,
         borderRadius: width * 0.015,
         paddingHorizontal: width * 0.025,
@@ -44,6 +52,7 @@ export const estilosHome = StyleSheet.create({
         marginTop: height * 0.03,
         width: '100%',
         alignItems: 'center',
+        marginTop: height * 0.05,
     },
     filaIndicadores: {
         flexDirection: 'row',
