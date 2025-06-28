@@ -65,8 +65,6 @@ const FormularioLogin = ({ navigation }) => {
 
         await SecureStore.setItemAsync("usuario", JSON.stringify(usuario));
         dispatch(loguear(usuario));
-
-        Alert.alert('Éxito', 'Inicio de sesión correcto');
       } else {
         Alert.alert('Error', data?.message || 'Credenciales inválidas');
       }

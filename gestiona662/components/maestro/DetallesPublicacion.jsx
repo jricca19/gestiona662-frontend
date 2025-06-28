@@ -6,13 +6,28 @@ import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import * as SecureStore from 'expo-secure-store'
 
+function formatUTC(dateStr, pattern = 'EEEE dd') {
+    const date = new Date(dateStr);
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = date.toLocaleString('es-ES', { month: 'short', timeZone: 'UTC' }).toUpperCase();
+    const year = date.getUTCFullYear();
+    const weekDay = date.toLocaleString('es-ES', { weekday: 'long', timeZone: 'UTC' });
+    if (pattern === 'dd/MM/yyyy') return `${day}/${String(date.getUTCMonth() + 1).padStart(2, '0')}/${year}`;
+    if (pattern === 'EEEE dd') return `${weekDay} ${day}`;
+    if (pattern === 'MMMM - yyyy') {
+        const mes = date.toLocaleString('es-ES', { month: 'long', timeZone: 'UTC' });
+        return `${mes.charAt(0).toUpperCase() + mes.slice(1)} - ${year}`;
+    }
+    return '';
+}
+
 const DetallesPublicacion = ({ route, navigation }) => {
     const { publicacion } = route.params
 
     const fechas = (publicacion.publicationDays || [])
         .filter(d => d.status === 'AVAILABLE')
         .map(d => ({
-            label: format(parseISO(d.date), 'EEEE dd', { locale: es }),
+            label: formatUTC(d.date, 'EEEE dd'),
             value: d.date
         }))
 
@@ -42,7 +57,6 @@ const DetallesPublicacion = ({ route, navigation }) => {
                 publicationId: publicacion._id,
                 createdAt: new Date().toISOString(),
                 appliesToAllDays,
-                // Solo incluir postulationDays si NO aplica a todos los días
                 ...(appliesToAllDays ? {} : {
                     postulationDays: seleccionadosArray.map(date => ({
                         date: date.split('T')[0]
@@ -71,10 +85,10 @@ const DetallesPublicacion = ({ route, navigation }) => {
                                 ? 'completo'
                                 : publicacion.shift
                 }
-                // Días seleccionados en texto
+                // Días seleccionados en texto (en UTC)
                 const diasSeleccionadosTexto = appliesToAllDays
-                    ? (publicacion.publicationDays || []).map(d => format(parseISO(d.date), 'dd/MM/yyyy'))
-                    : seleccionadosArray.map(date => format(parseISO(date), 'dd/MM/yyyy'))
+                    ? (publicacion.publicationDays || []).map(d => formatUTC(d.date, 'dd/MM/yyyy'))
+                    : seleccionadosArray.map(date => formatUTC(date, 'dd/MM/yyyy'))
 
                 navigation.reset({
                     index: 0,
@@ -136,7 +150,7 @@ const DetallesPublicacion = ({ route, navigation }) => {
                     <View style={estilosDetalles.tarjetaFechas}>
                         <Text style={estilosDetalles.etiquetaTarjeta}>Selección de días</Text>
                         <Text style={estilosDetalles.tituloMes}>
-                            {format(parseISO(fechas[0].value), 'MMMM - yyyy', { locale: es }).replace(/^\w/, c => c.toUpperCase())}
+                            {formatUTC(fechas[0].value, 'MMMM - yyyy')}
                         </Text>
                         {fechas.map(f => (
                             <View key={f.value} style={estilosDetalles.filaDia}>

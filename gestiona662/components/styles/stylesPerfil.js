@@ -67,11 +67,13 @@ export const stylesPerfil = StyleSheet.create({
     datosSeccion: {
         backgroundColor: colores.terceario,
         borderRadius: width * 0.025,
-        padding: width * 0.04,
-        marginBottom: height * 0.018,
-        elevation: 1,
-        borderWidth: 1,
-        borderColor: colores.tercearioOscuro,
+    },
+    subtituloCampo: {
+        fontSize: tamanos.menu,
+        color: colores.primario,
+        fontWeight: '600',
+        marginBottom: 2,
+        marginLeft: width * 0.005,
     },
     filaSeccion: {
         flexDirection: 'row',
@@ -83,7 +85,7 @@ export const stylesPerfil = StyleSheet.create({
     },
     textoFila: {
         fontSize: tamanos.texto,
-        color: colores.primarioOscuro,
+        color: colores.quinto,
     },
     contenedorBotones: {
         alignItems: 'center',
@@ -92,39 +94,31 @@ export const stylesPerfil = StyleSheet.create({
     botonEditar: {
         backgroundColor: colores.primario,
         borderRadius: width * 0.02,
-        paddingVertical: height * 0.018,
+        paddingVertical: height * 0.013,
         alignItems: 'center',
         elevation: 2,
         width: '70%',
     },
     textoBotonEditar: {
         color: colores.terceario,
-        fontWeight: 'bold',
         fontSize: tamanos.texto,
     },
     escuelasContainer: {
-        backgroundColor: colores.terceario,
-        borderRadius: width * 0.025,
-        padding: width * 0.04,
-        marginBottom: height * 0.018,
-        elevation: 1,
-        borderWidth: 1,
-        borderColor: colores.tercearioOscuro,
+        marginBottom: height * 0.025,
     },
     filaEscuelaInput: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: height * 0.012,
-    },
-    inputEscuela: {
-        flex: 1,
-        borderColor: colores.secundario,
+        backgroundColor: '#fff',
+        borderRadius: 8,
         borderWidth: 1,
-        borderRadius: width * 0.015,
-        padding: width * 0.02,
-        marginRight: width * 0.02,
-        backgroundColor: colores.terceario,
-        color: colores.primarioOscuro,
+        borderColor: '#ddd',
+        position: 'relative',
+        minHeight: 50,
+        justifyContent: 'center',
+        marginBottom: height * 0.01,
+    },
+    tituloCalificacion: {
+        fontSize: tamanos.texto,
+        color: colores.primario,
     },
     botonIcono: {
         padding: width * 0.01,
@@ -139,6 +133,11 @@ export const stylesPerfil = StyleSheet.create({
         color: colores.primarioOscuro,
         marginRight: width * 0.025,
     },
+    picker: {
+        height: height * 0.06,
+        color: '#333',
+        backgroundColor: 'transparent',
+    },
     filaCalificacion: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -146,19 +145,21 @@ export const stylesPerfil = StyleSheet.create({
         marginLeft: width * 0.01,
     },
     textoCalificacion: {
-        fontSize: tamanos.subtitulo,
-        color: colores.primario,
-        fontWeight: 'bold',
+        fontSize: tamanos.texto,
+        color: colores.quinto,
         marginLeft: width * 0.01,
     },
     botonCerrarSesion: {
         alignItems: 'center',
         marginTop: height * 0.012,
+        width: '70%',
     },
     textoCerrarSesion: {
         color: colores.primario,
         fontWeight: 'bold',
         fontSize: tamanos.texto,
-        textDecorationLine: 'underline',
+        textShadowColor: 'rgba(0,0,0,0.15)',
+        textShadowOffset: { width: 0, height: 1 },
+        textShadowRadius: 2,
     },
 });

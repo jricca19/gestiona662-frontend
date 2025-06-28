@@ -114,16 +114,23 @@ const Publicaciones = ({ navigation }) => {
         setModalVisible(false);
     };
 
+    function formatUTC(dateStr, pattern = 'dd MMM yyyy') {
+        const date = new Date(dateStr);
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = date.toLocaleString('es-ES', { month: 'short', timeZone: 'UTC' }).toUpperCase();
+        const year = date.getUTCFullYear();
+        if (pattern === 'dd') return day;
+        if (pattern === 'dd MMM yyyy') return `${day} ${month} ${year}`;
+        return '';
+    }
+
     const renderItem = ({ item }) => {
-        // Formateo de fechas usando date-fns
         let fechaFormateada = '';
         if (item.startDate && item.endDate) {
-            const inicio = parseISO(item.startDate);
-            const fin = parseISO(item.endDate);
             fechaFormateada =
-                format(inicio, 'dd', { locale: es }) +
+                formatUTC(item.startDate, 'dd') +
                 '-' +
-                format(fin, 'dd MMM yyyy', { locale: es }).toUpperCase();
+                formatUTC(item.endDate, 'dd MMM yyyy');
         }
 
         return (
