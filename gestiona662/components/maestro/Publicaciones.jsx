@@ -1,12 +1,11 @@
 import { FlatList, Text, View, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
-import React, { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import * as SecureStore from 'expo-secure-store';
 import { MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 import { colores } from '../styles/fuentesyColores'
 import { estilosPublicaciones } from '../styles/stylesPublicaciones'
-import { format, parseISO } from 'date-fns'
-import { es } from 'date-fns/locale'
 import ModalBusquedaPublicaciones from './ModalBusquedaPublicaciones'
+import { formatUTC } from '../../utils/formatUTC'
 
 const PAGE_SIZE = 4;
 
@@ -27,16 +26,16 @@ const Publicaciones = ({ navigation }) => {
         setError(null);
         try {
             const token = await SecureStore.getItemAsync('token');
-            
+
             let url = `https://gestiona662-backend.vercel.app/v1/publications?page=${pageToLoad}&limit=${PAGE_SIZE}`;
-            
+
             let filtrosAUsar;
             if (filtros !== undefined) {
                 filtrosAUsar = filtros;
             } else {
                 filtrosAUsar = filtrosActivos;
             }
-            
+
             if (filtrosAUsar) {
                 if (filtrosAUsar.departmentName) {
                     url += `&departmentName=${filtrosAUsar.departmentName}`;
@@ -48,7 +47,7 @@ const Publicaciones = ({ navigation }) => {
                     url += `&startDate=${filtrosAUsar.startDate}`;
                 }
             }
-            
+
             const res = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -113,16 +112,6 @@ const Publicaciones = ({ navigation }) => {
     const handleCloseModal = () => {
         setModalVisible(false);
     };
-
-    function formatUTC(dateStr, pattern = 'dd MMM yyyy') {
-        const date = new Date(dateStr);
-        const day = String(date.getUTCDate()).padStart(2, '0');
-        const month = date.toLocaleString('es-ES', { month: 'short', timeZone: 'UTC' }).toUpperCase();
-        const year = date.getUTCFullYear();
-        if (pattern === 'dd') return day;
-        if (pattern === 'dd MMM yyyy') return `${day} ${month} ${year}`;
-        return '';
-    }
 
     const renderItem = ({ item }) => {
         let fechaFormateada = '';
@@ -190,7 +179,7 @@ const Publicaciones = ({ navigation }) => {
                 <View style={estilosPublicaciones.contenedor}>
                     <View style={estilosPublicaciones.fila}>
                         <Text style={estilosPublicaciones.titulo}>Publicaciones</Text>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             style={estilosPublicaciones.botonFiltrar}
                             onPress={() => setModalVisible(true)}
                         >
@@ -250,7 +239,7 @@ const Publicaciones = ({ navigation }) => {
                     )}
                 </View>
             </View>
-            
+
             <ModalBusquedaPublicaciones
                 visible={modalVisible}
                 onClose={handleCloseModal}

@@ -1,25 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { estilosDetalles } from '../styles/stylesDetallesPublicacion'
-import { format, parseISO } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { formatUTC } from '../../utils/formatUTC'
 import * as SecureStore from 'expo-secure-store'
-
-function formatUTC(dateStr, pattern = 'EEEE dd') {
-    const date = new Date(dateStr);
-    const day = String(date.getUTCDate()).padStart(2, '0');
-    const month = date.toLocaleString('es-ES', { month: 'short', timeZone: 'UTC' }).toUpperCase();
-    const year = date.getUTCFullYear();
-    const weekDay = date.toLocaleString('es-ES', { weekday: 'long', timeZone: 'UTC' });
-    if (pattern === 'dd/MM/yyyy') return `${day}/${String(date.getUTCMonth() + 1).padStart(2, '0')}/${year}`;
-    if (pattern === 'EEEE dd') return `${weekDay} ${day}`;
-    if (pattern === 'MMMM - yyyy') {
-        const mes = date.toLocaleString('es-ES', { month: 'long', timeZone: 'UTC' });
-        return `${mes.charAt(0).toUpperCase() + mes.slice(1)} - ${year}`;
-    }
-    return '';
-}
 
 const DetallesPublicacion = ({ route, navigation }) => {
     const { publicacion } = route.params
@@ -85,7 +69,7 @@ const DetallesPublicacion = ({ route, navigation }) => {
                                 ? 'completo'
                                 : publicacion.shift
                 }
-                // Días seleccionados en texto (en UTC)
+
                 const diasSeleccionadosTexto = appliesToAllDays
                     ? (publicacion.publicationDays || []).map(d => formatUTC(d.date, 'dd/MM/yyyy'))
                     : seleccionadosArray.map(date => formatUTC(date, 'dd/MM/yyyy'))
