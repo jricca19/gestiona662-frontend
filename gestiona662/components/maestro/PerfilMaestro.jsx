@@ -42,7 +42,7 @@ const PerfilMaestro = ({ navigation }) => {
                 </TouchableOpacity>
                 <Text style={stylesPerfil.textoEncabezado}>Perfil</Text>
             </View>
-            <ScrollView>
+            <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
                 <View style={stylesPerfil.contenedor}>
                     <ScrollView contentContainerStyle={stylesPerfil.contenidoScroll}>
                         <View style={stylesPerfil.avatarContainer}>
@@ -59,60 +59,73 @@ const PerfilMaestro = ({ navigation }) => {
                         <View>
                             <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
                             <View style={stylesPerfil.datosSeccion}>
+                                <Text style={stylesPerfil.subtituloCampo}>Email</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <MaterialIcons name="email" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.email || 'No disponible'}</Text>
+                                    <MaterialIcons name="email" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Teléfono de contacto</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <MaterialIcons name="phone" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+No disponible'}</Text>
+                                    <MaterialIcons name="phone" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59892654987'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>C.I.</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <MaterialIcons name="badge" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.ci || 'No disponible'}</Text>
+                                    <MaterialIcons name="badge" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.ci || '49086546'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Dirección</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <Entypo name="location-pin" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.address || 'No disponible'}</Text>
+                                    <MaterialIcons name="location-on" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.address || 'Calle 1234'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Fecha de egreso</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <MaterialIcons name="event" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.birthDate || 'No disponible'}</Text>
+                                    <MaterialIcons name="event" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.graduationDate || '10/05/2024'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Puntaje del concurso</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <MaterialIcons name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.competitionNumber || 'No disponible'}</Text>
+                                    <MaterialIcons name="assignment" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.competitionNumber || '90'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Efectividad</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <MaterialIcons name="verified-user" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <MaterialIcons name="account-balance" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                     <Text style={stylesPerfil.textoFila}>{usuario.isEffectiveTeacher ? 'Efectivo' : 'No Efectivo'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Carné de Salud</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <MaterialIcons name="health-and-safety" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.healthCertificateStatus || 'No disponible'}</Text>
+                                    <MaterialIcons name="health-and-safety" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.healthCertificateStatus || 'Vigente'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Certificado Ley 19889</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <MaterialIcons name="description" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.criminalRecordDate || 'No disponible'}</Text>
+                                    <MaterialIcons name="description" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.criminalRecordDate || '20/06/2025'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Turnos Preferidos</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <MaterialIcons name="schedule" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.shift || 'No disponible'}</Text>
+                                    <MaterialIcons name="schedule" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.shift || 'Tarde'}</Text>
                                 </View>
+                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Calificación</Text>
                                 <View style={stylesPerfil.filaSeccion}>
-                                    <FontAwesome name="star" size={18} color="#009fe3" style={stylesPerfil.iconoFila} />
-                                    <Text style={stylesPerfil.textoFila}>{usuario.rating || '0'}</Text>
+                                    <FontAwesome name="star" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
+                                    <Text style={stylesPerfil.textoFila}>{usuario.rating || '4.9'}</Text>
                                 </View>
                             </View>
                         </View>
 
-                        <TouchableOpacity style={stylesPerfil.botonEditar}>
-                            <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
-                        </TouchableOpacity>
+                        <View style={stylesPerfil.contenedorBotones}>
+                            <TouchableOpacity style={stylesPerfil.botonEditar}>
+                                <Text style={stylesPerfil.textoBotonEditar}>Editar Datos</Text>
+                            </TouchableOpacity>
 
-                        <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
-                            <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity style={stylesPerfil.botonCerrarSesion} onPress={handleLogout}>
+                                <Text style={stylesPerfil.textoCerrarSesion}>Cerrar Sesión</Text>
+                            </TouchableOpacity>
+                        </View>
                     </ScrollView>
                 </View>
             </ScrollView>

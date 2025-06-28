@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { estilosDetalles } from '../styles/stylesDetallesPublicacion'
-import { format, parseISO } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { formatUTC } from '../../utils/formatUTC'
 import * as SecureStore from 'expo-secure-store'
 
 const DetallesPublicacion = ({ route, navigation }) => {
@@ -12,7 +11,7 @@ const DetallesPublicacion = ({ route, navigation }) => {
     const fechas = (publicacion.publicationDays || [])
         .filter(d => d.status === 'AVAILABLE')
         .map(d => ({
-            label: format(parseISO(d.date), 'EEEE dd', { locale: es }),
+            label: formatUTC(d.date, 'EEEE dd'),
             value: d.date
         }))
 
@@ -42,7 +41,6 @@ const DetallesPublicacion = ({ route, navigation }) => {
                 publicationId: publicacion._id,
                 createdAt: new Date().toISOString(),
                 appliesToAllDays,
-                // Solo incluir postulationDays si NO aplica a todos los días
                 ...(appliesToAllDays ? {} : {
                     postulationDays: seleccionadosArray.map(date => ({
                         date: date.split('T')[0]
@@ -71,10 +69,10 @@ const DetallesPublicacion = ({ route, navigation }) => {
                                 ? 'completo'
                                 : publicacion.shift
                 }
-                // Días seleccionados en texto
+
                 const diasSeleccionadosTexto = appliesToAllDays
-                    ? (publicacion.publicationDays || []).map(d => format(parseISO(d.date), 'dd/MM/yyyy'))
-                    : seleccionadosArray.map(date => format(parseISO(date), 'dd/MM/yyyy'))
+                    ? (publicacion.publicationDays || []).map(d => formatUTC(d.date, 'dd/MM/yyyy'))
+                    : seleccionadosArray.map(date => formatUTC(date, 'dd/MM/yyyy'))
 
                 navigation.reset({
                     index: 0,
@@ -136,7 +134,7 @@ const DetallesPublicacion = ({ route, navigation }) => {
                     <View style={estilosDetalles.tarjetaFechas}>
                         <Text style={estilosDetalles.etiquetaTarjeta}>Selección de días</Text>
                         <Text style={estilosDetalles.tituloMes}>
-                            {format(parseISO(fechas[0].value), 'MMMM - yyyy', { locale: es }).replace(/^\w/, c => c.toUpperCase())}
+                            {formatUTC(fechas[0].value, 'MMMM - yyyy')}
                         </Text>
                         {fechas.map(f => (
                             <View key={f.value} style={estilosDetalles.filaDia}>

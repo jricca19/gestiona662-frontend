@@ -1,11 +1,11 @@
 import { FlatList, Text, View, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
-import React, { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import * as SecureStore from 'expo-secure-store';
 import { MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons'
 import { colores } from '../styles/fuentesyColores'
 import { estilosPublicaciones } from '../styles/stylesPublicaciones'
-import { format, parseISO } from 'date-fns'
-import { es } from 'date-fns/locale'
+import ModalBusquedaPublicaciones from './ModalBusquedaPublicaciones'
+import { formatUTC } from '../../utils/formatUTC'
 
 const PAGE_SIZE = 4;
 
@@ -16,15 +16,39 @@ const Publicaciones = ({ navigation }) => {
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [filtrosActivos, setFiltrosActivos] = useState(null);
 
-    const fetchPublicaciones = useCallback(async (pageToLoad = 1, refreshing = false) => {
+    const fetchPublicaciones = useCallback(async (pageToLoad = 1, refreshing = false, filtros = undefined) => {
         if (loading) return;
-        if (!refreshing && total && datos.length >= total) return; // No cargar más si ya se cargó todo
+        if (!refreshing && total && datos.length >= total) return;
         setLoading(true);
         setError(null);
         try {
             const token = await SecureStore.getItemAsync('token');
-            const res = await fetch(`https://gestiona662-backend.vercel.app/v1/publications?page=${pageToLoad}&limit=${PAGE_SIZE}`, {
+
+            let url = `https://gestiona662-backend.vercel.app/v1/publications?page=${pageToLoad}&limit=${PAGE_SIZE}`;
+
+            let filtrosAUsar;
+            if (filtros !== undefined) {
+                filtrosAUsar = filtros;
+            } else {
+                filtrosAUsar = filtrosActivos;
+            }
+
+            if (filtrosAUsar) {
+                if (filtrosAUsar.departmentName) {
+                    url += `&departmentName=${filtrosAUsar.departmentName}`;
+                }
+                if (filtrosAUsar.schoolId) {
+                    url += `&schoolId=${filtrosAUsar.schoolId}`;
+                }
+                if (filtrosAUsar.startDate) {
+                    url += `&startDate=${filtrosAUsar.startDate}`;
+                }
+            }
+
+            const res = await fetch(url, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +70,7 @@ const Publicaciones = ({ navigation }) => {
             setError('Error de red o servidor');
         }
         setLoading(false);
-    }, [loading, datos.length, total]);
+    }, [loading, datos.length, total, filtrosActivos]);
 
     useEffect(() => {
         fetchPublicaciones(1, true);
@@ -58,7 +82,7 @@ const Publicaciones = ({ navigation }) => {
         if (datos.length >= total) return;
         const nextPage = page + 1;
         setPage(nextPage);
-        fetchPublicaciones(nextPage);
+        fetchPublicaciones(nextPage, false);
     };
 
     const handleRefresh = () => {
@@ -67,16 +91,35 @@ const Publicaciones = ({ navigation }) => {
         fetchPublicaciones(1, true).then(() => setRefreshing(false));
     };
 
+    const handleApplyFilters = (filtros) => {
+        setFiltrosActivos(filtros);
+        setError(null);
+        setPage(1);
+        setDatos([]);
+        setTotal(0);
+        fetchPublicaciones(1, true, filtros);
+    };
+
+    const handleClearFilters = () => {
+        setFiltrosActivos(null);
+        setError(null);
+        setPage(1);
+        setDatos([]);
+        setTotal(0);
+        fetchPublicaciones(1, true, null);
+    };
+
+    const handleCloseModal = () => {
+        setModalVisible(false);
+    };
+
     const renderItem = ({ item }) => {
-        // Formateo de fechas usando date-fns
         let fechaFormateada = '';
         if (item.startDate && item.endDate) {
-            const inicio = parseISO(item.startDate);
-            const fin = parseISO(item.endDate);
             fechaFormateada =
-                format(inicio, 'dd', { locale: es }) +
+                formatUTC(item.startDate, 'dd') +
                 '-' +
-                format(fin, 'dd MMM yyyy', { locale: es }).toUpperCase();
+                formatUTC(item.endDate, 'dd MMM yyyy');
         }
 
         return (
@@ -136,7 +179,10 @@ const Publicaciones = ({ navigation }) => {
                 <View style={estilosPublicaciones.contenedor}>
                     <View style={estilosPublicaciones.fila}>
                         <Text style={estilosPublicaciones.titulo}>Publicaciones</Text>
-                        <TouchableOpacity style={estilosPublicaciones.botonFiltrar}>
+                        <TouchableOpacity
+                            style={estilosPublicaciones.botonFiltrar}
+                            onPress={() => setModalVisible(true)}
+                        >
                             <Text style={estilosPublicaciones.textoFiltrar}>Filtrar</Text>
                         </TouchableOpacity>
                     </View>
@@ -193,6 +239,13 @@ const Publicaciones = ({ navigation }) => {
                     )}
                 </View>
             </View>
+
+            <ModalBusquedaPublicaciones
+                visible={modalVisible}
+                onClose={handleCloseModal}
+                onApplyFilters={handleApplyFilters}
+                onClearFilters={handleClearFilters}
+            />
         </View>
     )
 }

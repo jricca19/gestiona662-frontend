@@ -1,9 +1,7 @@
-import React from 'react'
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { estilosDetalles } from '../styles/stylesDetallesPostulacion'
-import { format, parseISO } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { formatUTC } from '../../utils/formatUTC'
 
 const shiftLabels = {
     MORNING: { label: 'Mañana', hours: '08:00 a 12:00' },
@@ -17,15 +15,11 @@ const DetallesPostulacion = ({ navigation, route }) => {
     const escuela = pub.schoolId || {}
 
     let diasCubrir = ''
-    if (postulacion.appliesToAllDays) {
-        diasCubrir = 'Todos los días'
-    } else if (postulacion.postulationDays && postulacion.postulationDays.length > 0) {
-        const dias = postulacion.postulationDays.map(d =>
-            format(parseISO(d.date), 'd', { locale: es })
-        )
-        const mes = format(parseISO(postulacion.postulationDays[0].date), 'MMMM', { locale: es })
-        const anio = format(parseISO(postulacion.postulationDays[0].date), 'yyyy', { locale: es })
-        diasCubrir = `${dias.join(', ')}\n${mes.charAt(0).toUpperCase() + mes.slice(1)} ${anio}`
+    if (postulacion.postulationDays && postulacion.postulationDays.length > 0) {
+        const dias = postulacion.postulationDays.map(d => formatUTC(d.date, 'dd'))
+        const mes = formatUTC(postulacion.postulationDays[0].date, 'MMMM - yyyy').split(' - ')[0]
+        const anio = formatUTC(postulacion.postulationDays[0].date, 'MMMM - yyyy').split(' - ')[1]
+        diasCubrir += `${dias.join(', ')}\n${mes.charAt(0).toUpperCase() + mes.slice(1)} ${anio}`
     }
 
     const turno = shiftLabels[pub.shift] || { label: pub.shift, hours: '' }

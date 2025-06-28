@@ -19,7 +19,7 @@ export const estilosHome = StyleSheet.create({
         flex: 1,
         backgroundColor: colores.terceario,
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between'
     },
     bienvenida: {
         padding: height * 0.025,
@@ -29,20 +29,37 @@ export const estilosHome = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
-    contenedorEscuela: {
-        margin: height * 0.025,
-        backgroundColor: colores.cuarto,
-        borderRadius: width * 0.015,
-        paddingHorizontal: width * 0.025,
+    tituloSeccion: {
+        textAlign: 'center',
+        color: colores.primario,
+        fontWeight: 'bold',
+        fontSize: tamanos.subtitulo,
+        marginTop: height * 0.012,
+        marginBottom: height * 0.008,
+    },
+    escuelasContainer: {
+        marginBottom: height * 0.025,
+    },
+    filaEscuelaInput: {
+        backgroundColor: '#fff',
+        borderRadius: 8,
         borderWidth: 1,
-        borderColor: colores.tercearioOscuro,
-        width: width * 0.5,
-        height: height * 0.07,
-        alignSelf: 'center',
+        borderColor: '#ddd',
+        position: 'relative',
+        minHeight: 50,
+        width: width * 0.7,
+        justifyContent: 'center',
+    },
+    picker: {
+        height: height * 0.06,
+        color: '#333',
+        backgroundColor: 'transparent',
     },
     contenedorIndicadores: {
+        marginTop: height * 0.03,
         width: '100%',
         alignItems: 'center',
+        marginTop: height * 0.05,
     },
     filaIndicadores: {
         flexDirection: 'row',

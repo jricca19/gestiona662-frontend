@@ -1,11 +1,10 @@
 import { FlatList, Text, View, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as SecureStore from 'expo-secure-store'
 import { Ionicons } from '@expo/vector-icons'
 import { estilosPostulaciones } from '../styles/stylesPostulacionesMaestro'
-import { format, parseISO } from 'date-fns'
-import { es } from 'date-fns/locale'
 import { colores } from '../styles/fuentesyColores'
+import { formatUTC } from '../../utils/formatUTC'
 
 const estados = {
     ACCEPTED: {
@@ -80,10 +79,10 @@ const PostulacionesMaestro = ({ navigation }) => {
         let fechas = ''
         if (item.postulationDays && item.postulationDays.length > 0) {
             const dias = item.postulationDays.map(d =>
-                format(parseISO(d.date), 'd', { locale: es })
+                formatUTC(d.date, 'dd')
             )
-            const mes = format(parseISO(item.postulationDays[0].date), 'MMMM', { locale: es })
-            const anio = format(parseISO(item.postulationDays[0].date), 'yyyy', { locale: es })
+            const mes = formatUTC(item.postulationDays[0].date, 'MMMM - yyyy').split(' - ')[0]
+            const anio = formatUTC(item.postulationDays[0].date, 'MMMM - yyyy').split(' - ')[1]
             fechas = `${dias.join(', ')} de ${mes} de ${anio}`
         }
 
