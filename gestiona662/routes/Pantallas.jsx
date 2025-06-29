@@ -16,6 +16,7 @@ import DetallesPostulacion from '../components/maestro/DetallesPostulacion'
 import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
 import { Dimensions } from 'react-native'
+import NotificacionesPush from '../components/NotificacionesPush'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -93,6 +94,8 @@ function MaestroStack() {
       <Stack.Screen name="detallesPublicacion" component={DetallesPublicacion} options={{ headerShown: false }} />
       <Stack.Screen name="postulacionExitosa" component={PostulacionExitosa} options={{ headerShown: false }} />
       <Stack.Screen name="detallesPostulacion" component={DetallesPostulacion} options={{ headerShown: false }} />
+      {/* Pantalla de pruebas para notificaciones push */}
+      <Stack.Screen name="notificacionesPush" component={NotificacionesPush} options={{ title: 'Notificaciones Push' }} />
     </Stack.Navigator>
   );
 }

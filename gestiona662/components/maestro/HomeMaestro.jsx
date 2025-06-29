@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Button } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { estilosHome } from '../styles/stylesHome';
@@ -54,6 +54,12 @@ const HomeMaestro = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
+                {/* Botón temporal para pruebas de notificaciones */}
+                <Button
+                    title="Probar Notificaciones Push"
+                    onPress={() => navigation.navigate('notificacionesPush')}
+                    color="#009fe3"
+                />
             </ScrollView>
         </View>
     );
