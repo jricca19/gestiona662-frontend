@@ -60,18 +60,22 @@ export default function NotificacionesPush({ navigation }) {
     registrarNotificaciones();
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      // App en primer plano: navegar a "publicaciones"
-      navigation.navigate('maestroTabs', { screen: 'publicaciones' });
+      // App en primer plano, mostrar popup
+      console.log('Notificación recibida:', notification);
+      const title = notification.request?.content?.title || '';
+      const body = notification.request?.content?.body || '';
+      Alert.alert(title, body);
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       // Usuario tocó la notificación: navegar a "publicaciones"
+      console.log('Respuesta a la notificación:', response);
       navigation.navigate('maestroTabs', { screen: 'publicaciones' });
     });
 
     return () => {
-      notificationListener.current && notificationListener.current.remove();
-      responseListener.current && responseListener.current.remove();
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, [navigation]);
 
