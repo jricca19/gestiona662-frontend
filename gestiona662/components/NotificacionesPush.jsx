@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Alert, Platform, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, View } from 'react-native';
+import { Alert, Platform, Text, StyleSheet, TouchableOpacity, Dimensions, View } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import * as Clipboard from 'expo-clipboard';
