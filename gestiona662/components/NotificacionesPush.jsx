@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { Alert, Platform, Text, StyleSheet, ScrollView } from 'react-native';
+import { Alert, Platform, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, View } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
+import * as Clipboard from 'expo-clipboard';
+import { colores, tamanos } from './styles/fuentesyColores';
+import { Ionicons } from '@expo/vector-icons'
 
-// Configuramos cómo se mostrarán las notificaciones cuando la app esté abierta
+const { width, height } = Dimensions.get('window')
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -12,8 +16,9 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export default function NotificacionesPush() {
+export default function NotificacionesPush({ navigation }) {
   const [expoPushToken, setExpoPushToken] = useState('');
+  const [copiado, setCopiado] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -36,7 +41,6 @@ export default function NotificacionesPush() {
         }
 
         token = (await Notifications.getExpoPushTokenAsync()).data;
-        console.log('📱 Expo Push Token:', token);
         setExpoPushToken(token);
       } else {
         Alert.alert('Error', 'Debe usar un dispositivo físico para notificaciones push');
@@ -55,48 +59,97 @@ export default function NotificacionesPush() {
     registrarNotificaciones();
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      console.log('🔔 Notificación recibida:', notification);
+      // App en primer plano: navegar a "publicaciones"
+      navigation.navigate('maestroTabs', { screen: 'publicaciones' });
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log('📲 Usuario tocó la notificación:', response);
+      // Usuario tocó la notificación: navegar a "publicaciones"
+      navigation.navigate('maestroTabs', { screen: 'publicaciones' });
     });
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
-      console.log('Token para notificaciones:', expoPushToken);
+      notificationListener.current && notificationListener.current.remove();
+      responseListener.current && responseListener.current.remove();
     };
-  }, []);
+  }, [navigation]);
+
+  const copiarAlPortapapeles = async () => {
+    await Clipboard.setStringAsync(expoPushToken);
+    setCopiado(true);
+    setTimeout(() => setCopiado(false), 2000);
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Expo Push Token</Text>
+    <View style={{ flex: 1 }}>
+      <View style={styles.encabezado}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={28} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.tituloEncabezado}>Notificaciones</Text>
+        <View style={{ width: 28 }} />
+      </View>
+      <Text style={styles.title}>Token para pruebas desde Postman</Text>
       <Text selectable style={styles.token}>{expoPushToken}</Text>
-      <Text style={styles.sub}>Copialo para usarlo en Postman</Text>
-    </ScrollView>
+      <TouchableOpacity style={styles.botonCopiar} onPress={copiarAlPortapapeles}>
+        <Ionicons name="copy-outline" size={22} color="#fff" />
+        <Text style={styles.textoBoton}>Copiar token</Text>
+      </TouchableOpacity>
+      {copiado && (
+        <Text style={styles.textoCopiado}>¡Token copiado al portapapeles!</Text>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    alignItems: 'center'
+  encabezado: {
+    backgroundColor: colores.primario,
+    paddingVertical: height * 0.015,
+    paddingHorizontal: width * 0.04,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  tituloEncabezado: {
+    color: colores.terceario,
+    fontSize: tamanos.titulo1,
+    fontWeight: 'bold',
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginVertical: 10
+    padding: width * 0.05,
   },
   token: {
     fontSize: 16,
-    color: '#333',
-    backgroundColor: '#eee',
-    padding: 10,
+    color: colores.quinto,
+    backgroundColor: colores.cuarto,
+    margin: width * 0.05,
+    padding: width * 0.02,
+    borderWidth: 1,
+    borderColor: colores.tercearioOscuro,
     borderRadius: 8
   },
-  sub: {
+  botonCopiar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colores.primario,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 16,
+    alignSelf: 'center'
+  },
+  textoBoton: {
+    color: '#fff',
+    marginLeft: 8,
+    fontWeight: 'bold'
+  },
+  textoCopiado: {
+    color: colores.letrasExito,
     marginTop: 10,
-    color: 'gray'
-  }
+    alignSelf: 'center',
+    fontWeight: 'bold'
+  },
 });

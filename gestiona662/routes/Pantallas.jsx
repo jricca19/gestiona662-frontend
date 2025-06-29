@@ -94,8 +94,7 @@ function MaestroStack() {
       <Stack.Screen name="detallesPublicacion" component={DetallesPublicacion} options={{ headerShown: false }} />
       <Stack.Screen name="postulacionExitosa" component={PostulacionExitosa} options={{ headerShown: false }} />
       <Stack.Screen name="detallesPostulacion" component={DetallesPostulacion} options={{ headerShown: false }} />
-      {/* Pantalla de pruebas para notificaciones push */}
-      <Stack.Screen name="notificacionesPush" component={NotificacionesPush} options={{ title: 'Notificaciones Push' }} />
+      <Stack.Screen name="notificacionesPush" component={NotificacionesPush} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
