@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { estilosPostulaciones } from '../styles/stylesPostulacionesMaestro'
 import { colores } from '../styles/fuentesyColores'
 import { formatUTC } from '../../utils/formatUTC'
+import { URL_BACKEND } from '@env';
 
 const estados = {
     ACCEPTED: {
@@ -47,7 +48,7 @@ const PostulacionesMaestro = ({ navigation }) => {
         setError(null)
         try {
             const token = await SecureStore.getItemAsync('token')
-            const res = await fetch('https://gestiona662-backend.vercel.app/v1/postulations/user', {
+            const res = await fetch(`${URL_BACKEND}/v1/postulations/user`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

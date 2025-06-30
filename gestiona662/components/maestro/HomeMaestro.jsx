@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { estilosHome } from '../styles/stylesHome';
+import { fuentes, colores, tamanos } from '../styles/fuentesyColores';
 
 const HomeMaestro = ({ navigation }) => {
     const { name, lastName } = useSelector(state => state.usuario);
@@ -54,6 +55,16 @@ const HomeMaestro = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
+
+                <TouchableOpacity
+                    style={estilosHome.btnNotificaciones}
+                    onPress={() => navigation.navigate('notificacionesPush')}
+                    activeOpacity={0.7}
+                >
+                    <Text style={estilosHome.textoBtnNotificaciones}>
+                        Probar Notificaciones Push
+                    </Text>
+                </TouchableOpacity>
             </ScrollView>
         </View>
     );

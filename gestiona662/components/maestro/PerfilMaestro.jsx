@@ -6,6 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { stylesPerfil } from '../styles/stylesPerfil';
 import FotoPerfilUploader from '../FotoPerfilUploader';
 import { useEffect, useState } from 'react';
+import { URL_BACKEND } from '@env';
 
 const PerfilMaestro = ({ navigation }) => {
     const usuario = useSelector(state => state.usuario);
@@ -15,7 +16,7 @@ const PerfilMaestro = ({ navigation }) => {
     useEffect(() => {
         const fetchPerfil = async () => {
             const token = await SecureStore.getItemAsync('token');
-            const resp = await fetch('https://gestiona662-backend.vercel.app/v1/users/profile', {
+            const resp = await fetch(`${URL_BACKEND}/v1/users/profile`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

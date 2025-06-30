@@ -6,6 +6,7 @@ import { colores } from '../styles/fuentesyColores'
 import { estilosPublicaciones } from '../styles/stylesPublicaciones'
 import ModalBusquedaPublicaciones from './ModalBusquedaPublicaciones'
 import { formatUTC } from '../../utils/formatUTC'
+import { URL_BACKEND } from '@env';
 
 const PAGE_SIZE = 4;
 
@@ -27,7 +28,7 @@ const Publicaciones = ({ navigation }) => {
         try {
             const token = await SecureStore.getItemAsync('token');
 
-            let url = `https://gestiona662-backend.vercel.app/v1/publications?page=${pageToLoad}&limit=${PAGE_SIZE}`;
+            let url = `${URL_BACKEND}/v1/publications?page=${pageToLoad}&limit=${PAGE_SIZE}`;
 
             let filtrosAUsar;
             if (filtros !== undefined) {

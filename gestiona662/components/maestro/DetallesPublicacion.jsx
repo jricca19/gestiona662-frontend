@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { estilosDetalles } from '../styles/stylesDetallesPublicacion'
 import { formatUTC } from '../../utils/formatUTC'
 import * as SecureStore from 'expo-secure-store'
+import { URL_BACKEND } from '@env';
 
 const DetallesPublicacion = ({ route, navigation }) => {
     const { publicacion } = route.params
@@ -47,7 +48,7 @@ const DetallesPublicacion = ({ route, navigation }) => {
                     }))
                 })
             }
-            const res = await fetch('https://gestiona662-backend.vercel.app/v1/postulations', {
+            const res = await fetch(`${URL_BACKEND}/v1/postulations`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
