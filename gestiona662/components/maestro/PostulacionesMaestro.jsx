@@ -6,6 +6,7 @@ import { estilosPostulaciones } from '../styles/stylesPostulacionesMaestro'
 import { colores } from '../styles/fuentesyColores'
 import { formatUTC } from '../../utils/formatUTC'
 import { URL_BACKEND } from '@env';
+import EfectoSlide from '../EfectoSlide';
 
 const estados = {
     ACCEPTED: {
@@ -92,27 +93,29 @@ const PostulacionesMaestro = ({ navigation }) => {
         const escuela = pub.schoolId || {}
 
         return (
-            <View style={estilosPostulaciones.tarjeta} key={item._id}>
-                <View style={estilosPostulaciones.encabezadoTarjeta}>
-                    <Text style={estilosPostulaciones.nombreEscuela}>
-                        Escuela N°{escuela.schoolNumber}
-                    </Text>
-                    <View style={estado.style}>
-                        <Text style={[estilosPostulaciones.textoEstado, { color: estado.color }]}>{estado.label}</Text>
+            <EfectoSlide style={estilosPostulaciones.tarjeta}>
+                <View key={item._id}>
+                    <View style={estilosPostulaciones.encabezadoTarjeta}>
+                        <Text style={estilosPostulaciones.nombreEscuela}>
+                            Escuela N°{escuela.schoolNumber}
+                        </Text>
+                        <View style={estado.style}>
+                            <Text style={[estilosPostulaciones.textoEstado, { color: estado.color }]}>{estado.label}</Text>
+                        </View>
                     </View>
+                    <Text style={estilosPostulaciones.fechaTarjeta}>
+                        {pub.grade ? `${pub.grade}° - ` : ''}
+                        {pub.shift === 'MORNING' ? 'Mañana' : pub.shift === 'AFTERNOON' ? 'Tarde' : pub.shift === 'FULL' ? 'Tiempo Completo' : pub.shift}
+                    </Text>
+                    <Text style={estilosPostulaciones.fechaTarjeta}>{fechas}</Text>
+                    <TouchableOpacity
+                        style={estilosPostulaciones.botonDetalles}
+                        onPress={() => navigation.navigate('detallesPostulacion', { postulacion: item })}
+                    >
+                        <Text style={estilosPostulaciones.textoDetalles}>Ver Detalles</Text>
+                    </TouchableOpacity>
                 </View>
-                <Text style={estilosPostulaciones.fechaTarjeta}>
-                    {pub.grade ? `${pub.grade}° - ` : ''}
-                    {pub.shift === 'MORNING' ? 'Mañana' : pub.shift === 'AFTERNOON' ? 'Tarde' : pub.shift === 'FULL' ? 'Tiempo Completo' : pub.shift}
-                </Text>
-                <Text style={estilosPostulaciones.fechaTarjeta}>{fechas}</Text>
-                <TouchableOpacity
-                    style={estilosPostulaciones.botonDetalles}
-                    onPress={() => navigation.navigate('detallesPostulacion', { postulacion: item })}
-                >
-                    <Text style={estilosPostulaciones.textoDetalles}>Ver Detalles</Text>
-                </TouchableOpacity>
-            </View>
+            </EfectoSlide>
         )
     }
 
