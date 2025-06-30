@@ -26,7 +26,7 @@ const estados = {
     REJECTED: {
         label: 'Rechazada',
         style: estilosPostulaciones.estadoRechazada,
-        color: colores.lestrasError
+        color: colores.letrasError
     },
 }
 
