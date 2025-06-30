@@ -7,6 +7,7 @@ import * as SecureStore from 'expo-secure-store'
 import { URL_BACKEND } from '@env';
 import { Snackbar } from 'react-native-paper';
 import { colores } from '../styles/fuentesyColores'
+import PulseButton from '../PulseButton';
 
 const { height } = Dimensions.get('window')
 
@@ -167,13 +168,12 @@ const DetallesPublicacion = ({ route, navigation }) => {
                             ))}
                         </View>
                     )}
-                    <TouchableOpacity
-                        style={[estilosDetalles.boton, loading && { opacity: 0.6 }]}
+                    <PulseButton
                         onPress={handlePostularse}
-                        disabled={loading}
-                    >
-                        <Text style={estilosDetalles.textoBoton}>{loading ? 'Enviando...' : 'Postularse'}</Text>
-                    </TouchableOpacity>
+                        loading={loading}
+                        text="Postularse"
+                        loadingText="Enviando..."
+                    />
                     {error && (
                         <Text style={{ color: 'red', marginVertical: 10, textAlign: 'center' }}>{error}</Text>
                     )}

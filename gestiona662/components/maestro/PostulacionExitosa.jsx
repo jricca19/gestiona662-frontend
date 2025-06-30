@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { estilosPostulacionExitosa } from '../styles/PostulacionExitosa'
 import { format, parseISO } from 'date-fns'
+import PulseButton from '../PulseButton'
 
 const PostulacionExitosa = ({ route, navigation }) => {
     const { postulation, detalles, diasSeleccionadosTexto } = route.params
@@ -51,12 +52,14 @@ const PostulacionExitosa = ({ route, navigation }) => {
             <Text style={[estilosPostulacionExitosa.detalle, { marginTop: 20, fontWeight: 'bold' }]}>
                 Tienes tiempo de cancelar antes de ser seleccionado.
             </Text>
-            <TouchableOpacity
-                style={estilosPostulacionExitosa.boton}
+
+            <PulseButton
                 onPress={() => navigation.replace('maestroTabs', { screen: 'misPostulaciones' })}
-            >
-                <Text style={estilosPostulacionExitosa.textoBoton}>Ver Postulaciones</Text>
-            </TouchableOpacity>
+                loading={false}
+                pulse={true}
+                text="Ver Postulaciones"
+                loadingText="Ver Postulaciones"
+            />
         </View>
     )
 }
