@@ -13,7 +13,7 @@ export const colores = {
     cartelError: '#FFB7B7',
     cartelExito: '#B9FFB7',
     cartelAdvertencia: '#FFEDB7',
-    lestrasError: '#B70000',
+    letrasError: '#B70000',
     letrasExito: '#059300',
     letrasAdvertencia: '#D3A82A',
 

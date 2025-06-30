@@ -6,6 +6,8 @@ import { estilosPostulaciones } from '../styles/stylesPostulacionesMaestro'
 import { colores } from '../styles/fuentesyColores'
 import { formatUTC } from '../../utils/formatUTC'
 import { URL_BACKEND } from '@env';
+import EfectoSlide from '../EfectoSlide';
+import DeslizarParaEliminar from '../DeslizarParaEliminar';
 
 const estados = {
     ACCEPTED: {
@@ -26,7 +28,7 @@ const estados = {
     REJECTED: {
         label: 'Rechazada',
         style: estilosPostulaciones.estadoRechazada,
-        color: colores.lestrasError
+        color: colores.letrasError
     },
 }
 
@@ -76,6 +78,28 @@ const PostulacionesMaestro = ({ navigation }) => {
         fetchPostulaciones().then(() => setRefreshing(false))
     }
 
+    const eliminarPostulacion = async (id) => {
+        setDatos(prev => prev.filter(item => item._id !== id));
+        setError(null);
+        try {
+            const token = await SecureStore.getItemAsync('token')
+            const res = await fetch(`${URL_BACKEND}/v1/postulations/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            })
+            if (res.status !== 200) {
+                setError('Error al eliminar la postulación');
+                fetchPostulaciones();
+            }
+        } catch (err) {
+            setError('Error de red o servidor');
+            fetchPostulaciones();
+        }
+    };
+
     const renderItem = ({ item }) => {
         let fechas = ''
         if (item.postulationDays && item.postulationDays.length > 0) {
@@ -92,27 +116,34 @@ const PostulacionesMaestro = ({ navigation }) => {
         const escuela = pub.schoolId || {}
 
         return (
-            <View style={estilosPostulaciones.tarjeta} key={item._id}>
-                <View style={estilosPostulaciones.encabezadoTarjeta}>
-                    <Text style={estilosPostulaciones.nombreEscuela}>
-                        Escuela N°{escuela.schoolNumber}
-                    </Text>
-                    <View style={estado.style}>
-                        <Text style={[estilosPostulaciones.textoEstado, { color: estado.color }]}>{estado.label}</Text>
+            <DeslizarParaEliminar
+                onDelete={() => eliminarPostulacion(item._id)}
+                confirmMessage="¿Seguro que desea eliminar esta postulación?"
+            >
+                <EfectoSlide style={estilosPostulaciones.tarjeta}>
+                    <View key={item._id}>
+                        <View style={estilosPostulaciones.encabezadoTarjeta}>
+                            <Text style={estilosPostulaciones.nombreEscuela}>
+                                Escuela N°{escuela.schoolNumber}
+                            </Text>
+                            <View style={estado.style}>
+                                <Text style={[estilosPostulaciones.textoEstado, { color: estado.color }]}>{estado.label}</Text>
+                            </View>
+                        </View>
+                        <Text style={estilosPostulaciones.fechaTarjeta}>
+                            {pub.grade ? `${pub.grade}° - ` : ''}
+                            {pub.shift === 'MORNING' ? 'Mañana' : pub.shift === 'AFTERNOON' ? 'Tarde' : pub.shift === 'FULL' ? 'Tiempo Completo' : pub.shift}
+                        </Text>
+                        <Text style={estilosPostulaciones.fechaTarjeta}>{fechas}</Text>
+                        <TouchableOpacity
+                            style={estilosPostulaciones.botonDetalles}
+                            onPress={() => navigation.navigate('detallesPostulacion', { postulacion: item })}
+                        >
+                            <Text style={estilosPostulaciones.textoDetalles}>Ver Detalles</Text>
+                        </TouchableOpacity>
                     </View>
-                </View>
-                <Text style={estilosPostulaciones.fechaTarjeta}>
-                    {pub.grade ? `${pub.grade}° - ` : ''}
-                    {pub.shift === 'MORNING' ? 'Mañana' : pub.shift === 'AFTERNOON' ? 'Tarde' : pub.shift === 'FULL' ? 'Tiempo Completo' : pub.shift}
-                </Text>
-                <Text style={estilosPostulaciones.fechaTarjeta}>{fechas}</Text>
-                <TouchableOpacity
-                    style={estilosPostulaciones.botonDetalles}
-                    onPress={() => navigation.navigate('detallesPostulacion', { postulacion: item })}
-                >
-                    <Text style={estilosPostulaciones.textoDetalles}>Ver Detalles</Text>
-                </TouchableOpacity>
-            </View>
+                </EfectoSlide>
+            </DeslizarParaEliminar>
         )
     }
 

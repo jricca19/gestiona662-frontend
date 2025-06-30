@@ -50,18 +50,4 @@ export const estilosPostulacionExitosa = StyleSheet.create({
         marginBottom: height * 0.01,
         color: colores.quinto,
     },
-    boton: {
-        backgroundColor: colores.primario,
-        borderRadius: width * 0.025,
-        paddingVertical: height * 0.018,
-        paddingHorizontal: width * 0.08,
-        alignItems: 'center',
-        elevation: 2,
-        marginVertical: height * 0.04,
-    },
-    textoBoton: {
-        color: colores.terceario,
-        fontWeight: 'bold',
-        fontSize: tamanos.texto,
-    },
 })

@@ -118,18 +118,4 @@ export const estilosDetalles = StyleSheet.create({
         fontSize: tamanos.texto,
         color: colores.quinto,
     },
-    boton: {
-        backgroundColor: colores.primario,
-        borderRadius: width * 0.025,
-        paddingVertical: height * 0.018,
-        paddingHorizontal: width * 0.2,
-        alignItems: 'center',
-        elevation: 2,
-        marginVertical: height * 0.04,
-    },
-    textoBoton: {
-        color: colores.terceario,
-        fontWeight: 'bold',
-        fontSize: tamanos.textoMayor,
-    },
 })
