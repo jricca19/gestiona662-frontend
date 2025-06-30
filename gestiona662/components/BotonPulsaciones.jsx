@@ -6,7 +6,7 @@ import { Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
-const PulseButton = ({ onPress, loading, text = 'Presioname', loadingText = 'Cargando...', pulse = false }) => {
+const BotonPulsaciones = ({ onPress, loading, text = 'Presioname', loadingText = 'Cargando...', pulse = false }) => {
     const scale = useSharedValue(1);
     const [pressed, setPressed] = useState(false);
 
@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default PulseButton;
+export default BotonPulsaciones;

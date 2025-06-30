@@ -7,7 +7,7 @@ import * as SecureStore from 'expo-secure-store'
 import { URL_BACKEND } from '@env';
 import { Snackbar } from 'react-native-paper';
 import { colores } from '../styles/fuentesyColores'
-import PulseButton from '../PulseButton';
+import BotonPulsaciones from '../BotonPulsaciones';
 
 const { height } = Dimensions.get('window')
 
@@ -168,7 +168,7 @@ const DetallesPublicacion = ({ route, navigation }) => {
                             ))}
                         </View>
                     )}
-                    <PulseButton
+                    <BotonPulsaciones
                         onPress={handlePostularse}
                         loading={loading}
                         text="Postularse"
