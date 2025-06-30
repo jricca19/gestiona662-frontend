@@ -5,6 +5,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { estilosModalBusqueda } from '../styles/stylesModalBusquedaPublicaciones';
+import { URL_BACKEND } from '@env';
 
 const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearFilters }) => {
     const [departamentoSeleccionado, setDepartamentoSeleccionado] = useState('');
@@ -26,7 +27,7 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearF
     const cargarDepartamentos = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://gestiona662-backend.vercel.app/departments', {
+            const response = await fetch(`${URL_BACKEND}/departments`, {
                 method: 'GET',
             });
             const data = await response.json();
@@ -40,7 +41,7 @@ const ModalBusquedaPublicaciones = ({ visible, onClose, onApplyFilters, onClearF
     const cargarEscuelas = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://gestiona662-backend.vercel.app/schoolsSelect');
+            const response = await fetch(`${URL_BACKEND}/schoolsSelect`);
             const data = await response.json();
             setEscuelas(data || []);
         } catch (error) {

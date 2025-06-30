@@ -4,9 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { colores } from './styles/fuentesyColores';
-
-const CLOUD_NAME = 'dkbpd912l';
-const UPLOAD_PRESET = 'gestiona662';
+import { URL_BACKEND, URL_CLOUDINARY, UPLOAD_PRESET } from '@env';
 
 const FotoPerfilUploader = ({ avatarStyle, ciUsuario, profilePhoto }) => {
     const [imageUrl, setImageUrl] = useState(null);
@@ -21,7 +19,7 @@ const FotoPerfilUploader = ({ avatarStyle, ciUsuario, profilePhoto }) => {
     const saveImageUrl = async (url) => {
         const token = await SecureStore.getItemAsync('token');
         try {
-            const response = await fetch('https://gestiona662-backend.vercel.app/v1/users/profile', {
+            const response = await fetch(`${URL_BACKEND}/v1/users/profile`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,10 +59,10 @@ const FotoPerfilUploader = ({ avatarStyle, ciUsuario, profilePhoto }) => {
             name: `${ciUsuario}.jpg`,
             type: 'image/jpeg',
         });
-        formData.append('upload_preset', UPLOAD_PRESET);
+        formData.append('upload_preset', `${UPLOAD_PRESET}`);
 
         try {
-            const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+            const response = await fetch(`${URL_CLOUDINARY}`, {
                 method: 'POST',
                 body: formData,
             });
