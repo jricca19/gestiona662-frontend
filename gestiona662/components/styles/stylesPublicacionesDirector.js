@@ -38,5 +38,22 @@ export const estilosPublicacionesDirector = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         gap: 10,
-    }
+    },
+    // Agrega a tu StyleSheet
+    acciones: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginTop: 10,
+        marginBottom: 2,
+    },
+    iconButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    iconShadow: {
+        textShadowColor: '#7ec3d6',
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 3,
+    },
 });

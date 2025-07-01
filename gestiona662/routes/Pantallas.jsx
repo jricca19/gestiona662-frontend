@@ -8,6 +8,7 @@ import PerfilMaestro from '../components/maestro/PerfilMaestro'
 import PerfilDirector from '../components/director/PerfilDirector'
 import PostulacionesMaestro  from '../components/maestro/PostulacionesMaestro'
 import PublicacionesDirector from '../components/director/PublicacionesDirector'
+import PostulacionesDirector from '../components/director/PostulacionesDirector'
 import Publicaciones from '../components/maestro/Publicaciones'
 import DetallesPublicacion from '../components/maestro/DetallesPublicacion'
 import PostulacionExitosa from '../components/maestro/PostulacionExitosa'
@@ -101,6 +102,7 @@ function DirectorStack() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="directorTabs" component={DirectorTabs} options={{ headerShown: false }} />
+      <Stack.Screen name="postulacionesPublicacion" component={PostulacionesDirector} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
