@@ -7,12 +7,13 @@ import { estilosPublicaciones } from '../styles/stylesPublicaciones';
 import { colores } from '../styles/fuentesyColores';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons, Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const PublicacionesDirector = ({ navigation }) => {
     const [datos, setDatos] = useState([]);
     const [escuelas, setEscuelas] = useState([]);
     const [escuelaSeleccionada, setEscuelaSeleccionada] = useState('');
+    const [postulaciones, setPostulaciones] = useState({});
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -59,6 +60,33 @@ const PublicacionesDirector = ({ navigation }) => {
         }
         setLoading(false);
     }, [loading, datos.length, total, escuelaSeleccionada]);
+
+    const cargarPostulaciones = async (publicationId) => {
+        try {
+            if (postulaciones[publicationId]) return; // ya están cargadas
+
+            const token = await SecureStore.getItemAsync('token'); // si usás expo-secure-store
+            const res = await fetch(`https://gestiona662-backend.vercel.app/v1/postulations/publication/${publicationId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setPostulaciones(prev => ({ ...prev, [publicationId]: data }));
+            }
+            else if (res.status === 404) {
+                setPostulaciones(prev => ({ ...prev, [publicationId]: [] }));
+            }
+            else {
+                throw new error(`Error al cargar postulaciones de ${publicationId}:`);
+            }
+        } catch (err) {
+            console.error(`Error cargando postulaciones de ${publicationId}:`, err);
+        }
+    };
 
     useEffect(() => {
         if (escuelaSeleccionada) {
@@ -111,6 +139,20 @@ const PublicacionesDirector = ({ navigation }) => {
         fetchPublicaciones(1, true).then(() => setRefreshing(false));
     };
 
+    useEffect(() => {
+        const cargarTodasLasPostulaciones = async () => {
+            for (const pub of datos) {
+                if (!postulaciones[pub._id]) {
+                    await cargarPostulaciones(pub._id);
+                }
+            }
+        };
+
+        if (datos.length > 0) {
+            cargarTodasLasPostulaciones();
+        }
+    }, [datos]);
+
     const renderItem = ({ item }) => {
         // Formateo de fechas usando date-fns
         let fechaFormateada = '';
@@ -126,7 +168,7 @@ const PublicacionesDirector = ({ navigation }) => {
         return (
             <View style={estilosPublicaciones.tarjeta} key={item._id}>
                 <View style={estilosPublicaciones.encabezadoTarjeta}>
-                    <Text style={estilosPublicaciones.nombreEscuela}>Escuela Nº{item.schoolId?.schoolNumber}</Text>
+                    <Text style={estilosPublicaciones.nombreEscuela}>{item.grade}°</Text>
                     <View style={estilosPublicaciones.calificacion}>
                         <FontAwesome name="star" size={20} color="#FFD700" />
                         <Text style={estilosPublicaciones.textoCalificacion}>{item.rating ?? '0'}</Text>
@@ -148,19 +190,46 @@ const PublicacionesDirector = ({ navigation }) => {
                         {fechaFormateada}
                     </Text>
                 </View>
-                <View style={[estilosPublicaciones.filaTarjeta, { justifyContent: 'space-between' }]}>
-                    <MaterialIcons name="place" size={18} color={colores.primario} />
-                    <View style={{ flex: 1 }}>
-                        <Text style={estilosPublicaciones.textoTarjeta}>
-                            {item.schoolId?.departmentId?.name || 'Sin Departamento'}
-                        </Text>
-                    </View>
+                <View style={estilosPublicaciones.filaTarjeta}>
+                    <MaterialIcons name="event" size={18} color={colores.primario} />
+                    <Text style={estilosPublicaciones.textoTarjeta}>
+                        Postulados: {postulaciones[item._id]?.length || 0}
+                    </Text>
+                </View>
+                {/* <View style={[estilosPublicaciones.filaTarjeta, { justifyContent: 'space-between' }]}>
                     <TouchableOpacity
                         style={estilosPublicaciones.botonDetalles}
                         onPress={() => navigation.navigate('detallesPublicacion', { publicacion: item })}
                     >
                         <Ionicons name="eye-outline" size={18} color="#fff" />
                         <Text style={estilosPublicaciones.textoDetalles}>Ver Detalles</Text>
+                    </TouchableOpacity>
+                </View> */}
+                <View style={estilosPublicacionesDirector.acciones}>
+                    <TouchableOpacity
+                        style={estilosPublicacionesDirector.iconButton}
+                        onPress={() => {
+                            const postulacionesArray = Array.isArray(postulaciones[item._id]) ? postulaciones[item._id] : [];
+                            navigation.navigate('postulacionesPublicacion', { postulaciones: postulacionesArray, publicacion: item });
+                        }}
+                        disabled={!Array.isArray(postulaciones[item._id]) || postulaciones[item._id].length === 0} // desactiva si no hay postulaciones
+                    >
+                        <MaterialCommunityIcons
+                            name="handshake"
+                            size={38}
+                            color={
+                                Array.isArray(postulaciones[item._id]) && postulaciones[item._id].length > 0
+                                    ? "#117396"
+                                    : "#B0BEC5"
+                            }
+                            style={estilosPublicacionesDirector.iconShadow}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={estilosPublicacionesDirector.iconButton} onPress={() => {/* acción editar */ }}>
+                        <MaterialCommunityIcons name="square-edit-outline" size={38} color="#117396" style={estilosPublicacionesDirector.iconShadow} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={estilosPublicacionesDirector.iconButton} onPress={() => {/* acción eliminar */ }}>
+                        <MaterialCommunityIcons name="trash-can" size={38} color="#117396" style={estilosPublicacionesDirector.iconShadow} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -197,7 +266,7 @@ const PublicacionesDirector = ({ navigation }) => {
             <View style={{ flex: 1 }}>
                 <View style={estilosPublicaciones.contenedor}>
                     <FlatList
-                        data={datos}
+                        data={datos.filter(item => Array.isArray(postulaciones[item._id]))}
                         renderItem={renderItem}
                         keyExtractor={item => item._id}
                         onEndReached={handleLoadMore}
