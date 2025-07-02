@@ -35,7 +35,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
         return;
     }
 
-    // Mapeo del turno al formato que requiere el backend
     let shiftValue = '';
     switch (turno) {
         case 'Matutino':
@@ -77,11 +76,9 @@ const CrearPublicacionDirector = ({ navigation }) => {
             navigation.goBack();
         } else {
             const errorData = await res.json();
-            console.error('Error al crear publicación:', errorData || 'Error desconocido');
             alert('Error al crear publicación',errorData);
         }
     } catch (error) {
-        console.error('Error en la petición:', error);
         alert('Error al conectar con el servidor',error);
     }
 };
@@ -115,17 +112,13 @@ const CrearPublicacionDirector = ({ navigation }) => {
 
     return (
         <View style={stylesCrearPublicacion.container}>
-            {/* Header */}
             <View style={stylesCrearPublicacion.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={stylesCrearPublicacion.backButton}>
                     <Ionicons name="arrow-back" size={24} color="#fff" />
                 </TouchableOpacity>
                 <Text style={stylesCrearPublicacion.headerTitle}>Crear publicación</Text>
             </View>
-
-            {/* Formulario */}
             <View style={stylesCrearPublicacion.form}>
-                {/* Escuela */}
                 <Text style={stylesCrearPublicacion.label}>Escuela</Text>
                 <TouchableOpacity style={stylesCrearPublicacion.inputRow} onPress={() => setModalEscuela(true)}>
                     <TextInput
@@ -141,8 +134,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
                     />
                     <MaterialIcons name="arrow-drop-down" size={24} color="#888" style={stylesCrearPublicacion.iconInput} />
                 </TouchableOpacity>
-
-                {/* Modal Escuela */}
                 <Modal visible={modalEscuela} transparent animationType="fade">
                     <Pressable style={stylesCrearPublicacion.modalOverlay} onPress={() => setModalEscuela(false)}>
                         <View style={stylesCrearPublicacion.modalBox}>
@@ -164,7 +155,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
                     </Pressable>
                 </Modal>
 
-                {/* Grado */}
                 <Text style={stylesCrearPublicacion.label}>Grado</Text>
                 <TouchableOpacity style={stylesCrearPublicacion.inputRow} onPress={() => setModalGrado(true)}>
                     <TextInput
@@ -178,7 +168,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
                     <MaterialIcons name="arrow-drop-down" size={24} color="#888" style={stylesCrearPublicacion.iconInput} />
                 </TouchableOpacity>
 
-                {/* Modal Grado */}
                 <Modal visible={modalGrado} transparent animationType="fade">
                     <Pressable style={stylesCrearPublicacion.modalOverlay} onPress={() => setModalGrado(false)}>
                         <View style={stylesCrearPublicacion.modalBox}>
@@ -200,9 +189,7 @@ const CrearPublicacionDirector = ({ navigation }) => {
                     </Pressable>
                 </Modal>
 
-                {/* Desde y Hasta */}
                 <View style={stylesCrearPublicacion.row}>
-                    {/* Campo Desde */}
                     <View style={{ flex: 1, marginRight: 8 }}>
                         <Text style={stylesCrearPublicacion.label}>Desde:</Text>
                         <TouchableOpacity
@@ -225,7 +212,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
 
-                    {/* Campo Hasta */}
                     <View style={{ flex: 1, marginLeft: 8 }}>
                         <Text style={stylesCrearPublicacion.label}>Hasta:</Text>
                         <TouchableOpacity
@@ -249,7 +235,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
                     </View>
                 </View>
 
-                {/* DatePickers fuera del layout visual principal */}
                 {showDesdePicker && (
                     <DateTimePicker
                         value={new Date()}
@@ -280,7 +265,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
                     />
                 )}
 
-                {/* Turno */}
                 <Text style={stylesCrearPublicacion.label}>Turno:</Text>
                 <View style={stylesCrearPublicacion.turnoRow}>
                     {['Matutino', 'Vespertino', 'Tiempo completo'].map((opcion) => (
@@ -298,7 +282,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
                     ))}
                 </View>
 
-                {/* Ayuda para el suplente */}
                 <Text style={stylesCrearPublicacion.label}>Ayuda para el suplente:</Text>
                 <TextInput
                     style={stylesCrearPublicacion.textArea}
@@ -310,7 +293,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
                     numberOfLines={4}
                 />
 
-                {/* Botón */}
                 <TouchableOpacity style={stylesCrearPublicacion.boton}
                     onPress={handleCrearPublicacion}>
                     <Text style={stylesCrearPublicacion.botonTexto}>Crear publicación</Text>

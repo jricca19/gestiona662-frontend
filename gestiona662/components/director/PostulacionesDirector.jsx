@@ -9,9 +9,8 @@ import { colores } from '../styles/fuentesyColores';
 const PostulacionesPublicacion = ({ navigation, route }) => {
     const postulaciones = route.params?.postulaciones || [];
     const publicacion = route.params?.publicacion || null;
-    // Estado para la disponibilidad seleccionada por postulante
-    const [seleccion, setSeleccion] = useState({}); // { postulanteId: fechaSeleccionada }
-    const [seleccionado, setSeleccionado] = useState(null); // postulanteId seleccionado
+    const [seleccion, setSeleccion] = useState({});
+    const [seleccionado, setSeleccionado] = useState(null);
     let fechaFormateada = '';
     if (publicacion.startDate && publicacion.endDate) {
         const inicio = parseISO(publicacion.startDate);
@@ -30,15 +29,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
 
         try {
             const token = await SecureStore.getItemAsync('token');
-            console.log('Enviando asignaciones:',
-                JSON.stringify({
-                    asignaciones: [
-                        {
-                            postulationId: seleccionado,
-                            selectedDays: seleccion[seleccionado]
-                        },
-                    ]
-                }));
             const res = await fetch(`https://gestiona662-backend.vercel.app/v1/publications/assignPostulation/multiple`, {
                 method: 'PATCH',
                 headers: {
@@ -56,7 +46,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
             });
 
             const data = await res.json();
-            console.log('Response:', data);
 
             if (res.ok) {
                 alert('Postulación asignada correctamente');
@@ -66,7 +55,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                 alert('Error al asignar: ' + data.message);
             }
         } catch (error) {
-            console.error('❌ Error de red:', error);
             alert('Error de red al asignar la postulación');
         }
     };
@@ -74,7 +62,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Ionicons name="arrow-back" size={28} color="#fff" />
@@ -83,7 +70,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
             </View>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
-                {/* Grado y Fecha */}
                 <View style={{ alignItems: 'center', marginTop: 10 }}>
                     <Text style={styles.grado}>
                         {publicacion.grade === 0 ? 'NIVEL INICIAL' : `${publicacion.grade}°`}
@@ -91,7 +77,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                     <Text style={styles.fecha}>{fechaFormateada}</Text>
                 </View>
 
-                {/* Postulados */}
                 <Text style={styles.subtitulo}>Postulados</Text>
                 {postulaciones.map((post, idx) => {
                     const postulacionId = post._id
@@ -103,7 +88,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
 
                     return (
                         <View key={post._id || idx} style={styles.card}>
-                            {/* Etiquetas */}
                             <View style={styles.etiquetasRow}>
                                 <View style={[
                                     styles.etiqueta,
@@ -125,10 +109,8 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                                 <Text style={styles.puntaje}>{perfil.haveRating ? perfil.rating : '-'}</Text>
                             </View>
 
-                            {/* Nombre */}
                             <Text style={styles.nombre}>{nombreCompleto}</Text>
 
-                            {/* Disponibilidad */}
                             <Text style={styles.disponibilidadLabel}>Disponibilidad</Text>
                             <View style={styles.disponibilidadRow}>
                                 {fechasDisponibles.map((fecha, i) => (
@@ -159,7 +141,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
 
                             </View>
 
-                            {/* Seleccionar */}
                             <TouchableOpacity
                                 style={[
                                     styles.seleccionarBtn,
@@ -179,7 +160,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                     );
                 })}
 
-                {/* Confirmar */}
                 <TouchableOpacity
                     style={styles.confirmarBtn}
                     onPress={onConfirmar}
