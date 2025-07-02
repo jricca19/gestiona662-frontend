@@ -1,0 +1,18 @@
+{
+  "login": {
+    "title": "Welcome to Gestiona662",
+    "subtitle": "We connect schools with teachers quickly and safely",
+    "email": "Email",
+    "password": "Password",
+    "forgot": "Forgot your password?",
+    "login": "Login",
+    "register": "Register",
+    "es": "Spanish",
+    "en": "English",
+    "email_invalid": "Invalid email",
+    "email_required": "Email is required",
+    "password_min": "Minimum {{count}} characters",
+    "password_max": "Maximum {{count}} characters",
+    "password_required": "Password is required"
+  }
+}
