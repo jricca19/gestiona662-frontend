@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Button, Alert, Modal, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, TextInput, Button, Alert, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -18,9 +18,9 @@ const schema = yup.object().shape({
     .max(20, 'El nombre no puede tener más de 20 caracteres'),
   lastName: yup
     .string()
-    .required('El nombre es obligatorio')
-    .min(3, 'El nombre debe tener al menos 3 caracteres')
-    .max(20, 'El nombre no puede tener más de 20 caracteres'),
+    .required('El apellido es obligatorio')
+    .min(3, 'El apellido debe tener al menos 3 caracteres')
+    .max(20, 'El apellido no puede tener más de 20 caracteres'),
   ci: yup.string().required('La cédula es obligatoria'),
   email: yup.string().email('Email inválido').required('El email es obligatorio'),
   password: yup
@@ -74,12 +74,6 @@ const FormularioRegistro = ({ navigation }) => {
       Alert.alert("Error", "Completa todos los campos");
       return;
     }
-    console.log("Enviando:", {
-      schoolNumber: newSchoolNumber,
-      cityName: selectedCity,
-      address: newAddress,
-      departmentId: defaultDeptId,
-    });
     try {
       const res = await fetch(`https://gestiona662-backend.vercel.app/schools`, {
         method: 'POST',
@@ -95,7 +89,6 @@ const FormularioRegistro = ({ navigation }) => {
       });
 
       const data = await res.json();
-      console.log("Respuesta del servidor:", data);
       if (!res.ok) {
         throw new Error(data.message || 'Error al crear escuela');
       }
@@ -124,13 +117,12 @@ const FormularioRegistro = ({ navigation }) => {
 
         const escuelasData = await resEscuelas.json();
         const departamentosData = await resDeptos.json();
-        console.log(departamentosData);
 
         setEscuelas(escuelasData);
         setDepartamentos(departamentosData);
 
         if (departamentosData.length > 0) {
-          setDefaultDeptId(departamentosData[0]._id); // para usar en nueva escuela
+          setDefaultDeptId(departamentosData[0]._id);
         }
       } catch (err) {
         console.error("Error cargando datos:", err);
@@ -225,201 +217,218 @@ const FormularioRegistro = ({ navigation }) => {
         <View style={stylesRegistro.contenedor}>
           <Text style={stylesRegistro.titulo}>Tus datos</Text>
           <Text style={stylesRegistro.label}>Nombre</Text>
-          <View style={stylesRegistro.filaIcono}>
-            <Ionicons name="person-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-            <Controller
-              control={control}
-              name="name"
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={stylesRegistro.input}
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="Nombre"
-                  placeholderTextColor="#999"
-                />
-              )}
-            />
+          <View>
+            <View style={stylesRegistro.filaIcono}>
+              <Ionicons name="person-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Controller
+                control={control}
+                name="name"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={stylesRegistro.input}
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="Nombre"
+                    placeholderTextColor="#999"
+                  />
+                )}
+              />
+            </View>
+            {errors.name && <Text style={stylesRegistro.error}>{errors.name.message}</Text>}
           </View>
-          {errors.name && <Text style={stylesRegistro.error}>{errors.name.message}</Text>}
-
+          <View style={{ height: 10 }} />
           <Text style={stylesRegistro.label}>Apellido</Text>
-          <View style={stylesRegistro.filaIcono}>
-            <Ionicons name="person-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-            <Controller
-              control={control}
-              name="lastName"
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={stylesRegistro.input}
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="Apellido"
-                  placeholderTextColor="#999"
-                />
-              )}
-            />
+          <View>
+            <View style={stylesRegistro.filaIcono}>
+              <Ionicons name="person-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Controller
+                control={control}
+                name="lastName"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={stylesRegistro.input}
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="Apellido"
+                    placeholderTextColor="#999"
+                  />
+                )}
+              />
+            </View>
+            {errors.lastName && <Text style={stylesRegistro.error}>{errors.lastName.message}</Text>}
           </View>
-          {errors.lastName && <Text style={stylesRegistro.error}>{errors.lastName.message}</Text>}
-
+          <View style={{ height: 10 }} />
           <Text style={stylesRegistro.label}>Cédula de Identidad</Text>
-          <View style={stylesRegistro.filaIcono}>
-            <Ionicons name="card-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-            <Controller
-              control={control}
-              name="ci"
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={stylesRegistro.input}
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="Cédula de Identidad"
-                  placeholderTextColor="#999"
-                />
-              )}
-            />
+          <View>
+            <View style={stylesRegistro.filaIcono}>
+              <Ionicons name="card-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Controller
+                control={control}
+                name="ci"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={stylesRegistro.input}
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="Cédula de Identidad"
+                    placeholderTextColor="#999"
+                  />
+                )}
+              />
+            </View>
+            {errors.ci && <Text style={stylesRegistro.error}>{errors.ci.message}</Text>}
           </View>
-          {errors.ci && <Text style={stylesRegistro.error}>{errors.ci.message}</Text>}
-
+          <View style={{ height: 10 }} />
           <Text style={stylesRegistro.label}>Email</Text>
-          <View style={stylesRegistro.filaIcono}>
-            <Ionicons name="mail-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-            <Controller
-              control={control}
-              name="email"
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={stylesRegistro.input}
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="Email"
-                  placeholderTextColor="#999"
-                />
-              )}
-            />
+          <View>
+            <View style={stylesRegistro.filaIcono}>
+              <Ionicons name="mail-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, value } }) => (
+                  <TextInput
+                    style={stylesRegistro.input}
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="Email"
+                    placeholderTextColor="#999"
+                  />
+                )}
+              />
+            </View>
+            {errors.email && <Text style={stylesRegistro.error}>{errors.email.message}</Text>}
           </View>
-          {errors.email && <Text style={stylesRegistro.error}>{errors.email.message}</Text>}
-
+          <View style={{ height: 10 }} />
           <Text style={stylesRegistro.label}>Contraseña</Text>
-          <View style={stylesRegistro.filaIcono}>
-            <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-            <View style={{ flex: 1, position: 'relative' }}>
-              <Controller
-                control={control}
-                name="password"
-                render={({ field: { onChange, value } }) => (
-                  <TextInput
-                    style={[stylesRegistro.input, { paddingRight: 40 }]} // espacio para el ojo
-                    placeholder="Contraseña"
-                    placeholderTextColor="#999"
-                    secureTextEntry={!mostrarPassword}
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-              />
-              <TouchableOpacity
-                style={{
-                  position: 'absolute',
-                  right: 10,
-                  top: '50%',
-                  transform: [{ translateY: -12 }],
-                }}
-                onPress={() => setMostrarPassword(!mostrarPassword)}
-              >
-                <Ionicons
-                  name={mostrarPassword ? 'eye-off-outline' : 'eye-outline'}
-                  size={24}
-                  color="#009fe3"
+          <View>
+            <View style={stylesRegistro.filaIcono}>
+              <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <View style={{ flex: 1, position: 'relative' }}>
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field: { onChange, value } }) => (
+                    <TextInput
+                      style={[stylesRegistro.input, { paddingRight: 40 }]}
+                      placeholder="Contraseña"
+                      placeholderTextColor="#999"
+                      secureTextEntry={!mostrarPassword}
+                      onChangeText={onChange}
+                      value={value}
+                    />
+                  )}
                 />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: '50%',
+                    transform: [{ translateY: -12 }],
+                  }}
+                  onPress={() => setMostrarPassword(!mostrarPassword)}
+                >
+                  <Ionicons
+                    name={mostrarPassword ? 'eye-off-outline' : 'eye-outline'}
+                    size={24}
+                    color="#009fe3"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
+            {errors.password && <Text style={stylesRegistro.error}>{errors.password.message}</Text>}
           </View>
-          {errors.password && <Text style={stylesRegistro.error}>{errors.password.message}</Text>}
-
+          <View style={{ height: 10 }} />
           <Text style={stylesRegistro.label}>Confirmar contraseña</Text>
-          <View style={stylesRegistro.filaIcono}>
-            <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-            <View style={{ flex: 1, position: 'relative' }}>
+          <View>
+            <View style={stylesRegistro.filaIcono}>
+              <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <View style={{ flex: 1, position: 'relative' }}>
+                <Controller
+                  control={control}
+                  name="confirmPassword"
+                  render={({ field: { onChange, value } }) => (
+                    <TextInput
+                      style={[stylesRegistro.input, { paddingRight: 40 }]}
+                      placeholder="Confirmar contraseña"
+                      placeholderTextColor="#999"
+                      secureTextEntry={!mostrarConfirmPassword}
+                      onChangeText={onChange}
+                      value={value}
+                    />
+                  )}
+                />
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: '50%',
+                    transform: [{ translateY: -12 }],
+                  }}
+                  onPress={() => setMostrarConfirmPassword(!mostrarConfirmPassword)}
+                >
+                  <Ionicons
+                    name={mostrarConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
+                    size={24}
+                    color="#009fe3"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            {errors.confirmPassword && <Text style={stylesRegistro.error}>{errors.confirmPassword.message}</Text>}
+          </View>
+          <View style={{ height: 10 }} />
+          <Text style={stylesRegistro.label}>Teléfono</Text>
+          <View>
+            <View style={stylesRegistro.filaIcono}>
+              <Ionicons name="call-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
               <Controller
                 control={control}
-                name="confirmPassword"
+                name="phoneNumber"
                 render={({ field: { onChange, value } }) => (
                   <TextInput
-                    style={[stylesRegistro.input, { paddingRight: 40 }]} // espacio para el ojo
-                    placeholder="Confirmar contraseña"
-                    placeholderTextColor="#999"
-                    secureTextEntry={!mostrarConfirmPassword}
-                    onChangeText={onChange}
+                    style={stylesRegistro.input}
                     value={value}
+                    onChangeText={onChange}
+                    placeholder="Teléfono"
+                    placeholderTextColor="#999"
                   />
                 )}
               />
-              <TouchableOpacity
-                style={{
-                  position: 'absolute',
-                  right: 10,
-                  top: '50%',
-                  transform: [{ translateY: -12 }],
-                }}
-                onPress={() => setMostrarConfirmPassword(!mostrarConfirmPassword)}
-              >
-                <Ionicons
-                  name={mostrarConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
-                  size={24}
-                  color="#009fe3"
-                />
-              </TouchableOpacity>
             </View>
+            {errors.phoneNumber && <Text style={stylesRegistro.error}>{errors.phoneNumber.message}</Text>}
           </View>
-          {errors.confirmPassword && <Text style={stylesRegistro.error}>{errors.confirmPassword.message}</Text>}
-
-          <Text style={stylesRegistro.label}>Teléfono</Text>
-          <View style={stylesRegistro.filaIcono}>
-            <Ionicons name="call-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-            <Controller
-              control={control}
-              name="phoneNumber"
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={stylesRegistro.input}
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="Teléfono"
-                  placeholderTextColor="#999"
-                />
-              )}
-            />
-          </View>
-          {errors.phoneNumber && <Text style={stylesRegistro.error}>{errors.phoneNumber.message}</Text>}
-
+          <View style={{ height: 10 }} />
           <Text style={stylesRegistro.label}>Rol</Text>
-          <View style={stylesRegistro.filaIcono}>
-            <Ionicons name="briefcase-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
-            <Controller
-              control={control}
-              name="role"
-              render={({ field: { onChange, value } }) => (
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity
-                    onPress={() => onChange('STAFF')}
-                    style={{ flexDirection: 'row', alignItems: 'center', marginRight: 20 }}
-                  >
-                    <Ionicons name={value === 'STAFF' ? 'radio-button-on' : 'radio-button-off'} size={22} color="#009fe3" />
-                    <Text style={{ marginLeft: 6 }}>STAFF</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => onChange('TEACHER')}
-                    style={{ flexDirection: 'row', alignItems: 'center' }}
-                  >
-                    <Ionicons name={value === 'TEACHER' ? 'radio-button-on' : 'radio-button-off'} size={22} color="#009fe3" />
-                    <Text style={{ marginLeft: 6 }}>TEACHER</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
+          <View>
+            <View style={stylesRegistro.filaIcono}>
+              <Ionicons name="briefcase-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Controller
+                control={control}
+                name="role"
+                render={({ field: { onChange, value } }) => (
+                  <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity
+                      onPress={() => onChange('STAFF')}
+                      style={{ flexDirection: 'row', alignItems: 'center', marginRight: 20 }}
+                    >
+                      <Ionicons name={value === 'STAFF' ? 'radio-button-on' : 'radio-button-off'} size={22} color="#009fe3" />
+                      <Text style={{ marginLeft: 6 }}>STAFF</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => onChange('TEACHER')}
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
+                      <Ionicons name={value === 'TEACHER' ? 'radio-button-on' : 'radio-button-off'} size={22} color="#009fe3" />
+                      <Text style={{ marginLeft: 6 }}>TEACHER</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </View>
+            {errors.role && <Text style={stylesRegistro.error}>{errors.role.message}</Text>}
           </View>
-          {errors.role && <Text style={stylesRegistro.error}>{errors.role.message}</Text>}
+          <View style={{ height: 10 }} />
 
           {watch('role') === 'STAFF' && (
             <>
@@ -433,7 +442,7 @@ const FormularioRegistro = ({ navigation }) => {
                     <Picker
                       selectedValue={value}
                       onValueChange={onChange}
-                      style={{ flex: 1 }}
+                      style={stylesRegistro.picker}
                     >
                       <Picker.Item label="Selecciona una escuela" value="" />
                       {escuelas.map((escuela) => (

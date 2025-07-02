@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button, Alert, Image } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -86,35 +86,38 @@ const FormularioLogin = ({ navigation }) => {
       />
       <Text style={stylesLogin.titulo}>Bienvenido a Gestiona662</Text>
       <Text style={stylesLogin.subtitulo}>Conectamos escuelas con maestros de forma rápida y segura</Text>
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={stylesLogin.input}
-            placeholder="Email"
-            keyboardType="email-address"
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
-      />
-      {errors.email && <Text style={stylesLogin.error}>{errors.email.message}</Text>}
-
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={stylesLogin.input}
-            placeholder="Contraseña"
-            secureTextEntry
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
-      />
-      {errors.password && <Text style={stylesLogin.error}>{errors.password.message}</Text>}
+      <View style={stylesLogin.filaInput}>
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={stylesLogin.input}
+              placeholder="Email"
+              keyboardType="email-address"
+              value={value}
+              onChangeText={onChange}
+            />
+          )}
+        />
+        {errors.email && <Text style={stylesLogin.error}>{errors.email.message}</Text>}
+      </View>
+      <View style={stylesLogin.filaInput}>
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={stylesLogin.input}
+              placeholder="Contraseña"
+              secureTextEntry
+              value={value}
+              onChangeText={onChange}
+            />
+          )}
+        />
+        {errors.password && <Text style={stylesLogin.error}>{errors.password.message}</Text>}
+      </View>
       <TouchableOpacity style={stylesLogin.botonRecuperar}>
         <Text style={stylesLogin.textoBotonRecuperar}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>

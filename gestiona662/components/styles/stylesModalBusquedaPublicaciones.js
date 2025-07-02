@@ -86,6 +86,7 @@ export const estilosModalBusqueda = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 15,
         minHeight: 50,
+        width: width * 0.8,
     },
     textoFecha: {
         fontSize: tamanos.texto,

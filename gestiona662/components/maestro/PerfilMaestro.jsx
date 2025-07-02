@@ -10,7 +10,6 @@ import { URL_BACKEND } from '@env';
 import { Snackbar } from 'react-native-paper';
 import { colores } from '../styles/fuentesyColores';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { estilosModalBusqueda } from '../styles/stylesModalBusquedaPublicaciones';
 
 const { height } = Dimensions.get('window');
 
@@ -32,7 +31,9 @@ const PerfilMaestro = ({ navigation }) => {
         law19889CertificateDate: '',
         preferredShifts: [],
     });
-    const [showDatePicker, setShowDatePicker] = useState({ field: null, visible: false });
+    const [showGraduationDatePicker, setShowGraduationDatePicker] = useState(false);
+    const [showLaw19889DatePicker, setShowLaw19889DatePicker] = useState(false);
+    const [showCriminalRecordDatePicker, setShowCriminalRecordDatePicker] = useState(false);
 
     const showSnackbar = (message, type = 'ok') => {
         setSnackbarMessage(message);
@@ -71,12 +72,12 @@ const PerfilMaestro = ({ navigation }) => {
     const startEdit = () => {
         setEditData({
             address: perfil?.teacherProfile?.address || '',
-            graduationDate: perfil?.teacherProfile?.graduationDate ? perfil.teacherProfile.graduationDate.slice(0,10) : '',
+            graduationDate: perfil?.teacherProfile?.graduationDate ? perfil.teacherProfile.graduationDate.slice(0, 10) : '',
             competitionNumber: perfil?.teacherProfile?.competitionNumber?.toString() || '',
             isEffectiveTeacher: perfil?.teacherProfile?.isEffectiveTeacher || false,
             healthCertificateStatus: perfil?.teacherProfile?.healthCertificateStatus || false,
-            criminalRecordDate: perfil?.teacherProfile?.criminalRecordDate ? perfil.teacherProfile.criminalRecordDate.slice(0,10) : '',
-            law19889CertificateDate: perfil?.teacherProfile?.law19889CertificateDate ? perfil.teacherProfile.law19889CertificateDate.slice(0,10) : '',
+            criminalRecordDate: perfil?.teacherProfile?.criminalRecordDate ? perfil.teacherProfile.criminalRecordDate.slice(0, 10) : '',
+            law19889CertificateDate: perfil?.teacherProfile?.law19889CertificateDate ? perfil.teacherProfile.law19889CertificateDate.slice(0, 10) : '',
             preferredShifts: perfil?.teacherProfile?.preferredShifts || [],
         });
         setIsEditing(true);
@@ -91,7 +92,7 @@ const PerfilMaestro = ({ navigation }) => {
         setEditData(prev => ({ ...prev, [field]: value }));
     };
 
-    // Manejar cambios en los turnos preferidos (checkbox simple)
+    // Manejar cambios en los turnos preferidos
     const toggleShift = (shift) => {
         setEditData(prev => {
             const arr = prev.preferredShifts.includes(shift)
@@ -138,25 +139,10 @@ const PerfilMaestro = ({ navigation }) => {
         }
     };
 
-    // Manejar apertura de selector de fecha
-    const openDatePicker = (field) => {
-        setShowDatePicker({ field, visible: true });
-    };
-
-    // Función para mostrar la fecha en DD/MM/YYYY sin desfase de zona horaria
+    // Función para mostrar la fecha en DD/MM/YYYY
     const formatDateDisplay = (dateStr) => {
         if (!dateStr) return '';
-        // Si es formato YYYY-MM-DD, parsear manualmente como local
-        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-            const [year, month, day] = dateStr.split('-');
-            return `${day}/${month}/${year}`;
-        }
-        // Si no, intentar parsear normalmente
-        const d = new Date(dateStr);
-        if (isNaN(d)) return dateStr;
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year = d.getFullYear();
+        const [year, month, day] = dateStr.split('-');
         return `${day}/${month}/${year}`;
     };
 
@@ -168,12 +154,23 @@ const PerfilMaestro = ({ navigation }) => {
         return `${year}-${month}-${day}`;
     };
 
-    // Manejar selección de fecha
-    const handleDateChange = (event, selectedDate) => {
-        setShowDatePicker({ field: null, visible: false });
-        if (selectedDate && showDatePicker.field) {
-            const formatted = formatDateSave(selectedDate);
-            handleEditChange(showDatePicker.field, formatted);
+    // Handlers para cada campo de fecha
+    const handleGraduationDateChange = (event, selectedDate) => {
+        setShowGraduationDatePicker(false);
+        if (selectedDate) {
+            handleEditChange('graduationDate', formatDateSave(selectedDate));
+        }
+    };
+    const handleLaw19889DateChange = (event, selectedDate) => {
+        setShowLaw19889DatePicker(false);
+        if (selectedDate) {
+            handleEditChange('law19889CertificateDate', formatDateSave(selectedDate));
+        }
+    };
+    const handleCriminalRecordDateChange = (event, selectedDate) => {
+        setShowCriminalRecordDatePicker(false);
+        if (selectedDate) {
+            handleEditChange('criminalRecordDate', formatDateSave(selectedDate));
         }
     };
 
@@ -204,129 +201,154 @@ const PerfilMaestro = ({ navigation }) => {
                             <View>
                                 <Text style={stylesPerfil.tituloSeccion}>Tus Datos</Text>
                                 <View style={stylesPerfil.datosSeccion}>
-                                    {/* Email, Teléfono, CI: solo lectura */}
                                     <Text style={stylesPerfil.subtituloCampo}>Email</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="email" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Teléfono de contacto</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Teléfono de contacto</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="phone" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59892654987'}</Text>
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>C.I.</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>C.I.</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="badge" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         <Text style={stylesPerfil.textoFila}>{usuario.ci || '49086546'}</Text>
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Dirección</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Dirección</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="location-on" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         {isEditing ? (
                                             <TextInput
                                                 value={editData.address}
                                                 onChangeText={t => handleEditChange('address', t)}
-                                                style={[stylesPerfil.textoFila, { flex: 1, borderBottomWidth: 1 }]}
+                                                style={stylesPerfil.textoFilaEditable}
                                             />
                                         ) : (
                                             <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.address}</Text>
                                         )}
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Fecha de egreso</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Fecha de egreso</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="event" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         {isEditing ? (
                                             <>
                                                 <TouchableOpacity
-                                                    style={estilosModalBusqueda.selectorFecha}
-                                                    onPress={() => openDatePicker('graduationDate')}
+                                                    style={stylesPerfil.selectorFecha}
+                                                    onPress={() => setShowGraduationDatePicker(true)}
                                                 >
-                                                    <Text style={estilosModalBusqueda.textoFecha}>
+                                                    <Text style={stylesPerfil.textoFecha}>
                                                         {editData.graduationDate ? formatDateDisplay(editData.graduationDate) : 'Seleccione una fecha...'}
                                                     </Text>
                                                     <MaterialIcons name="event" size={24} color="#009fe3" />
                                                 </TouchableOpacity>
+                                                {showGraduationDatePicker && (
+                                                    <DateTimePicker
+                                                        value={editData.graduationDate ? new Date(editData.graduationDate) : new Date()}
+                                                        mode="date"
+                                                        display="default"
+                                                        onChange={handleGraduationDateChange}
+                                                    />
+                                                )}
                                             </>
                                         ) : (
-                                            <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.graduationDate?.slice(0,10)}</Text>
+                                            <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.graduationDate?.slice(0, 10)}</Text>
                                         )}
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Puntaje del concurso</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Puntaje del concurso</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="assignment" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         {isEditing ? (
                                             <TextInput
                                                 value={editData.competitionNumber}
                                                 onChangeText={t => handleEditChange('competitionNumber', t)}
-                                                style={[stylesPerfil.textoFila, { flex: 1, borderBottomWidth: 1 }]}
+                                                style={stylesPerfil.textoFilaEditable}
                                                 keyboardType="numeric"
                                             />
                                         ) : (
                                             <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.competitionNumber}</Text>
                                         )}
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Efectividad</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Efectividad</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="account-balance" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         {isEditing ? (
                                             <Switch
                                                 value={editData.isEffectiveTeacher}
                                                 onValueChange={v => handleEditChange('isEffectiveTeacher', v)}
-                                                style={{ marginLeft: 10 }}
                                             />
                                         ) : (
                                             <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.isEffectiveTeacher ? 'Efectivo' : 'No Efectivo'}</Text>
                                         )}
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Carné de Salud</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Carné de Salud</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="health-and-safety" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         {isEditing ? (
                                             <Switch
                                                 value={editData.healthCertificateStatus}
                                                 onValueChange={v => handleEditChange('healthCertificateStatus', v)}
-                                                style={{ marginLeft: 10 }}
                                             />
                                         ) : (
                                             <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.healthCertificateStatus ? 'Vigente' : 'No vigente'}</Text>
                                         )}
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Certificado Ley 19889</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Certificado Ley 19889</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="description" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         {isEditing ? (
-                                            <TouchableOpacity
-                                                style={estilosModalBusqueda.selectorFecha}
-                                                onPress={() => openDatePicker('law19889CertificateDate')}
-                                            >
-                                                <Text style={estilosModalBusqueda.textoFecha}>
-                                                    {editData.law19889CertificateDate ? formatDateDisplay(editData.law19889CertificateDate) : 'Seleccione una fecha...'}
-                                                </Text>
-                                                <MaterialIcons name="event" size={24} color="#009fe3" />
-                                            </TouchableOpacity>
+                                            <>
+                                                <TouchableOpacity
+                                                    style={stylesPerfil.selectorFecha}
+                                                    onPress={() => setShowLaw19889DatePicker(true)}
+                                                >
+                                                    <Text style={stylesPerfil.textoFecha}>
+                                                        {editData.law19889CertificateDate ? formatDateDisplay(editData.law19889CertificateDate) : 'Seleccione una fecha...'}
+                                                    </Text>
+                                                    <MaterialIcons name="event" size={24} color="#009fe3" />
+                                                </TouchableOpacity>
+                                                {showLaw19889DatePicker && (
+                                                    <DateTimePicker
+                                                        value={editData.law19889CertificateDate ? new Date(editData.law19889CertificateDate) : new Date()}
+                                                        mode="date"
+                                                        display="default"
+                                                        onChange={handleLaw19889DateChange}
+                                                    />
+                                                )}
+                                            </>
                                         ) : (
-                                            <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.law19889CertificateDate?.slice(0,10)}</Text>
+                                            <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.law19889CertificateDate?.slice(0, 10)}</Text>
                                         )}
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Fecha Antecedentes Penales</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Fecha Antecedentes Penales</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="description" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         {isEditing ? (
-                                            <TouchableOpacity
-                                                style={estilosModalBusqueda.selectorFecha}
-                                                onPress={() => openDatePicker('criminalRecordDate')}
-                                            >
-                                                <Text style={estilosModalBusqueda.textoFecha}>
-                                                    {editData.criminalRecordDate ? formatDateDisplay(editData.criminalRecordDate) : 'Seleccione una fecha...'}
-                                                </Text>
-                                                <MaterialIcons name="event" size={24} color="#009fe3" />
-                                            </TouchableOpacity>
+                                            <>
+                                                <TouchableOpacity
+                                                    style={stylesPerfil.selectorFecha}
+                                                    onPress={() => setShowCriminalRecordDatePicker(true)}
+                                                >
+                                                    <Text style={stylesPerfil.textoFecha}>
+                                                        {editData.criminalRecordDate ? formatDateDisplay(editData.criminalRecordDate) : 'Seleccione una fecha...'}
+                                                    </Text>
+                                                    <MaterialIcons name="event" size={24} color="#009fe3" />
+                                                </TouchableOpacity>
+                                                {showCriminalRecordDatePicker && (
+                                                    <DateTimePicker
+                                                        value={editData.criminalRecordDate ? new Date(editData.criminalRecordDate) : new Date()}
+                                                        mode="date"
+                                                        display="default"
+                                                        onChange={handleCriminalRecordDateChange}
+                                                    />
+                                                )}
+                                            </>
                                         ) : (
-                                            <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.criminalRecordDate?.slice(0,10)}</Text>
+                                            <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.criminalRecordDate?.slice(0, 10)}</Text>
                                         )}
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Turnos Preferidos</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Turnos Preferidos</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <MaterialIcons name="schedule" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         {isEditing ? (
@@ -355,7 +377,7 @@ const PerfilMaestro = ({ navigation }) => {
                                             </Text>
                                         )}
                                     </View>
-                                    <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Calificación</Text>
+                                    <Text style={stylesPerfil.subtituloCampo}>Calificación</Text>
                                     <View style={stylesPerfil.filaSeccion}>
                                         <FontAwesome name="star" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                         <Text style={stylesPerfil.textoFila}>{perfil?.teacherProfile?.rating}</Text>
@@ -403,19 +425,6 @@ const PerfilMaestro = ({ navigation }) => {
                     {snackbarMessage}
                 </Text>
             </Snackbar>
-            {/* DateTimePicker para fechas */}
-            {showDatePicker.visible && (
-                <DateTimePicker
-                    value={
-                        editData[showDatePicker.field]
-                            ? new Date(editData[showDatePicker.field])
-                            : new Date()
-                    }
-                    mode="date"
-                    display="default"
-                    onChange={handleDateChange}
-                />
-            )}
         </View>
     );
 };
