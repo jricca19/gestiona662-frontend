@@ -21,7 +21,7 @@ export const stylesRegistro = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   textoEncabezado: {
-    color: '#fff',
+    color: colores.cuarto,
     fontSize: 22,
     fontWeight: 'bold',
   },
@@ -29,11 +29,10 @@ export const stylesRegistro = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
     fontWeight: 'bold',
-    color: '#009fe3',
+    color: colores.primario,
   },
   label: {
-    color: '#009fe3',
-    marginBottom: 5,
+    color: colores.primario,
     fontWeight: 'bold',
     fontSize: 14,
   },
@@ -42,19 +41,14 @@ export const stylesRegistro = StyleSheet.create({
     color: colores.letrasError,
   },
   input: {
-    borderColor: '#ccc',
+    borderColor: colores.tercearioOscuro,
     borderWidth: 1,
     padding: 10,
     borderRadius: 5,
     flex: 1,
   },
-  picker: {
-    flex: 1,
-    height: height * 0.06,
-    color: colores.quinto,
-  },
   botonRegistrarse: {
-    backgroundColor: '#009fe3',
+    backgroundColor: colores.primario,
     borderRadius: 8,
     paddingVertical: 12,
     alignItems: 'center',
@@ -62,17 +56,33 @@ export const stylesRegistro = StyleSheet.create({
     marginBottom: 5,
   },
   textoBotonRegistrarse: {
-    color: '#fff',
+    color: colores.cuarto,
     fontWeight: 'bold',
     fontSize: 16,
   },
   filaIcono: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 0,
+    marginBottom: height * 0.01,
   },
   iconSeparado: {
     marginRight: 10,
+  },
+  selectorContainer: {
+    flex: 1,
+    color: colores.quinto,
+    backgroundColor: colores.cuarto,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colores.tercearioOscuro,
+    height: height * 0.05,
+    justifyContent: 'center',
+    marginRight: 5,
+  },
+  pickerEscuela: {
+    height: height * 0.06,
+    color: colores.quinto,
+    backgroundColor: 'transparent',
   },
   encabezadoConFlecha: {
     width: '100%',
@@ -81,7 +91,6 @@ export const stylesRegistro = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
   },
-
   iconoAtrasWrapper: {
     position: 'absolute',
     left: width * 0.05,
@@ -97,13 +106,12 @@ export const stylesRegistro = StyleSheet.create({
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginVertical: width * 0.05,
   },
-
   checkboxLabel: {
     marginLeft: 10,
     fontSize: 14,
-    color: '#333',
+    color: colores.quinto,
   },
   inputWrapper: {
     width: '100%',
@@ -111,43 +119,26 @@ export const stylesRegistro = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  inputConOjo: {
-    backgroundColor: 'white',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    paddingRight: 40,
-    fontSize: 16,
-    color: '#333',
-    width: '100%',
-    height: 48, // Fijamos altura
-  },
-
-  iconoOjo: {
-    position: 'absolute',
-    right: 10,
-    top: 12, // Cálculo manual exacto
-    zIndex: 1,
-  },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)', // Fondo oscuro semitransparente
+    backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
     width: '90%',
-    backgroundColor: 'white',
+    backgroundColor: colores.cuarto,
     padding: 20,
     borderRadius: 10,
-    elevation: 5, // sombra para Android
-    shadowColor: '#000', // sombra para iOS
+    elevation: 5,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
   modalTitle: {
+    textAlign: 'center',
+    color: colores.primario,
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -155,7 +146,28 @@ export const stylesRegistro = StyleSheet.create({
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: height * 0.02,
+  },
+  modalButton: {
+    backgroundColor: colores.primario,
+    borderRadius: width * 0.02,
+    padding: height * 0.015,
+    minWidth: width * 0.3,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: colores.cuarto,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  inputModal: {
+    borderColor: colores.tercearioOscuro,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
+    color: colores.quinto,
+    marginBottom: 10,
+    height: height * 0.07,
   },
   botonAgregarEscuela: {
     width: 40,
@@ -167,9 +179,17 @@ export const stylesRegistro = StyleSheet.create({
     marginLeft: 10
   },
   botonAgregarTexto: {
-    color: 'white',
+    color: colores.cuarto,
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: -2
+  },
+  pickerWrapper: {
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colores.tercearioOscuro,
+    backgroundColor: colores.cuarto,
+    marginBottom: 10,
+    height: height * 0.07,
   },
 });

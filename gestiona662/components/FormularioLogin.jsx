@@ -8,6 +8,8 @@ import { loguear } from '../store/slices/usuarioSlice';
 import { stylesLogin } from './styles/stylesLogin';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n/i18n';
+import { colores } from './styles/fuentesyColores';
+
 
 const FormularioLogin = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -123,6 +125,7 @@ const FormularioLogin = ({ navigation }) => {
                 keyboardType="email-address"
                 value={value}
                 onChangeText={onChange}
+                placeholderTextColor={colores.tercearioOscuro}
               />
             )}
           />
@@ -139,6 +142,7 @@ const FormularioLogin = ({ navigation }) => {
                 secureTextEntry
                 value={value}
                 onChangeText={onChange}
+                placeholderTextColor={colores.tercearioOscuro}
               />
             )}
           />
