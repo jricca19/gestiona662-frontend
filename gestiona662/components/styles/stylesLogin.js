@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native';
-import { fuentes, colores, tamanos } from './fuentesyColores';
+import { Dimensions, StyleSheet } from 'react-native';
+import { colores } from './fuentesyColores';
+
+const { width, height } = Dimensions.get('window');
 
 export const stylesLogin = StyleSheet.create({
     logo: {
@@ -17,7 +19,7 @@ export const stylesLogin = StyleSheet.create({
         marginBottom: 5,
     },
     textoBotonIniciarSesión: {
-        color: '#fff',
+        color: colores.cuarto,
         fontWeight: 'bold',
         fontSize: 16,
     },
@@ -37,36 +39,40 @@ export const stylesLogin = StyleSheet.create({
         marginBottom: 5
     },
     textoBotonRecuperar: {
-        color: '#009fe3',
+        color: colores.primario,
         fontWeight: 'bold',
         fontSize: 14
     },
     titulo: {
         fontSize: 24,
-        marginBottom: 20,
+        marginBottom: height * 0.05,
         textAlign: 'center',
         fontWeight: 'bold',
     },
     subtitulo: {
         fontSize: 14,
-        marginBottom: 20,
+        marginBottom: height * 0.05,
         textAlign: 'center'
     },
     container: {
-        padding: 20,
+        padding: width * 0.07,
         justifyContent: 'center',
-        marginTop: 40,
+        margin: width * 0.08,
         backgroundColor: colores.terceario
     },
+    filaInput: {
+        marginBottom: width * 0.02,
+    },
     input: {
-        borderColor: '#ccc',
+        backgroundColor: colores.cuarto,
+        borderColor: colores.tercearioOscuro,
         borderWidth: 1,
-        marginBottom: 15,
         padding: 10,
         borderRadius: 5,
+        color: colores.quinto,
     },
     error: {
-        color: 'red',
-        marginBottom: 10,
+        marginLeft: width * 0.02,
+        color: colores.letrasError,
     }
 });

@@ -52,7 +52,7 @@ export const estilosHome = StyleSheet.create({
     },
     picker: {
         height: height * 0.06,
-        color: '#333',
+        color: colores.quinto,
         backgroundColor: 'transparent',
     },
     contenedorIndicadores: {

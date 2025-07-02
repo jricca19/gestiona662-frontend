@@ -100,12 +100,12 @@ const PerfilDirector = ({ navigation }) => {
                                     <MaterialIcons name="email" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                     <Text style={stylesPerfil.textoFila}>{usuario.email || 'correo@dominio.com'}</Text>
                                 </View>
-                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>Teléfono de contacto</Text>
+                                <Text style={stylesPerfil.subtituloCampo}>Teléfono de contacto</Text>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="phone" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                     <Text style={stylesPerfil.textoFila}>{usuario.phoneNumber || '+59892654987'}</Text>
                                 </View>
-                                <Text style={[stylesPerfil.subtituloCampo, { marginTop: 10 }]}>C.I.</Text>
+                                <Text style={stylesPerfil.subtituloCampo}>C.I.</Text>
                                 <View style={stylesPerfil.filaSeccion}>
                                     <MaterialIcons name="badge" size={20} color="#009fe3" style={stylesPerfil.iconoFila} />
                                     <Text style={stylesPerfil.textoFila}>{usuario.ci || '49086546'}</Text>
