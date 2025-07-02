@@ -52,8 +52,10 @@ export const stylesRegistro = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 12,
     alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 5,
     marginBottom: 5,
+    height: height * 0.06,
   },
   textoBotonRegistrarse: {
     color: colores.cuarto,

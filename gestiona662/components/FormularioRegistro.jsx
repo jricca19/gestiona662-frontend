@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Button, Alert, Modal, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, TextInput, Button, Alert, Modal, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -52,6 +52,7 @@ const FormularioRegistro = ({ navigation }) => {
   const [newAddress, setNewAddress] = useState('');
   const [ciudades, setCiudades] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const cargarCiudades = async () => {
@@ -153,6 +154,7 @@ const FormularioRegistro = ({ navigation }) => {
   };
 
   const onSubmit = async (formData) => {
+    setLoading(true);
     const { confirmPassword, aceptarTerminos, schoolId, ...rest } = formData;
 
     const dataToSend = {
@@ -202,6 +204,7 @@ const FormularioRegistro = ({ navigation }) => {
       console.error('Error en registro:', error);
       Alert.alert('Error', 'No se pudo conectar con el servidor');
     }
+    setLoading(false);
   };
 
   return (
@@ -273,6 +276,7 @@ const FormularioRegistro = ({ navigation }) => {
                     onChangeText={onChange}
                     placeholder="Cédula de Identidad"
                     placeholderTextColor={colores.tercearioOscuro}
+                    keyboardType="numeric"
                   />
                 )}
               />
@@ -566,8 +570,16 @@ const FormularioRegistro = ({ navigation }) => {
             <Text style={stylesRegistro.error}>{errors.aceptarTerminos.message}</Text>
           )}
 
-          <TouchableOpacity style={stylesRegistro.botonRegistrarse} onPress={handleSubmit(onSubmit)}>
-            <Text style={stylesRegistro.textoBotonRegistrarse}>Registrarse</Text>
+          <TouchableOpacity
+            style={stylesRegistro.botonRegistrarse}
+            onPress={handleSubmit(onSubmit)}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color={colores.cuarto} />
+            ) : (
+              <Text style={stylesRegistro.textoBotonRegistrarse}>Registrarse</Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>

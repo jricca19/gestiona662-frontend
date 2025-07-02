@@ -106,4 +106,24 @@ export const estilosHome = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
     },
+    error: {
+        marginTop: height * 0.2,
+        textAlign: 'center',
+        fontSize: tamanos.texto,
+        color: 'red',
+    },
+    botonReintentar: {
+        backgroundColor: colores.primario,
+        borderRadius: width * 0.03,
+        paddingVertical: height * 0.01,
+        paddingHorizontal: width * 0.06,
+        elevation: 10,
+        marginTop: height * 0.02,
+    },
+    textoBotonReintentar: {
+        color: colores.terceario,
+        fontWeight: 'bold',
+        fontSize: tamanos.texto,
+    },
+
 });

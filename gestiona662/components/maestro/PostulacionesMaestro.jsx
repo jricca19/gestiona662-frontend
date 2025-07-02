@@ -8,6 +8,8 @@ import { formatUTC } from '../../utils/formatUTC'
 import { URL_BACKEND } from '@env';
 import EfectoSlide from '../EfectoSlide';
 import DeslizarParaEliminar from '../DeslizarParaEliminar';
+import { useDispatch, useSelector } from 'react-redux'
+import { establecerPostulaciones, eliminarPostulacion } from '../../store/slices/postulacionesSlice'
 
 const estados = {
     ACCEPTED: {
@@ -40,7 +42,8 @@ const statusOrder = {
 }
 
 const PostulacionesMaestro = ({ navigation }) => {
-    const [datos, setDatos] = useState([])
+    const dispatch = useDispatch();
+    const datos = useSelector(state => state.postulaciones.items);
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [refreshing, setRefreshing] = useState(false)
@@ -59,7 +62,7 @@ const PostulacionesMaestro = ({ navigation }) => {
             })
             const data = await res.json()
             if (res.status === 200) {
-                setDatos(data)
+                dispatch(establecerPostulaciones(data))
             } else {
                 setError('Error al obtener postulaciones')
             }
@@ -78,8 +81,8 @@ const PostulacionesMaestro = ({ navigation }) => {
         fetchPostulaciones().then(() => setRefreshing(false))
     }
 
-    const eliminarPostulacion = async (id) => {
-        setDatos(prev => prev.filter(item => item._id !== id));
+    const eliminarPostulacionHandler = async (id) => {
+        dispatch(eliminarPostulacion(id));
         setError(null);
         try {
             const token = await SecureStore.getItemAsync('token')
@@ -117,7 +120,7 @@ const PostulacionesMaestro = ({ navigation }) => {
 
         return (
             <DeslizarParaEliminar
-                onDelete={() => eliminarPostulacion(item._id)}
+                onDelete={() => eliminarPostulacionHandler(item._id)}
                 confirmMessage="¿Seguro que desea eliminar esta postulación?"
             >
                 <EfectoSlide style={estilosPostulaciones.tarjeta}>
@@ -162,13 +165,13 @@ const PostulacionesMaestro = ({ navigation }) => {
                         <View style={{ alignItems: 'center', marginTop: 32 }}>
                             <Text style={estilosPostulaciones.error}>{error}</Text>
                             <TouchableOpacity
-                                style={[estilosPostulaciones.botonDetalles, { marginTop: 16 }]}
+                                style={estilosPostulaciones.botonReintentar}
                                 onPress={() => {
                                     setError(null)
                                     fetchPostulaciones()
                                 }}
                             >
-                                <Text style={estilosPostulaciones.textoDetalles}>Reintentar</Text>
+                                <Text style={estilosPostulaciones.textoBotonReintentar}>Reintentar</Text>
                             </TouchableOpacity>
                         </View>
                     ) : loading ? (

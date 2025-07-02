@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
 import { Dimensions } from 'react-native'
 import NotificacionesPush from '../components/NotificacionesPush'
+import Observador from '../components/Observador'
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,55 +28,61 @@ const TAB_BAR_HEIGHT = height * 0.07;
 
 function MaestroTabs() {
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarActiveTintColor: '#009BDB',
-        tabBarInactiveTintColor: '#333333',
-        tabBarStyle: { 
-          height: TAB_BAR_HEIGHT,
-          backgroundColor: '#FAFAFA',
-        },
-        tabBarIcon: ({ color, size }) => {
-          if (route.name === 'homeMaestro') return <Ionicons name="home" size={size} color={color} />;
-          if (route.name === 'publicaciones') return <Ionicons name="search-outline" size={size} color={color} />;
-          if (route.name === 'misPostulaciones') return <Ionicons name="list-outline" size={size} color={color} />;
-          if (route.name === 'perfilMaestro') return <Ionicons name="person-circle-outline" size={size} color={color} />;
-        },
-      })}
-    >
-      <Tab.Screen name="homeMaestro" component={HomeMaestro} options={{ title: 'Inicio' }} />
-      <Tab.Screen name="publicaciones" component={Publicaciones} options={{ title: 'Buscar Suplencias' }} />
-      <Tab.Screen name="misPostulaciones" component={PostulacionesMaestro} options={{ title: 'Mis Postulaciones' }} />
-      <Tab.Screen name="perfilMaestro" component={PerfilMaestro} options={{ title: 'Perfil' }} />
-    </Tab.Navigator>
+    <>
+      <Observador />
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarActiveTintColor: '#009BDB',
+          tabBarInactiveTintColor: '#333333',
+          tabBarStyle: { 
+            height: TAB_BAR_HEIGHT,
+            backgroundColor: '#FAFAFA',
+          },
+          tabBarIcon: ({ color, size }) => {
+            if (route.name === 'homeMaestro') return <Ionicons name="home" size={size} color={color} />;
+            if (route.name === 'publicaciones') return <Ionicons name="search-outline" size={size} color={color} />;
+            if (route.name === 'misPostulaciones') return <Ionicons name="list-outline" size={size} color={color} />;
+            if (route.name === 'perfilMaestro') return <Ionicons name="person-circle-outline" size={size} color={color} />;
+          },
+        })}
+      >
+        <Tab.Screen name="homeMaestro" component={HomeMaestro} options={{ title: 'Inicio' }} />
+        <Tab.Screen name="publicaciones" component={Publicaciones} options={{ title: 'Buscar Suplencias' }} />
+        <Tab.Screen name="misPostulaciones" component={PostulacionesMaestro} options={{ title: 'Mis Postulaciones' }} />
+        <Tab.Screen name="perfilMaestro" component={PerfilMaestro} options={{ title: 'Perfil' }} />
+      </Tab.Navigator>
+    </>
   );
 }
 
 function DirectorTabs() {
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarActiveTintColor: '#009BDB',
-        tabBarInactiveTintColor: '#333333',
-        tabBarStyle: { 
-          height: TAB_BAR_HEIGHT,
-          backgroundColor: '#FAFAFA',
-        },
-        tabBarIcon: ({ color, size }) => {
-          if (route.name === 'homeDirector') return <Ionicons name="home" size={size} color={color} />;
-          if (route.name === 'crearPublicacion') return <Ionicons name="add-circle-outline" size={size} color={color} />;
-          if (route.name === 'misPublicaciones') return <Ionicons name="list-outline" size={size} color={color} />;
-          if (route.name === 'perfilDirector') return <Ionicons name="person-circle-outline" size={size} color={color} />;
-        },
-      })}
-    >
-      <Tab.Screen name="homeDirector" component={HomeDirector} options={{ title: 'Inicio' }} />
-      <Tab.Screen name="crearPublicacion" component={CrearPublicacionDirector} options={{ title: 'Crear Publicación' }} />
-      <Tab.Screen name="misPublicaciones" component={PublicacionesDirector} options={{ title: 'Mis Publicaciones' }} />
-      <Tab.Screen name="perfilDirector" component={PerfilDirector} options={{ title: 'Perfil' }} />
-    </Tab.Navigator>
+    <>
+      <Observador />
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          headerShown: false,
+          tabBarActiveTintColor: '#009BDB',
+          tabBarInactiveTintColor: '#333333',
+          tabBarStyle: { 
+            height: TAB_BAR_HEIGHT,
+            backgroundColor: '#FAFAFA',
+          },
+          tabBarIcon: ({ color, size }) => {
+            if (route.name === 'homeDirector') return <Ionicons name="home" size={size} color={color} />;
+            if (route.name === 'crearPublicacion') return <Ionicons name="add-circle-outline" size={size} color={color} />;
+            if (route.name === 'misPublicaciones') return <Ionicons name="list-outline" size={size} color={color} />;
+            if (route.name === 'perfilDirector') return <Ionicons name="person-circle-outline" size={size} color={color} />;
+          },
+        })}
+      >
+        <Tab.Screen name="homeDirector" component={HomeDirector} options={{ title: 'Inicio' }} />
+        <Tab.Screen name="crearPublicacion" component={CrearPublicacionDirector} options={{ title: 'Crear Publicación' }} />
+        <Tab.Screen name="misPublicaciones" component={PublicacionesDirector} options={{ title: 'Mis Publicaciones' }} />
+        <Tab.Screen name="perfilDirector" component={PerfilDirector} options={{ title: 'Perfil' }} />
+      </Tab.Navigator>
+    </>
   );
 }
 
