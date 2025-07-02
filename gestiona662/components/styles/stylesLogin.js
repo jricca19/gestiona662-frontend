@@ -74,5 +74,34 @@ export const stylesLogin = StyleSheet.create({
     error: {
         marginLeft: width * 0.02,
         color: colores.letrasError,
-    }
+    },
+    botonesIdiomas: {
+        flexDirection: 'row',
+        alignSelf: 'flex-end',
+        borderWidth: 1,
+        borderColor: colores.tercearioOscuro,
+        borderRadius: 16,
+        marginTop: height * 0.02,
+        marginRight: width * 0.03,
+        backgroundColor: colores.terceario,
+        overflow: 'hidden',
+    },
+    botonIdiomaElegido: {
+        paddingHorizontal: width * 0.02,
+        paddingVertical: height * 0.005,
+        backgroundColor: colores.primario,
+    },
+    botonIdiomaSinElegir: {
+        paddingHorizontal: width * 0.02,
+        paddingVertical: height * 0.005,
+        backgroundColor: colores.terceario,
+    },
+    textoBtnIdiomaElegido: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    textoBtnIdiomaSinElegir: {
+        color: '#333',
+        fontWeight: 'bold',
+    },
 });

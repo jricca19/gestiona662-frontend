@@ -6,18 +6,24 @@ import { useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import { loguear } from '../store/slices/usuarioSlice';
 import { stylesLogin } from './styles/stylesLogin';
-
-const schema = yup.object().shape({
-  email: yup.string().email('Email inválido').required('El email es obligatorio'),
-  password: yup
-    .string()
-    .min(8, 'Mínimo 8 caracteres')
-    .max(20, 'Máximo 20 caracteres')
-    .required('La contraseña es obligatoria'),
-});
+import { useTranslation } from 'react-i18next';
+import i18n from '../i18n/i18n';
 
 const FormularioLogin = ({ navigation }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .email(t('validation.email'))
+      .required(t('validation.required')),
+    password: yup
+      .string()
+      .min(8, t('validation.min', { count: 8 }))
+      .max(20, t('validation.min', { count: 20 }))
+      .required(t('validation.required')),
+  });
 
   const {
     control,
@@ -79,55 +85,76 @@ const FormularioLogin = ({ navigation }) => {
   };
 
   return (
-    <View style={stylesLogin.container}>
-      <Image
-        source={require('../assets/logo-login.png')}
-        style={stylesLogin.logo}
-      />
-      <Text style={stylesLogin.titulo}>Bienvenido a Gestiona662</Text>
-      <Text style={stylesLogin.subtitulo}>Conectamos escuelas con maestros de forma rápida y segura</Text>
-      <View style={stylesLogin.filaInput}>
-        <Controller
-          control={control}
-          name="email"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={stylesLogin.input}
-              placeholder="Email"
-              keyboardType="email-address"
-              value={value}
-              onChangeText={onChange}
-            />
-          )}
-        />
-        {errors.email && <Text style={stylesLogin.error}>{errors.email.message}</Text>}
+    <>
+      <View style={stylesLogin.botonesIdiomas}>
+        <TouchableOpacity
+          style={i18n.language === 'es' ? stylesLogin.botonIdiomaElegido : stylesLogin.botonIdiomaSinElegir}
+          onPress={() => i18n.changeLanguage('es')}
+        >
+          <Text style={i18n.language === 'es' ? stylesLogin.textoBtnIdiomaElegido : stylesLogin.textoBtnIdiomaSinElegir}>
+            {t('login.es')}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={i18n.language === 'en' ? stylesLogin.botonIdiomaElegido : stylesLogin.botonIdiomaSinElegir}
+          onPress={() => i18n.changeLanguage('en')}
+        >
+          <Text style={i18n.language === 'en' ? stylesLogin.textoBtnIdiomaElegido : stylesLogin.textoBtnIdiomaSinElegir}>
+            {t('login.en')}
+          </Text>
+        </TouchableOpacity>
       </View>
-      <View style={stylesLogin.filaInput}>
-        <Controller
-          control={control}
-          name="password"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={stylesLogin.input}
-              placeholder="Contraseña"
-              secureTextEntry
-              value={value}
-              onChangeText={onChange}
-            />
-          )}
+
+      <View style={stylesLogin.container}>
+        <Image
+          source={require('../assets/logo-login.png')}
+          style={stylesLogin.logo}
         />
-        {errors.password && <Text style={stylesLogin.error}>{errors.password.message}</Text>}
+        <Text style={stylesLogin.titulo}>{t('login.title')}</Text>
+        <Text style={stylesLogin.subtitulo}>{t('login.subtitle')}</Text>
+        <View style={stylesLogin.filaInput}>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={stylesLogin.input}
+                placeholder={t('form.email')}
+                keyboardType="email-address"
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+          />
+          {errors.email && <Text style={stylesLogin.error}>{errors.email.message}</Text>}
+        </View>
+        <View style={stylesLogin.filaInput}>
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                style={stylesLogin.input}
+                placeholder={t('form.password')}
+                secureTextEntry
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+          />
+          {errors.password && <Text style={stylesLogin.error}>{errors.password.message}</Text>}
+        </View>
+        <TouchableOpacity style={stylesLogin.botonRecuperar}>
+          <Text style={stylesLogin.textoBotonRecuperar}>{t('login.forgot')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={stylesLogin.botonIniciarSesion} onPress={handleSubmit(onSubmit)}>
+          <Text style={stylesLogin.textoBotonIniciarSesión}>{t('login.login')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={stylesLogin.botonRegistrarse} onPress={irARegistro}>
+          <Text style={stylesLogin.textoBotonRegistrarse}>{t('login.register')}</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={stylesLogin.botonRecuperar}>
-        <Text style={stylesLogin.textoBotonRecuperar}>¿Olvidaste tu contraseña?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={stylesLogin.botonIniciarSesion} onPress={handleSubmit(onSubmit)}>
-        <Text style={stylesLogin.textoBotonIniciarSesión}>Iniciar sesión</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={stylesLogin.botonRegistrarse} onPress={irARegistro}>
-        <Text style={stylesLogin.textoBotonRegistrarse}>Registrarse</Text>
-      </TouchableOpacity>
-    </View>
+    </>
   );
 };
 
