@@ -160,7 +160,7 @@ const PublicacionesDirector = ({ navigation }) => {
             const inicio = parseISO(item.startDate);
             const fin = parseISO(item.endDate);
             fechaFormateada =
-                format(inicio, 'dd', { locale: es }) +
+                format(inicio, 'dd MMM', { locale: es }).toUpperCase() +
                 '-' +
                 format(fin, 'dd MMM yyyy', { locale: es }).toUpperCase();
         }
@@ -168,21 +168,31 @@ const PublicacionesDirector = ({ navigation }) => {
         return (
             <View style={estilosPublicaciones.tarjeta} key={item._id}>
                 <View style={estilosPublicaciones.encabezadoTarjeta}>
-                    <Text style={estilosPublicaciones.nombreEscuela}>{item.grade}°</Text>
-                    <View style={estilosPublicaciones.calificacion}>
-                        <FontAwesome name="star" size={20} color="#FFD700" />
-                        <Text style={estilosPublicaciones.textoCalificacion}>{item.rating ?? '0'}</Text>
+                    <View style={estilosPublicaciones.filaTarjeta}>
+                        <MaterialIcons name="show-chart" size={18} color="#03A9E0" />
+                        <Text style={estilosPublicaciones.textoTarjeta}>
+                            {item.grade === 0 ? 'Nivel Inicial' : `${item.grade}°`}
+                        </Text>
                     </View>
-                </View>
-                <View style={estilosPublicaciones.filaTarjeta}>
-                    <MaterialIcons name="access-time" size={18} color={colores.primario} />
-                    <Text style={estilosPublicaciones.textoTarjeta}>
-                        {item.grade}° -
-                        {item.shift === 'MORNING' ? ' Mañana - ' : item.shift === 'AFTERNOON' ? ' Tarde - ' : item.shift === 'FULL' ? ' Tiempo Completo - ' : ` ${item.shift}`}
-                        {item.shift === 'MORNING' && '08:00 a 12:00'}
-                        {item.shift === 'AFTERNOON' && '12:00 a 17:00'}
-                        {item.shift === 'FULL' && '09:00 a 15:00'}
-                    </Text>
+                    <View style={[
+                        estilosPublicaciones.badgeStatus,
+                        item.status === 'PENDING'
+                            ? estilosPublicaciones.badgePendiente
+                            : item.status === 'ASSIGNED'
+                                ? estilosPublicaciones.badgeAsignada
+                                : estilosPublicaciones.badgeRechazada
+                    ]}>
+                        <Text style={[
+                            estilosPublicaciones.badgeStatusText,
+                            item.status === 'PENDING'
+                                ? estilosPublicaciones.badgePendienteText
+                                : item.status === 'ASSIGNED'
+                                    ? estilosPublicaciones.badgeAsignadaText
+                                    : estilosPublicaciones.badgeRechazadaText
+                        ]}>
+                            {item.status}
+                        </Text>
+                    </View>
                 </View>
                 <View style={estilosPublicaciones.filaTarjeta}>
                     <MaterialIcons name="event" size={18} color={colores.primario} />
@@ -193,7 +203,7 @@ const PublicacionesDirector = ({ navigation }) => {
                 <View style={estilosPublicaciones.filaTarjeta}>
                     <MaterialIcons name="event" size={18} color={colores.primario} />
                     <Text style={estilosPublicaciones.textoTarjeta}>
-                        Postulados: {postulaciones[item._id]?.length || 0}
+                        {postulaciones[item._id]?.length || 0} postulados
                     </Text>
                 </View>
                 {/* <View style={[estilosPublicaciones.filaTarjeta, { justifyContent: 'space-between' }]}>
