@@ -16,13 +16,13 @@ const FormularioLogin = ({ navigation }) => {
   const schema = yup.object().shape({
     email: yup
       .string()
-      .email(t('login.email_invalid'))
-      .required(t('login.email_required')),
+      .email(t('validation.email'))
+      .required(t('validation.required')),
     password: yup
       .string()
-      .min(8, t('login.password_min', { count: 8 }))
-      .max(20, t('login.password_max', { count: 20 }))
-      .required(t('login.password_required')),
+      .min(8, t('validation.min', { count: 8 }))
+      .max(20, t('validation.min', { count: 20 }))
+      .required(t('validation.required')),
   });
 
   const {
@@ -119,7 +119,7 @@ const FormularioLogin = ({ navigation }) => {
             render={({ field: { onChange, value } }) => (
               <TextInput
                 style={stylesLogin.input}
-                placeholder={t('login.email')}
+                placeholder={t('form.email')}
                 keyboardType="email-address"
                 value={value}
                 onChangeText={onChange}
@@ -135,7 +135,7 @@ const FormularioLogin = ({ navigation }) => {
             render={({ field: { onChange, value } }) => (
               <TextInput
                 style={stylesLogin.input}
-                placeholder={t('login.password')}
+                placeholder={t('form.password')}
                 secureTextEntry
                 value={value}
                 onChangeText={onChange}
