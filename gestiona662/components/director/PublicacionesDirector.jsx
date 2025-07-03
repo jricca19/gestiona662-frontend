@@ -172,17 +172,17 @@ const PublicacionesDirector = ({ navigation }) => {
                     </View>
                     <View style={[
                         estilosPublicaciones.badgeStatus,
-                        item.status === 'PENDING'
+                        item.status === 'OPEN'
                             ? estilosPublicaciones.badgePendiente
-                            : item.status === 'ASSIGNED'
+                            : item.status === 'COMPLETED'
                                 ? estilosPublicaciones.badgeAsignada
                                 : estilosPublicaciones.badgeRechazada
                     ]}>
                         <Text style={[
                             estilosPublicaciones.badgeStatusText,
-                            item.status === 'PENDING'
+                            item.status === 'OPEN'
                                 ? estilosPublicaciones.badgePendienteText
-                                : item.status === 'ASSIGNED'
+                                : item.status === 'COMPLETED'
                                     ? estilosPublicaciones.badgeAsignadaText
                                     : estilosPublicaciones.badgeRechazadaText
                         ]}>

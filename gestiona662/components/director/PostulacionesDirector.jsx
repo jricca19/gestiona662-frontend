@@ -106,7 +106,7 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                                     </Text>
                                 </View>
                                 <MaterialIcons name="star" size={20} color={'#FFD600'} style={{ marginLeft: 'auto' }} />
-                                <Text style={styles.puntaje}>{perfil.haveRating ? perfil.rating : '-'}</Text>
+                                <Text style={styles.puntaje}>{perfil.rating}</Text>
                             </View>
 
                             <Text style={styles.nombre}>{nombreCompleto}</Text>
