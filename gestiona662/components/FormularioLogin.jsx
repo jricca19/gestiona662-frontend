@@ -80,7 +80,6 @@ const FormularioLogin = ({ navigation }) => {
         Alert.alert('Error', data?.message || 'Credenciales inválidas');
       }
     } catch (error) {
-      console.error('Error en login:', error);
       Alert.alert('Error', 'No se pudo conectar con el servidor');
     }
     setLoading(false);

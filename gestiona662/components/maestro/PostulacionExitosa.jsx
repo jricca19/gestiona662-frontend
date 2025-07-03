@@ -6,12 +6,10 @@ import BotonPulsaciones from '../BotonPulsaciones'
 const PostulacionExitosa = ({ route, navigation }) => {
     const { postulation, detalles, diasSeleccionadosTexto } = route.params
 
-    // Datos de la escuela y publicación
     const escuela = detalles?.escuela || 'No disponible'
     const clase = detalles?.clase || 'No disponible'
     const turno = detalles?.turno || 'No disponible'
 
-    // Días de postulación
     let dias = []
     if (diasSeleccionadosTexto) {
         dias = diasSeleccionadosTexto
@@ -52,7 +50,7 @@ const PostulacionExitosa = ({ route, navigation }) => {
             </Text>
 
             <BotonPulsaciones
-                onPress={() => navigation.replace('maestroTabs', { screen: 'misPostulaciones' })}
+                onPress={() => navigation.replace('maestroTabs', { screen: 'misPostulaciones', params: { refresh: true } })}
                 loading={false}
                 pulse={true}
                 text="Ver Postulaciones"
