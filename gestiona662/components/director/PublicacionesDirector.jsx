@@ -120,12 +120,10 @@ const PublicacionesDirector = ({ navigation, route }) => {
         obtenerEscuelas();
     }, []);
 
-    // Detectar refresh desde navegación
     useEffect(() => {
         if (route?.params?.refresh) {
             setPage(1);
             fetchPublicaciones(1, true);
-            // Limpiar el parámetro para evitar recargas infinitas
             navigation.setParams({ refresh: false });
         }
     }, [route?.params?.refresh]);
@@ -158,7 +156,6 @@ const PublicacionesDirector = ({ navigation, route }) => {
         }
     }, [datos]);
 
-    // Estados en español para publicaciones
     const estados = {
         OPEN: {
             label: 'Abierta',
@@ -287,6 +284,9 @@ const PublicacionesDirector = ({ navigation, route }) => {
 
             <View style={{ flex: 1 }}>
                 <View style={estilosPublicacionesDirector.contenedor}>
+                    <View style={estilosPublicacionesDirector.filaTitulo}>
+                        <Text style={estilosPublicacionesDirector.titulo}>Publicaciones</Text>
+                    </View>
                     <FlatList
                         data={datos.filter(item => Array.isArray(postulaciones[item._id]))}
                         renderItem={renderItem}

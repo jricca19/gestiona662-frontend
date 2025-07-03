@@ -68,7 +68,6 @@ const PerfilMaestro = ({ navigation }) => {
         dispatch(desloguear());
     };
 
-    // Prellenar datos cuando se entra en modo edición
     const startEdit = () => {
         setEditData({
             address: perfil?.teacherProfile?.address || '',
@@ -87,12 +86,10 @@ const PerfilMaestro = ({ navigation }) => {
         setIsEditing(false);
     };
 
-    // Manejar cambios en los campos
     const handleEditChange = (field, value) => {
         setEditData(prev => ({ ...prev, [field]: value }));
     };
 
-    // Manejar cambios en los turnos preferidos
     const toggleShift = (shift) => {
         setEditData(prev => {
             const arr = prev.preferredShifts.includes(shift)
@@ -102,7 +99,6 @@ const PerfilMaestro = ({ navigation }) => {
         });
     };
 
-    // Guardar cambios
     const handleSaveEdit = async () => {
         try {
             const token = await SecureStore.getItemAsync('token');
@@ -131,7 +127,6 @@ const PerfilMaestro = ({ navigation }) => {
             }
             showSnackbar('Datos actualizados correctamente', 'ok');
             setIsEditing(false);
-            // Refrescar perfil
             const updated = await resp.json();
             setPerfil(updated);
         } catch (e) {
@@ -139,14 +134,14 @@ const PerfilMaestro = ({ navigation }) => {
         }
     };
 
-    // Función para mostrar la fecha en DD/MM/YYYY
+    // mostrar la fecha en DD/MM/YYYY
     const formatDateDisplay = (dateStr) => {
         if (!dateStr) return '';
         const [year, month, day] = dateStr.split('-');
         return `${day}/${month}/${year}`;
     };
 
-    // Función para guardar la fecha en YYYY-MM-DD
+    // guardar la fecha en YYYY-MM-DD
     const formatDateSave = (dateObj) => {
         const year = dateObj.getFullYear();
         const month = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -154,7 +149,6 @@ const PerfilMaestro = ({ navigation }) => {
         return `${year}-${month}-${day}`;
     };
 
-    // Handlers para cada campo de fecha
     const handleGraduationDateChange = (event, selectedDate) => {
         setShowGraduationDatePicker(false);
         if (selectedDate) {

@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { colores } from '../styles/fuentesyColores';
+import { colores, tamanos } from '../styles/fuentesyColores';
+
+const { width, height } = Dimensions.get('window')
 
 const PostulacionesPublicacion = ({ navigation, route }) => {
     const postulaciones = route.params?.postulaciones || [];
@@ -67,6 +69,7 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                     <Ionicons name="arrow-back" size={28} color="#fff" />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Publicación</Text>
+                <View style={{ width: 28 }} />
             </View>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
@@ -82,27 +85,51 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                     const postulacionId = post._id
                     const perfil = post.teacherId?.teacherProfile || {};
                     const nombreCompleto = `${post.teacherId?.name ?? ''} ${post.teacherId?.lastName ?? ''}`.trim();
-                    const fechasDisponibles = post.postulationDays.map(d =>
-                        new Date(d.date).toISOString().split('T')[0]
-                    );
+
+                    let diasPublicacion = [];
+                    if (publicacion.startDate && publicacion.endDate) {
+                        const start = parseISO(publicacion.startDate);
+                        const end = parseISO(publicacion.endDate);
+                        let current = new Date(start);
+                        while (current <= end) {
+                            const raw = current.toISOString().split('T')[0];
+                            const label = format(current, 'dd/MM', { locale: es });
+                            diasPublicacion.push({ raw, label });
+                            current.setDate(current.getDate() + 1);
+                        }
+                    }
+
+                    const diasElegidos = post.postulationDays.map(d => new Date(d.date).toISOString().split('T')[0]);
 
                     return (
-                        <View key={post._id || idx} style={styles.card}>
+                        <View
+                            key={post._id || idx}
+                            style={[
+                                styles.card,
+                                seleccionado === postulacionId && styles.cardSeleccionada
+                            ]}
+                        >
                             <View style={styles.etiquetasRow}>
                                 <View style={[
                                     styles.etiqueta,
-                                    perfil.isEffectiveTeacher ? styles.etiquetaEfectivo : styles.etiquetaNoEfectivo
+                                    perfil.isEffectiveTeacher ? styles.etiquetaNormal : styles.etiquetaResaltada
                                 ]}>
                                     <Text style={[
                                         styles.etiquetaTexto,
-                                        perfil.isEffectiveTeacher ? styles.etiquetaTextoEfectivo : styles.etiquetaTextoNoEfectivo
+                                        perfil.isEffectiveTeacher ? styles.etiquetaTextoNormal : styles.etiquetaTextoResaltada
                                     ]}>
                                         {perfil.isEffectiveTeacher ? 'Efectivo' : 'No efectivo'}
                                     </Text>
                                 </View>
-                                <View style={styles.etiquetaExp}>
-                                    <Text style={styles.etiquetaTextoExp}>
-                                        {post.appliesToAllDays ? 'Todos los días' : 'Días específicos'}
+                                <View style={[
+                                    styles.etiqueta,
+                                    post.appliesToAllDays ? styles.etiquetaNormal : styles.etiquetaResaltada
+                                ]}>
+                                    <Text style={[
+                                        styles.etiquetaTexto,
+                                        post.appliesToAllDays ? styles.etiquetaTextoNormal : styles.etiquetaTextoResaltada
+                                    ]}>
+                                        {post.appliesToAllDays ? 'Todos los días' : 'Solo algunos días'}
                                     </Text>
                                 </View>
                                 <MaterialIcons name="star" size={20} color={'#FFD600'} style={{ marginLeft: 'auto' }} />
@@ -113,47 +140,37 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
 
                             <Text style={styles.disponibilidadLabel}>Disponibilidad</Text>
                             <View style={styles.disponibilidadRow}>
-                                {fechasDisponibles.map((fecha, i) => (
-                                    <TouchableOpacity
-                                        key={fecha + i}
-                                        style={styles.radioContainer}
-                                        onPress={() => {
-                                            const current = seleccion[postulacionId] || [];
-                                            const yaSeleccionada = current.includes(fecha);
-
-                                            const nuevasFechas = yaSeleccionada
-                                                ? current.filter(f => f !== fecha)
-                                                : [...current, fecha];
-
-                                            setSeleccion(prev => ({
-                                                ...prev,
-                                                [postulacionId]: nuevasFechas
-                                            }));
-                                        }}
-                                    >
+                                {diasPublicacion.map((dia, i) => (
+                                    <View key={dia.raw + i} style={styles.radioContainer}>
                                         <View style={[
                                             styles.radio,
-                                            seleccion[postulacionId]?.includes(fecha) && styles.radioSelected
+                                            diasElegidos.includes(dia.raw) && styles.radioSelected
                                         ]} />
-                                        <Text style={styles.radioLabel}>{fecha}</Text>
-                                    </TouchableOpacity>
+                                        <Text style={styles.radioLabel}>{dia.label}</Text>
+                                    </View>
                                 ))}
-
                             </View>
 
                             <TouchableOpacity
                                 style={[
                                     styles.seleccionarBtn,
-                                    seleccionado === postulacionId && styles.seleccionarBtnActivo
+                                    seleccionado !== postulacionId && styles.seleccionarBtnActivo,
+                                    seleccionado === postulacionId && styles.seleccionarBtnSinBorde
                                 ]}
-                                onPress={() => setSeleccionado(postulacionId)}
+                                onPress={() => {
+                                    setSeleccionado(postulacionId);
+                                    setSeleccion(prev => ({
+                                        ...prev,
+                                        [postulacionId]: diasElegidos
+                                    }));
+                                }}
                                 activeOpacity={0.8}
                             >
                                 <Text style={[
                                     styles.seleccionarTexto,
-                                    seleccionado === postulacionId && styles.seleccionarTextoActivo
+                                    seleccionado !== postulacionId && styles.seleccionarTextoActivo
                                 ]}>
-                                    Seleccionar
+                                    {seleccionado === postulacionId ? "Seleccionado" : "Seleccionar"}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -176,45 +193,43 @@ export default PostulacionesPublicacion;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5F7F8',
+        backgroundColor: colores.fondo,
     },
     header: {
-        width: '100%',
-        height: 60,
         backgroundColor: colores.primario,
+        paddingVertical: height * 0.01,
+        paddingHorizontal: width * 0.04,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 10,
-        marginBottom: 10,
+        justifyContent: 'space-between',
     },
     headerTitle: {
-        color: '#fff',
-        fontSize: 20,
+        color: colores.terceario,
+        fontSize: tamanos.titulo1,
         fontWeight: 'bold',
-        marginLeft: 16,
     },
     grado: {
-        fontSize: 22,
+        fontSize: tamanos.titulo2,
         fontWeight: 'bold',
-        color: '#222',
+        color: colores.quinto,
         marginBottom: 2,
     },
     fecha: {
-        fontSize: 17,
-        color: '#222',
+        fontSize: tamanos.subtitulo,
+        color: colores.quinto,
         marginBottom: 10,
     },
     subtitulo: {
         fontWeight: 'bold',
-        fontSize: 16,
-        color: '#222',
+        fontSize: tamanos.subtitulo,
+        color: colores.quinto,
         marginLeft: 18,
         marginTop: 10,
         marginBottom: 6,
     },
     card: {
-        backgroundColor: "#E6F6FE",
-        borderRadius: 10,
+        backgroundColor: colores.secundarioClaro,
+        borderRadius: width * 0.04,
         padding: 12,
         marginHorizontal: 12,
         marginBottom: 14,
@@ -223,6 +238,11 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 4,
         elevation: 2,
+    },
+    cardSeleccionada: {
+        backgroundColor: colores.secundarioMasClaro,
+        borderColor: colores.primario,
+        borderWidth: 2,
     },
     etiquetasRow: {
         flexDirection: 'row',
@@ -235,100 +255,98 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         marginRight: 6,
     },
-    etiquetaEfectivo: {
-        backgroundColor: '#B3E5FC',
+    etiquetaNormal: {
+        backgroundColor: colores.terceario,
     },
-    etiquetaNoEfectivo: {
-        backgroundColor: '#E0E0E0',
+    etiquetaResaltada: {
+        backgroundColor: colores.terceario,
     },
     etiquetaTexto: {
         fontWeight: 'bold',
         fontSize: 13,
     },
-    etiquetaTextoEfectivo: {
-        color: colores.primario,
+    etiquetaTextoNormal: {
+        color: colores.tercearioOscuro,
     },
-    etiquetaTextoNoEfectivo: {
-        color: '#B0BEC5',
-    },
-    etiquetaExp: {
-        backgroundColor: '#E1F5FE',
-        borderRadius: 8,
-        paddingHorizontal: 8,
-        paddingVertical: 2,
-        marginRight: 6,
-    },
-    etiquetaTextoExp: {
-        color: colores.primario,
-        fontWeight: 'bold',
-        fontSize: 13,
+    etiquetaTextoResaltada: {
+        color: colores.tercearioOscuro,
     },
     puntaje: {
         fontWeight: 'bold',
         fontSize: 16,
-        color: '#222',
+        color: colores.quinto,
         marginLeft: 2,
     },
     nombre: {
         fontWeight: 'bold',
         fontSize: 16,
-        color: '#222',
+        color: colores.quinto,
         marginBottom: 4,
         marginTop: 2,
     },
     disponibilidadLabel: {
         fontSize: 14,
-        color: '#222',
+        color: colores.quinto,
         marginBottom: 2,
+        textAlign: 'center',
+        alignSelf: 'center',
     },
     disponibilidadRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 6,
+        justifyContent: 'center',
+        marginBottom: height * 0.02,
         marginTop: 2,
+        marginLeft: width * 0.15,
     },
     radioContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginRight: 16,
+        marginRight: width * 0.07,
     },
     radio: {
         width: 20,
         height: 20,
         borderRadius: 10,
         borderWidth: 2,
-        borderColor: colores.primario,
-        backgroundColor: '#fff',
+        borderColor: colores.tercearioOscuro,
+        backgroundColor: colores.cuarto,
         marginRight: 4,
     },
     radioSelected: {
         backgroundColor: colores.primario,
-        borderColor: colores.primario,
+        borderColor: colores.primarioOscuro,
     },
     radioLabel: {
         fontSize: 14,
-        color: '#222',
+        color: colores.quinto,
     },
     seleccionarBtn: {
         alignSelf: 'center',
         marginTop: 2,
-        paddingVertical: 2,
-        paddingHorizontal: 16,
+        paddingVertical: 6,
+        paddingHorizontal: 22,
         borderRadius: 8,
         backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderColor: colores.primario,
     },
     seleccionarBtnActivo: {
         backgroundColor: colores.primario,
+    },
+    seleccionarBtnSinBorde: {
+        borderWidth: 0,
+        borderColor: 'transparent',
+        backgroundColor: 'transparent',
     },
     seleccionarTexto: {
         color: colores.primario,
         fontWeight: 'bold',
         fontSize: 15,
-        textDecorationLine: 'underline',
+        textDecorationLine: 'none',
     },
     seleccionarTextoActivo: {
-        color: '#fff',
-        textDecorationLine: 'none',
+        color: colores.cuarto,
     },
     confirmarBtn: {
         backgroundColor: colores.primario,
@@ -345,8 +363,8 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     confirmarTexto: {
-        color: '#fff',
+        color: colores.cuarto,
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: tamanos.texto,
     },
 });

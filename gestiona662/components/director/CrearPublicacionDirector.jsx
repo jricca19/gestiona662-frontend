@@ -72,7 +72,6 @@ const CrearPublicacionDirector = ({ navigation }) => {
             });
 
             if (res.ok) {
-                // Limpiar campos antes de navegar
                 setEscuelaSeleccionada(null);
                 setGrado('');
                 setDesde('');
@@ -260,7 +259,7 @@ const CrearPublicacionDirector = ({ navigation }) => {
                         onChange={(event, selectedDate) => {
                             setShowDesdePicker(false);
                             if (selectedDate) {
-                                const fecha = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                                const fecha = selectedDate.toISOString().split('T')[0];
                                 setDesde(fecha);
                             }
                         }}
@@ -275,7 +274,7 @@ const CrearPublicacionDirector = ({ navigation }) => {
                         onChange={(event, selectedDate) => {
                             setShowHastaPicker(false);
                             if (selectedDate) {
-                                const fecha = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD
+                                const fecha = selectedDate.toISOString().split('T')[0];
                                 setHasta(fecha);
                             }
                         }}

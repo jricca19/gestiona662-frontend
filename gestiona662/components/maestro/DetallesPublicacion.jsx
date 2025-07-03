@@ -70,7 +70,6 @@ const DetallesPublicacion = ({ route, navigation }) => {
             })
             const data = await res.json()
             if (res.status === 201) {
-                // Preparar detalles para pasar a la pantalla de éxito
                 const detalles = {
                     escuela: publicacion.schoolId,
                     clase: publicacion.grade + (publicacion.division || ''),

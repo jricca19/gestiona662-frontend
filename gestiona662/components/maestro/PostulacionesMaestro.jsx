@@ -79,11 +79,9 @@ const PostulacionesMaestro = ({ navigation, route }) => {
         }
     }, [lastUpdate]);
 
-    // Refrescar si viene el parámetro refresh desde la navegación
     useEffect(() => {
         if (route?.params?.refresh) {
             fetchPostulaciones();
-            // Limpiar el parámetro para evitar recargas infinitas
             navigation.setParams({ refresh: false });
         }
     }, [route?.params?.refresh]);

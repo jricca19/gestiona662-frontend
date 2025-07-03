@@ -60,6 +60,18 @@ export const estilosPublicacionesDirector = StyleSheet.create({
         backgroundColor: colores.terceario,
         paddingTop: 0,
     },
+    filaTitulo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: height * 0.02,
+        paddingHorizontal: width * 0.04,
+    },
+    titulo: {
+        fontSize: tamanos.titulo2,
+        fontWeight: 'bold',
+        color: colores.quinto,
+    },
     tarjeta: {
         backgroundColor: colores.secundarioClaro,
         borderRadius: width * 0.04,
