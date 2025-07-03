@@ -12,7 +12,7 @@ import { URL_BACKEND } from '@env';
 const HomeMaestro = ({ navigation }) => {
     const { name, lastName, logueado } = useSelector(state => state.usuario);
     const postulaciones = useSelector(state => state.postulaciones.items);
-    const publicacionesTotal = useSelector(state => state.publicaciones.total);
+    const publicacionesTotal = useSelector(state => state.publicaciones?.total ?? 0);
     const dispatch = useDispatch();
     const [error, setError] = useState(null);
 

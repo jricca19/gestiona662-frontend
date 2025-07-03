@@ -44,6 +44,7 @@ const statusOrder = {
 const PostulacionesMaestro = ({ navigation }) => {
     const dispatch = useDispatch();
     const datos = useSelector(state => state.postulaciones.items);
+    const lastUpdate = useSelector(state => state.postulaciones.lastUpdate);
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [refreshing, setRefreshing] = useState(false)
@@ -73,8 +74,10 @@ const PostulacionesMaestro = ({ navigation }) => {
     }
 
     useEffect(() => {
-        fetchPostulaciones()
-    }, [])
+        if (!lastUpdate || datos.length === 0) {
+            fetchPostulaciones()
+        }
+    }, [lastUpdate]);
 
     const handleRefresh = () => {
         setRefreshing(true)
