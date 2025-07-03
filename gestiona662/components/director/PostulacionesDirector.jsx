@@ -9,9 +9,8 @@ import { colores } from '../styles/fuentesyColores';
 const PostulacionesPublicacion = ({ navigation, route }) => {
     const postulaciones = route.params?.postulaciones || [];
     const publicacion = route.params?.publicacion || null;
-    // Estado para la disponibilidad seleccionada por postulante
-    const [seleccion, setSeleccion] = useState(""); // { postulanteId: fechaSeleccionada }
-    const [seleccionado, setSeleccionado] = useState(null); // postulanteId seleccionado
+    const [seleccion, setSeleccion] = useState({});
+    const [seleccionado, setSeleccionado] = useState(null);
     let fechaFormateada = '';
     if (publicacion.startDate && publicacion.endDate) {
         const inicio = parseISO(publicacion.startDate);
@@ -22,42 +21,47 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
             format(fin, 'dd MMM yyyy', { locale: es }).toUpperCase();
     }
 
-    const onConfirmar = async (postulationId) => {
-        if (!seleccionado) {
-            alert("Por favor selecciona una postulación");
+    const onConfirmar = async () => {
+        if (!seleccionado || !seleccion[seleccionado] || seleccion[seleccionado].length === 0) {
+            alert("Por favor selecciona una postulación y al menos un día.");
             return;
         }
 
         try {
             const token = await SecureStore.getItemAsync('token');
-
-            const res = await fetch(`https://gestiona662-backend.vercel.app/v1/publications/assignPostulation/${postulationId}`, {
+            const res = await fetch(`https://gestiona662-backend.vercel.app/v1/publications/assignPostulation/multiple`, {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({
+                    asignaciones: [
+                        {
+                            postulationId: seleccionado,
+                            selectedDays: seleccion[seleccionado]
+                        },
+                    ],
+                }),
             });
 
             const data = await res.json();
-            console.log('Response:', data);
 
             if (res.ok) {
-                console.log('✅ Postulación asignada:', data.message);
                 alert('Postulación asignada correctamente');
+                setSeleccion({});
+                setSeleccionado(null);
             } else {
-                console.error('❌ Error al asignar postulación:', data.message);
                 alert('Error al asignar: ' + data.message);
             }
         } catch (error) {
-            console.error('❌ Error de red:', error);
             alert('Error de red al asignar la postulación');
         }
     };
 
+
     return (
         <View style={styles.container}>
-            {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Ionicons name="arrow-back" size={28} color="#fff" />
@@ -66,7 +70,6 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
             </View>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
-                {/* Grado y Fecha */}
                 <View style={{ alignItems: 'center', marginTop: 10 }}>
                     <Text style={styles.grado}>
                         {publicacion.grade === 0 ? 'NIVEL INICIAL' : `${publicacion.grade}°`}
@@ -74,19 +77,17 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                     <Text style={styles.fecha}>{fechaFormateada}</Text>
                 </View>
 
-                {/* Postulados */}
                 <Text style={styles.subtitulo}>Postulados</Text>
                 {postulaciones.map((post, idx) => {
                     const postulacionId = post._id
                     const perfil = post.teacherId?.teacherProfile || {};
                     const nombreCompleto = `${post.teacherId?.name ?? ''} ${post.teacherId?.lastName ?? ''}`.trim();
-                    const fechasDisponibles = Array.isArray(post.postulationDays)
-                        ? post.postulationDays.map(d => new Date(d.date).toLocaleDateString('es-UY'))
-                        : [];
+                    const fechasDisponibles = post.postulationDays.map(d =>
+                        new Date(d.date).toISOString().split('T')[0]
+                    );
 
                     return (
                         <View key={post._id || idx} style={styles.card}>
-                            {/* Etiquetas */}
                             <View style={styles.etiquetasRow}>
                                 <View style={[
                                     styles.etiqueta,
@@ -105,24 +106,41 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                                     </Text>
                                 </View>
                                 <MaterialIcons name="star" size={20} color={'#FFD600'} style={{ marginLeft: 'auto' }} />
-                                <Text style={styles.puntaje}>{perfil.haveRating ? perfil.rating : '-'}</Text>
+                                <Text style={styles.puntaje}>{perfil.rating}</Text>
                             </View>
 
-                            {/* Nombre */}
                             <Text style={styles.nombre}>{nombreCompleto}</Text>
 
-                            {/* Disponibilidad */}
                             <Text style={styles.disponibilidadLabel}>Disponibilidad</Text>
                             <View style={styles.disponibilidadRow}>
                                 {fechasDisponibles.map((fecha, i) => (
-                                    <View key={fecha + i} style={styles.radioContainer}>
-                                        <View style={[styles.radio, styles.radioSelected]} />
+                                    <TouchableOpacity
+                                        key={fecha + i}
+                                        style={styles.radioContainer}
+                                        onPress={() => {
+                                            const current = seleccion[postulacionId] || [];
+                                            const yaSeleccionada = current.includes(fecha);
+
+                                            const nuevasFechas = yaSeleccionada
+                                                ? current.filter(f => f !== fecha)
+                                                : [...current, fecha];
+
+                                            setSeleccion(prev => ({
+                                                ...prev,
+                                                [postulacionId]: nuevasFechas
+                                            }));
+                                        }}
+                                    >
+                                        <View style={[
+                                            styles.radio,
+                                            seleccion[postulacionId]?.includes(fecha) && styles.radioSelected
+                                        ]} />
                                         <Text style={styles.radioLabel}>{fecha}</Text>
-                                    </View>
+                                    </TouchableOpacity>
                                 ))}
+
                             </View>
 
-                            {/* Seleccionar */}
                             <TouchableOpacity
                                 style={[
                                     styles.seleccionarBtn,
@@ -142,10 +160,9 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
                     );
                 })}
 
-                {/* Confirmar */}
                 <TouchableOpacity
                     style={styles.confirmarBtn}
-                    onPress={() => onConfirmar && onConfirmar(seleccionado, seleccion[seleccionado])}
+                    onPress={onConfirmar}
                 >
                     <Text style={styles.confirmarTexto}>Confirmar</Text>
                 </TouchableOpacity>
@@ -163,12 +180,12 @@ const styles = StyleSheet.create({
     },
     header: {
         width: '100%',
-            height: 60,
-            backgroundColor: colores.primario,
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingHorizontal: 10,
-            marginBottom: 10,
+        height: 60,
+        backgroundColor: colores.primario,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+        marginBottom: 10,
     },
     headerTitle: {
         color: '#fff',

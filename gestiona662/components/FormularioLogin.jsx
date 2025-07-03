@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Alert, Image, ActivityIndicator } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,10 +8,14 @@ import { loguear } from '../store/slices/usuarioSlice';
 import { stylesLogin } from './styles/stylesLogin';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n/i18n';
+import { colores } from './styles/fuentesyColores';
+import { useState } from 'react';
+
 
 const FormularioLogin = ({ navigation }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [loading, setLoading] = useState(false);
 
   const schema = yup.object().shape({
     email: yup
@@ -38,6 +42,7 @@ const FormularioLogin = ({ navigation }) => {
   });
 
   const onSubmit = async ({ email, password }) => {
+    setLoading(true);
     try {
       const response = await fetch('https://gestiona662-backend.vercel.app/v1/auth/login', {
         method: 'POST',
@@ -78,6 +83,7 @@ const FormularioLogin = ({ navigation }) => {
       console.error('Error en login:', error);
       Alert.alert('Error', 'No se pudo conectar con el servidor');
     }
+    setLoading(false);
   };
 
   const irARegistro = () => {
@@ -123,6 +129,7 @@ const FormularioLogin = ({ navigation }) => {
                 keyboardType="email-address"
                 value={value}
                 onChangeText={onChange}
+                placeholderTextColor={colores.tercearioOscuro}
               />
             )}
           />
@@ -139,6 +146,7 @@ const FormularioLogin = ({ navigation }) => {
                 secureTextEntry
                 value={value}
                 onChangeText={onChange}
+                placeholderTextColor={colores.tercearioOscuro}
               />
             )}
           />
@@ -147,8 +155,16 @@ const FormularioLogin = ({ navigation }) => {
         <TouchableOpacity style={stylesLogin.botonRecuperar}>
           <Text style={stylesLogin.textoBotonRecuperar}>{t('login.forgot')}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={stylesLogin.botonIniciarSesion} onPress={handleSubmit(onSubmit)}>
-          <Text style={stylesLogin.textoBotonIniciarSesión}>{t('login.login')}</Text>
+        <TouchableOpacity
+          style={stylesLogin.botonIniciarSesion}
+          onPress={handleSubmit(onSubmit)}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color={colores.cuarto}/>
+          ) : (
+            <Text style={stylesLogin.textoBotonIniciarSesión}>{t('login.login')}</Text>
+          )}
         </TouchableOpacity>
         <TouchableOpacity style={stylesLogin.botonRegistrarse} onPress={irARegistro}>
           <Text style={stylesLogin.textoBotonRegistrarse}>{t('login.register')}</Text>

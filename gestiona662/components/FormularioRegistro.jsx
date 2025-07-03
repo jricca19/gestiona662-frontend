@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Button, Alert, Modal, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, TextInput, Button, Alert, Modal, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -9,6 +9,7 @@ import { loguear } from '../store/slices/usuarioSlice';
 import { stylesRegistro } from './styles/stylesRegistro';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
+import { colores } from './styles/fuentesyColores';
 
 const schema = yup.object().shape({
   name: yup
@@ -51,6 +52,7 @@ const FormularioRegistro = ({ navigation }) => {
   const [newAddress, setNewAddress] = useState('');
   const [ciudades, setCiudades] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const cargarCiudades = async () => {
@@ -152,6 +154,7 @@ const FormularioRegistro = ({ navigation }) => {
   };
 
   const onSubmit = async (formData) => {
+    setLoading(true);
     const { confirmPassword, aceptarTerminos, schoolId, ...rest } = formData;
 
     const dataToSend = {
@@ -201,6 +204,7 @@ const FormularioRegistro = ({ navigation }) => {
       console.error('Error en registro:', error);
       Alert.alert('Error', 'No se pudo conectar con el servidor');
     }
+    setLoading(false);
   };
 
   return (
@@ -219,7 +223,7 @@ const FormularioRegistro = ({ navigation }) => {
           <Text style={stylesRegistro.label}>Nombre</Text>
           <View>
             <View style={stylesRegistro.filaIcono}>
-              <Ionicons name="person-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Ionicons name="person-outline" size={24} color={colores.primario} style={stylesRegistro.iconSeparado} />
               <Controller
                 control={control}
                 name="name"
@@ -229,7 +233,7 @@ const FormularioRegistro = ({ navigation }) => {
                     value={value}
                     onChangeText={onChange}
                     placeholder="Nombre"
-                    placeholderTextColor="#999"
+                    placeholderTextColor={colores.tercearioOscuro}
                   />
                 )}
               />
@@ -240,7 +244,7 @@ const FormularioRegistro = ({ navigation }) => {
           <Text style={stylesRegistro.label}>Apellido</Text>
           <View>
             <View style={stylesRegistro.filaIcono}>
-              <Ionicons name="person-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Ionicons name="person-outline" size={24} color={colores.primario} style={stylesRegistro.iconSeparado} />
               <Controller
                 control={control}
                 name="lastName"
@@ -250,7 +254,7 @@ const FormularioRegistro = ({ navigation }) => {
                     value={value}
                     onChangeText={onChange}
                     placeholder="Apellido"
-                    placeholderTextColor="#999"
+                    placeholderTextColor={colores.tercearioOscuro}
                   />
                 )}
               />
@@ -261,7 +265,7 @@ const FormularioRegistro = ({ navigation }) => {
           <Text style={stylesRegistro.label}>Cédula de Identidad</Text>
           <View>
             <View style={stylesRegistro.filaIcono}>
-              <Ionicons name="card-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Ionicons name="card-outline" size={24} color={colores.primario} style={stylesRegistro.iconSeparado} />
               <Controller
                 control={control}
                 name="ci"
@@ -271,7 +275,8 @@ const FormularioRegistro = ({ navigation }) => {
                     value={value}
                     onChangeText={onChange}
                     placeholder="Cédula de Identidad"
-                    placeholderTextColor="#999"
+                    placeholderTextColor={colores.tercearioOscuro}
+                    keyboardType="numeric"
                   />
                 )}
               />
@@ -282,7 +287,7 @@ const FormularioRegistro = ({ navigation }) => {
           <Text style={stylesRegistro.label}>Email</Text>
           <View>
             <View style={stylesRegistro.filaIcono}>
-              <Ionicons name="mail-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Ionicons name="mail-outline" size={24} color={colores.primario} style={stylesRegistro.iconSeparado} />
               <Controller
                 control={control}
                 name="email"
@@ -292,7 +297,7 @@ const FormularioRegistro = ({ navigation }) => {
                     value={value}
                     onChangeText={onChange}
                     placeholder="Email"
-                    placeholderTextColor="#999"
+                    placeholderTextColor={colores.tercearioOscuro}
                   />
                 )}
               />
@@ -303,7 +308,7 @@ const FormularioRegistro = ({ navigation }) => {
           <Text style={stylesRegistro.label}>Contraseña</Text>
           <View>
             <View style={stylesRegistro.filaIcono}>
-              <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Ionicons name="lock-closed-outline" size={24} color={colores.primario} style={stylesRegistro.iconSeparado} />
               <View style={{ flex: 1, position: 'relative' }}>
                 <Controller
                   control={control}
@@ -312,7 +317,7 @@ const FormularioRegistro = ({ navigation }) => {
                     <TextInput
                       style={[stylesRegistro.input, { paddingRight: 40 }]}
                       placeholder="Contraseña"
-                      placeholderTextColor="#999"
+                      placeholderTextColor={colores.tercearioOscuro}
                       secureTextEntry={!mostrarPassword}
                       onChangeText={onChange}
                       value={value}
@@ -331,7 +336,7 @@ const FormularioRegistro = ({ navigation }) => {
                   <Ionicons
                     name={mostrarPassword ? 'eye-off-outline' : 'eye-outline'}
                     size={24}
-                    color="#009fe3"
+                    color={colores.primario}
                   />
                 </TouchableOpacity>
               </View>
@@ -342,7 +347,7 @@ const FormularioRegistro = ({ navigation }) => {
           <Text style={stylesRegistro.label}>Confirmar contraseña</Text>
           <View>
             <View style={stylesRegistro.filaIcono}>
-              <Ionicons name="lock-closed-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Ionicons name="lock-closed-outline" size={24} color={colores.primario} style={stylesRegistro.iconSeparado} />
               <View style={{ flex: 1, position: 'relative' }}>
                 <Controller
                   control={control}
@@ -351,7 +356,7 @@ const FormularioRegistro = ({ navigation }) => {
                     <TextInput
                       style={[stylesRegistro.input, { paddingRight: 40 }]}
                       placeholder="Confirmar contraseña"
-                      placeholderTextColor="#999"
+                      placeholderTextColor={colores.tercearioOscuro}
                       secureTextEntry={!mostrarConfirmPassword}
                       onChangeText={onChange}
                       value={value}
@@ -370,7 +375,7 @@ const FormularioRegistro = ({ navigation }) => {
                   <Ionicons
                     name={mostrarConfirmPassword ? 'eye-off-outline' : 'eye-outline'}
                     size={24}
-                    color="#009fe3"
+                    color={colores.primario}
                   />
                 </TouchableOpacity>
               </View>
@@ -381,7 +386,7 @@ const FormularioRegistro = ({ navigation }) => {
           <Text style={stylesRegistro.label}>Teléfono</Text>
           <View>
             <View style={stylesRegistro.filaIcono}>
-              <Ionicons name="call-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Ionicons name="call-outline" size={24} color={colores.primario} style={stylesRegistro.iconSeparado} />
               <Controller
                 control={control}
                 name="phoneNumber"
@@ -391,7 +396,7 @@ const FormularioRegistro = ({ navigation }) => {
                     value={value}
                     onChangeText={onChange}
                     placeholder="Teléfono"
-                    placeholderTextColor="#999"
+                    placeholderTextColor={colores.tercearioOscuro}
                   />
                 )}
               />
@@ -402,7 +407,7 @@ const FormularioRegistro = ({ navigation }) => {
           <Text style={stylesRegistro.label}>Rol</Text>
           <View>
             <View style={stylesRegistro.filaIcono}>
-              <Ionicons name="briefcase-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <Ionicons name="briefcase-outline" size={24} color={colores.primario} style={stylesRegistro.iconSeparado} />
               <Controller
                 control={control}
                 name="role"
@@ -412,14 +417,14 @@ const FormularioRegistro = ({ navigation }) => {
                       onPress={() => onChange('STAFF')}
                       style={{ flexDirection: 'row', alignItems: 'center', marginRight: 20 }}
                     >
-                      <Ionicons name={value === 'STAFF' ? 'radio-button-on' : 'radio-button-off'} size={22} color="#009fe3" />
+                      <Ionicons name={value === 'STAFF' ? 'radio-button-on' : 'radio-button-off'} size={22} color={colores.primario} />
                       <Text style={{ marginLeft: 6 }}>STAFF</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => onChange('TEACHER')}
                       style={{ flexDirection: 'row', alignItems: 'center' }}
                     >
-                      <Ionicons name={value === 'TEACHER' ? 'radio-button-on' : 'radio-button-off'} size={22} color="#009fe3" />
+                      <Ionicons name={value === 'TEACHER' ? 'radio-button-on' : 'radio-button-off'} size={22} color={colores.primario} />
                       <Text style={{ marginLeft: 6 }}>TEACHER</Text>
                     </TouchableOpacity>
                   </View>
@@ -433,26 +438,28 @@ const FormularioRegistro = ({ navigation }) => {
           {watch('role') === 'STAFF' && (
             <>
               <Text style={stylesRegistro.label}>Escuela</Text>
-              <View style={stylesRegistro.filaIcono}>
-                <Ionicons name="school-outline" size={24} color="#009fe3" style={stylesRegistro.iconSeparado} />
+              <View style={[stylesRegistro.filaIcono, { flexDirection: 'row', alignItems: 'center' }]}>
+                <Ionicons name="school-outline" size={24} color={colores.primario} style={stylesRegistro.iconSeparado} />
                 <Controller
                   control={control}
                   name="schoolId"
                   render={({ field: { onChange, value } }) => (
-                    <Picker
-                      selectedValue={value}
-                      onValueChange={onChange}
-                      style={stylesRegistro.picker}
-                    >
-                      <Picker.Item label="Selecciona una escuela" value="" />
-                      {escuelas.map((escuela) => (
-                        <Picker.Item
-                          key={escuela._id}
-                          label={`Esc. ${escuela.schoolNumber} - ${escuela.cityName}`}
-                          value={escuela._id}
-                        />
-                      ))}
-                    </Picker>
+                    <View style={stylesRegistro.selectorContainer}>
+                      <Picker
+                        selectedValue={value}
+                        onValueChange={onChange}
+                        style={stylesRegistro.pickerEscuela}
+                      >
+                        <Picker.Item label="Selecciona una escuela" value="" />
+                        {escuelas.map((escuela) => (
+                          <Picker.Item
+                            key={escuela._id}
+                            label={`Esc. ${escuela.schoolNumber} - ${escuela.cityName}`}
+                            value={escuela._id}
+                          />
+                        ))}
+                      </Picker>
+                    </View>
                   )}
                 />
                 <TouchableOpacity
@@ -461,22 +468,26 @@ const FormularioRegistro = ({ navigation }) => {
                 >
                   <Text style={stylesRegistro.botonAgregarTexto}>+</Text>
                 </TouchableOpacity>
-                <Modal visible={modalVisible} animationType="slide" transparent={true}>
-                  <View style={stylesRegistro.modalOverlay}>
-                    <View style={stylesRegistro.modalContent}>
-                      <Text style={stylesRegistro.modalTitle}>Agregar escuela</Text>
-                      <TextInput
-                        placeholder="Número"
-                        value={newSchoolNumber}
-                        onChangeText={setNewSchoolNumber}
-                      />
-                      <Text style={stylesRegistro.label}>Departamento</Text>
+              </View>
+              <Modal visible={modalVisible} animationType="slide" transparent={true}>
+                <View style={stylesRegistro.modalOverlay}>
+                  <View style={stylesRegistro.modalContent}>
+                    <Text style={stylesRegistro.modalTitle}>Agregar escuela</Text>
+                    <TextInput
+                      placeholder="Número de escuela..."
+                      value={newSchoolNumber}
+                      onChangeText={setNewSchoolNumber}
+                      keyboardType="numeric"
+                      style={stylesRegistro.inputModal}
+                      placeholderTextColor={colores.tercearioOscuro}
+                    />
+                    <Text style={stylesRegistro.label}>Departamento</Text>
+                    <View style={stylesRegistro.pickerWrapper}>
                       <Picker
                         selectedValue={defaultDeptId}
                         onValueChange={async (deptId) => {
                           setDefaultDeptId(deptId);
                           setSelectedCity('');
-
                           try {
                             const res = await fetch(`https://gestiona662-backend.vercel.app/departments/${deptId}`);
                             const data = await res.json();
@@ -487,42 +498,56 @@ const FormularioRegistro = ({ navigation }) => {
                           }
                         }}
                       >
-                        <Picker.Item label="Selecciona un departamento" value="" />
+                        <Picker.Item label="Selecciona un departamento..." value="" />
                         {departamentos.map((dep) => (
                           <Picker.Item key={dep._id} label={dep.name} value={dep._id} />
                         ))}
                       </Picker>
-                      {ciudades.length > 0 && (
-                        <>
-                          <Text style={stylesRegistro.label}>Ciudad</Text>
+                    </View>
+                    {ciudades.length > 0 && (
+                      <>
+                        <Text style={stylesRegistro.label}>Ciudad</Text>
+                        <View style={stylesRegistro.pickerWrapper}>
                           <Picker
                             selectedValue={selectedCity}
                             onValueChange={(value) => setSelectedCity(value)}
                           >
+                            <Picker.Item label="Selecciona una ciudad..." value="" />
                             {ciudades.map((city, index) => (
                               <Picker.Item key={index} label={city.name} value={city.name} />
                             ))}
                           </Picker>
-                        </>
-                      )}
-                      <TextInput
-                        placeholder="Dirección"
-                        value={newAddress}
-                        onChangeText={setNewAddress}
-                      />
-                      <View style={stylesRegistro.modalButtons}>
-                        <Button title="Cancelar" onPress={() => setModalVisible(false)} />
-                        <Button title="Crear" onPress={handleCreateSchool} />
-                      </View>
+                        </View>
+                      </>
+                    )}
+                    <TextInput
+                      placeholder="Dirección..."
+                      value={newAddress}
+                      onChangeText={setNewAddress}
+                      style={stylesRegistro.inputModal}
+                      placeholderTextColor={colores.tercearioOscuro}
+                    />
+                    <View style={stylesRegistro.modalButtons}>
+                      <TouchableOpacity
+                        style={stylesRegistro.modalButton}
+                        onPress={() => setModalVisible(false)}
+                      >
+                        <Text style={stylesRegistro.modalButtonText}>Cancelar</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={stylesRegistro.modalButton}
+                        onPress={handleCreateSchool}
+                      >
+                        <Text style={stylesRegistro.modalButtonText}>Crear</Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
-                </Modal>
-              </View>
+                </View>
+              </Modal>
               {errors.schoolId && <Text style={stylesRegistro.error}>{errors.schoolId.message}</Text>}
             </>
-
           )}
-
 
           <Controller
             control={control}
@@ -535,7 +560,7 @@ const FormularioRegistro = ({ navigation }) => {
                 <Ionicons
                   name={value ? 'checkbox-outline' : 'square-outline'}
                   size={24}
-                  color="#009fe3"
+                  color={colores.primario}
                 />
                 <Text style={stylesRegistro.checkboxLabel}>Acepto los términos y condiciones</Text>
               </TouchableOpacity>
@@ -545,8 +570,16 @@ const FormularioRegistro = ({ navigation }) => {
             <Text style={stylesRegistro.error}>{errors.aceptarTerminos.message}</Text>
           )}
 
-          <TouchableOpacity style={stylesRegistro.botonRegistrarse} onPress={handleSubmit(onSubmit)}>
-            <Text style={stylesRegistro.textoBotonRegistrarse}>Registrarse</Text>
+          <TouchableOpacity
+            style={stylesRegistro.botonRegistrarse}
+            onPress={handleSubmit(onSubmit)}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color={colores.cuarto} />
+            ) : (
+              <Text style={stylesRegistro.textoBotonRegistrarse}>Registrarse</Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>
