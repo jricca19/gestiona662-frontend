@@ -22,7 +22,7 @@ const PublicacionesDirector = ({ navigation }) => {
 
     const fetchPublicaciones = useCallback(async (pageToLoad = 1, refreshing = false) => {
         if (loading) return;
-        if (!refreshing && total && datos.length >= total) return; // No cargar más si ya se cargó todo
+        if (!refreshing && total && datos.length >= total) return;
         setLoading(true);
         setError(null);
         try {
@@ -39,8 +39,7 @@ const PublicacionesDirector = ({ navigation }) => {
                 })
             });
 
-            const text = await res.text(); // NO lo intentes parsear aún
-            console.log('🔍 Respuesta cruda del backend:', text);
+            const text = await res.text();
 
             if (res.status === 200 && res.headers.get('content-type')?.includes('application/json')) {
                 const data = JSON.parse(text);
@@ -51,11 +50,9 @@ const PublicacionesDirector = ({ navigation }) => {
                     setDatos(prev => [...prev, ...(data ?? [])]);
                 }
             } else {
-                console.error('⚠️ Error inesperado del backend:', text);
                 setError('Error inesperado al obtener publicaciones');
             }
         } catch (err) {
-            console.error('❌ Error al hacer fetch de publicaciones:', err);
             setError('Error de red o servidor');
         }
         setLoading(false);
@@ -63,9 +60,9 @@ const PublicacionesDirector = ({ navigation }) => {
 
     const cargarPostulaciones = async (publicationId) => {
         try {
-            if (postulaciones[publicationId]) return; // ya están cargadas
+            if (postulaciones[publicationId]) return;
 
-            const token = await SecureStore.getItemAsync('token'); // si usás expo-secure-store
+            const token = await SecureStore.getItemAsync('token');
             const res = await fetch(`https://gestiona662-backend.vercel.app/v1/postulations/publication/${publicationId}`, {
                 method: 'GET',
                 headers: {
@@ -154,13 +151,12 @@ const PublicacionesDirector = ({ navigation }) => {
     }, [datos]);
 
     const renderItem = ({ item }) => {
-        // Formateo de fechas usando date-fns
         let fechaFormateada = '';
         if (item.startDate && item.endDate) {
             const inicio = parseISO(item.startDate);
             const fin = parseISO(item.endDate);
             fechaFormateada =
-                format(inicio, 'dd', { locale: es }) +
+                format(inicio, 'dd MMM', { locale: es }).toUpperCase() +
                 '-' +
                 format(fin, 'dd MMM yyyy', { locale: es }).toUpperCase();
         }
@@ -168,21 +164,31 @@ const PublicacionesDirector = ({ navigation }) => {
         return (
             <View style={estilosPublicaciones.tarjeta} key={item._id}>
                 <View style={estilosPublicaciones.encabezadoTarjeta}>
-                    <Text style={estilosPublicaciones.nombreEscuela}>{item.grade}°</Text>
-                    <View style={estilosPublicaciones.calificacion}>
-                        <FontAwesome name="star" size={20} color="#FFD700" />
-                        <Text style={estilosPublicaciones.textoCalificacion}>{item.rating ?? '0'}</Text>
+                    <View style={estilosPublicaciones.filaTarjeta}>
+                        <MaterialIcons name="show-chart" size={18} color="#03A9E0" />
+                        <Text style={estilosPublicaciones.textoTarjeta}>
+                            {item.grade === 0 ? 'Nivel Inicial' : `${item.grade}°`}
+                        </Text>
                     </View>
-                </View>
-                <View style={estilosPublicaciones.filaTarjeta}>
-                    <MaterialIcons name="access-time" size={18} color={colores.primario} />
-                    <Text style={estilosPublicaciones.textoTarjeta}>
-                        {item.grade}° -
-                        {item.shift === 'MORNING' ? ' Mañana - ' : item.shift === 'AFTERNOON' ? ' Tarde - ' : item.shift === 'FULL' ? ' Tiempo Completo - ' : ` ${item.shift}`}
-                        {item.shift === 'MORNING' && '08:00 a 12:00'}
-                        {item.shift === 'AFTERNOON' && '12:00 a 17:00'}
-                        {item.shift === 'FULL' && '09:00 a 15:00'}
-                    </Text>
+                    <View style={[
+                        estilosPublicaciones.badgeStatus,
+                        item.status === 'OPEN'
+                            ? estilosPublicaciones.badgePendiente
+                            : item.status === 'COMPLETED'
+                                ? estilosPublicaciones.badgeAsignada
+                                : estilosPublicaciones.badgeRechazada
+                    ]}>
+                        <Text style={[
+                            estilosPublicaciones.badgeStatusText,
+                            item.status === 'OPEN'
+                                ? estilosPublicaciones.badgePendienteText
+                                : item.status === 'COMPLETED'
+                                    ? estilosPublicaciones.badgeAsignadaText
+                                    : estilosPublicaciones.badgeRechazadaText
+                        ]}>
+                            {item.status}
+                        </Text>
+                    </View>
                 </View>
                 <View style={estilosPublicaciones.filaTarjeta}>
                     <MaterialIcons name="event" size={18} color={colores.primario} />
@@ -193,18 +199,9 @@ const PublicacionesDirector = ({ navigation }) => {
                 <View style={estilosPublicaciones.filaTarjeta}>
                     <MaterialIcons name="event" size={18} color={colores.primario} />
                     <Text style={estilosPublicaciones.textoTarjeta}>
-                        Postulados: {postulaciones[item._id]?.length || 0}
+                        {postulaciones[item._id]?.length || 0} postulados
                     </Text>
                 </View>
-                {/* <View style={[estilosPublicaciones.filaTarjeta, { justifyContent: 'space-between' }]}>
-                    <TouchableOpacity
-                        style={estilosPublicaciones.botonDetalles}
-                        onPress={() => navigation.navigate('detallesPublicacion', { publicacion: item })}
-                    >
-                        <Ionicons name="eye-outline" size={18} color="#fff" />
-                        <Text style={estilosPublicaciones.textoDetalles}>Ver Detalles</Text>
-                    </TouchableOpacity>
-                </View> */}
                 <View style={estilosPublicacionesDirector.acciones}>
                     <TouchableOpacity
                         style={estilosPublicacionesDirector.iconButton}
@@ -212,7 +209,7 @@ const PublicacionesDirector = ({ navigation }) => {
                             const postulacionesArray = Array.isArray(postulaciones[item._id]) ? postulaciones[item._id] : [];
                             navigation.navigate('postulacionesPublicacion', { postulaciones: postulacionesArray, publicacion: item });
                         }}
-                        disabled={!Array.isArray(postulaciones[item._id]) || postulaciones[item._id].length === 0} // desactiva si no hay postulaciones
+                        disabled={!Array.isArray(postulaciones[item._id]) || postulaciones[item._id].length === 0}
                     >
                         <MaterialCommunityIcons
                             name="handshake"
@@ -239,7 +236,6 @@ const PublicacionesDirector = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            {/* Encabezado */}
             <View style={estilosPublicacionesDirector.encabezado}>
                 <View style={estilosPublicacionesDirector.filaEncabezado}>
                     <Text style={estilosPublicacionesDirector.textoEncabezado}>Escuela</Text>
@@ -262,7 +258,6 @@ const PublicacionesDirector = ({ navigation }) => {
                 </View>
             </View>
 
-            {/* Lista de publicaciones */}
             <View style={{ flex: 1 }}>
                 <View style={estilosPublicaciones.contenedor}>
                     <FlatList

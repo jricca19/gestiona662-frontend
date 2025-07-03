@@ -7,6 +7,8 @@ import { estilosPublicaciones } from '../styles/stylesPublicaciones'
 import ModalBusquedaPublicaciones from './ModalBusquedaPublicaciones'
 import { formatUTC } from '../../utils/formatUTC'
 import { URL_BACKEND } from '@env';
+import { useDispatch } from 'react-redux';
+import { establecerTotalPublicaciones } from '../../store/slices/publicacionesSlice';
 
 const PAGE_SIZE = 4;
 
@@ -19,6 +21,7 @@ const Publicaciones = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [filtrosActivos, setFiltrosActivos] = useState(null);
+    const dispatch = useDispatch();
 
     const fetchPublicaciones = useCallback(async (pageToLoad = 1, refreshing = false, filtros = undefined) => {
         if (loading) return;
@@ -63,6 +66,9 @@ const Publicaciones = ({ navigation }) => {
                     setDatos(data.publications);
                 } else {
                     setDatos(prev => [...prev, ...data.publications]);
+                }
+                if (pageToLoad === 1 && !filtros) {
+                    dispatch(establecerTotalPublicaciones(data.total));
                 }
             } else {
                 setError('Error al obtener publicaciones', data.message);
@@ -191,14 +197,14 @@ const Publicaciones = ({ navigation }) => {
                         <View style={{ alignItems: 'center', marginTop: 32 }}>
                             <Text style={estilosPublicaciones.error}>{error}</Text>
                             <TouchableOpacity
-                                style={[estilosPublicaciones.botonFiltrar, { marginTop: 16 }]}
+                                style={[estilosPublicaciones.botonReintentar, { marginTop: 16 }]}
                                 onPress={() => {
                                     setError(null);
                                     fetchPublicaciones(1, true);
                                     setPage(1);
                                 }}
                             >
-                                <Text style={estilosPublicaciones.textoFiltrar}>Reintentar</Text>
+                                <Text style={estilosPublicaciones.textoBotonReintentar}>Reintentar</Text>
                             </TouchableOpacity>
                         </View>
                     ) : (

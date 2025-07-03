@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { colores } from './fuentesyColores';
 
 export const stylesCrearPublicacion = StyleSheet.create({
