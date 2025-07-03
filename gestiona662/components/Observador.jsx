@@ -6,7 +6,7 @@ import { establecerPostulaciones } from '../store/slices/postulacionesSlice';
 import { establecerPublicaciones } from '../store/slices/publicacionesSlice';
 import { URL_BACKEND } from '@env';
 
-const POLL_INTERVAL = 600000; // 1 minuto
+const POLL_INTERVAL = 120000; // 2 minutos
 
 const Observador = () => {
     const dispatch = useDispatch();
@@ -16,13 +16,13 @@ const Observador = () => {
 
     // Guardar los datos previos para comparar
     const prevPostulaciones = useRef(postulaciones);
-    const prevPublicaciones = useRef(publicaciones);
+    const prevTotalPublicaciones = useRef(publicaciones.length);
 
     useEffect(() => {
         prevPostulaciones.current = postulaciones;
     }, [postulaciones]);
     useEffect(() => {
-        prevPublicaciones.current = publicaciones;
+        prevTotalPublicaciones.current = publicaciones.length;
     }, [publicaciones]);
 
     useEffect(() => {
@@ -63,7 +63,7 @@ const Observador = () => {
                 }
 
                 // Publicaciones
-                const resPub = await fetch(`${URL_BACKEND}/v1/publications?page=1&limit=4`, {
+                const resPub = await fetch(`${URL_BACKEND}/v1/publications?page=1&limit=1`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -72,29 +72,26 @@ const Observador = () => {
                 });
                 const dataPub = await resPub.json();
                 if (resPub.status === 200) {
-                    if (JSON.stringify(dataPub.publications) !== JSON.stringify(prevPublicaciones.current)) {
+                    if (dataPub.total > prevTotalPublicaciones.current) {
                         dispatch(establecerPublicaciones({ items: dataPub.publications, total: dataPub.total }));
-                        // Ejemplo: notificar si hay nuevas publicaciones
-                        if (dataPub.total > prevPublicaciones.current.length) {
-                            await Notifications.scheduleNotificationAsync({
-                                content: {
-                                    title: '¡Nuevas publicaciones!',
-                                    body: 'Hay nuevas publicaciones disponibles.',
-                                },
-                                trigger: null,
-                            });
-                        }
+                        await Notifications.scheduleNotificationAsync({
+                            content: {
+                                title: '¡Nuevas publicaciones!',
+                                body: 'Hay nuevas publicaciones disponibles.',
+                            },
+                            trigger: null,
+                        });
                     }
                 }
             } catch (err) {
-                // Manejo de error opcional
+                console.error('Error al obtener datos:', err);
             }
         }, POLL_INTERVAL);
 
         return () => clearInterval(interval);
     }, [logueado, dispatch]);
 
-    return null; // No renderiza nada
+    return null;
 };
 
 export default Observador;
