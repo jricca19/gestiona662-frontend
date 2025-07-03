@@ -41,6 +41,7 @@ export const stylesRegistro = StyleSheet.create({
     color: colores.letrasError,
   },
   input: {
+    color: colores.quinto,
     borderColor: colores.tercearioOscuro,
     borderWidth: 1,
     padding: 10,
@@ -193,5 +194,10 @@ export const stylesRegistro = StyleSheet.create({
     backgroundColor: colores.cuarto,
     marginBottom: 10,
     height: height * 0.07,
+  },
+  pickerDptoyCiudad: {
+    height: height * 0.06,
+    color: colores.quinto,
+    backgroundColor: 'transparent',
   },
 });

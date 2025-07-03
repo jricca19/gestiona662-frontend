@@ -315,7 +315,7 @@ const FormularioRegistro = ({ navigation }) => {
                   name="password"
                   render={({ field: { onChange, value } }) => (
                     <TextInput
-                      style={[stylesRegistro.input, { paddingRight: 40 }]}
+                      style={stylesRegistro.input}
                       placeholder="Contraseña"
                       placeholderTextColor={colores.tercearioOscuro}
                       secureTextEntry={!mostrarPassword}
@@ -354,7 +354,7 @@ const FormularioRegistro = ({ navigation }) => {
                   name="confirmPassword"
                   render={({ field: { onChange, value } }) => (
                     <TextInput
-                      style={[stylesRegistro.input, { paddingRight: 40 }]}
+                      style={stylesRegistro.input}
                       placeholder="Confirmar contraseña"
                       placeholderTextColor={colores.tercearioOscuro}
                       secureTextEntry={!mostrarConfirmPassword}
@@ -449,6 +449,7 @@ const FormularioRegistro = ({ navigation }) => {
                         selectedValue={value}
                         onValueChange={onChange}
                         style={stylesRegistro.pickerEscuela}
+                        dropdownIconColor={colores.primario}
                       >
                         <Picker.Item label="Selecciona una escuela" value="" />
                         {escuelas.map((escuela) => (
@@ -484,6 +485,7 @@ const FormularioRegistro = ({ navigation }) => {
                     <Text style={stylesRegistro.label}>Departamento</Text>
                     <View style={stylesRegistro.pickerWrapper}>
                       <Picker
+                        style={stylesRegistro.pickerDptoyCiudad}
                         selectedValue={defaultDeptId}
                         onValueChange={async (deptId) => {
                           setDefaultDeptId(deptId);
@@ -509,6 +511,7 @@ const FormularioRegistro = ({ navigation }) => {
                         <Text style={stylesRegistro.label}>Ciudad</Text>
                         <View style={stylesRegistro.pickerWrapper}>
                           <Picker
+                            style={stylesRegistro.pickerDptoyCiudad}
                             selectedValue={selectedCity}
                             onValueChange={(value) => setSelectedCity(value)}
                           >

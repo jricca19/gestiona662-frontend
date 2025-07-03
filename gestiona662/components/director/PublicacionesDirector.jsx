@@ -3,13 +3,11 @@ import { estilosPublicacionesDirector } from '../styles/stylesPublicacionesDirec
 import { useState, useEffect, useCallback } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import * as SecureStore from 'expo-secure-store';
-import { estilosPublicaciones } from '../styles/stylesPublicaciones';
 import { colores } from '../styles/fuentesyColores';
-import { format, parseISO } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { MaterialIcons, Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { formatUTC } from '../../utils/formatUTC';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-const PublicacionesDirector = ({ navigation }) => {
+const PublicacionesDirector = ({ navigation, route }) => {
     const [datos, setDatos] = useState([]);
     const [escuelas, setEscuelas] = useState([]);
     const [escuelaSeleccionada, setEscuelaSeleccionada] = useState('');
@@ -122,6 +120,14 @@ const PublicacionesDirector = ({ navigation }) => {
         obtenerEscuelas();
     }, []);
 
+    useEffect(() => {
+        if (route?.params?.refresh) {
+            setPage(1);
+            fetchPublicaciones(1, true);
+            navigation.setParams({ refresh: false });
+        }
+    }, [route?.params?.refresh]);
+
     const handleLoadMore = () => {
         if (loading) return;
         if (datos.length >= total) return;
@@ -150,55 +156,73 @@ const PublicacionesDirector = ({ navigation }) => {
         }
     }, [datos]);
 
+    const estados = {
+        OPEN: {
+            label: 'Abierta',
+            style: estilosPublicacionesDirector.badgePendiente,
+            textStyle: estilosPublicacionesDirector.badgePendienteText
+        },
+        FILLED: {
+            label: 'Cubierta',
+            style: estilosPublicacionesDirector.badgeAsignada,
+            textStyle: estilosPublicacionesDirector.badgeAsignadaText
+        },
+        CANCELLED: {
+            label: 'Cancelada',
+            style: estilosPublicacionesDirector.badgeRechazada,
+            textStyle: estilosPublicacionesDirector.badgeRechazadaText
+        },
+        EXPIRED: {
+            label: 'Expirada',
+            style: estilosPublicacionesDirector.badgeRechazada,
+            textStyle: estilosPublicacionesDirector.badgeRechazadaText
+        },
+        COMPLETED: {
+            label: 'Finalizada',
+            style: estilosPublicacionesDirector.badgeAsignada,
+            textStyle: estilosPublicacionesDirector.badgeAsignadaText
+        }
+    };
+
     const renderItem = ({ item }) => {
         let fechaFormateada = '';
         if (item.startDate && item.endDate) {
-            const inicio = parseISO(item.startDate);
-            const fin = parseISO(item.endDate);
             fechaFormateada =
-                format(inicio, 'dd MMM', { locale: es }).toUpperCase() +
+                formatUTC(item.startDate, 'dd') +
                 '-' +
-                format(fin, 'dd MMM yyyy', { locale: es }).toUpperCase();
+                formatUTC(item.endDate, 'dd MMM yyyy');
         }
 
+        const estado = estados[item.status] || {
+            label: item.status,
+            style: estilosPublicacionesDirector.badgePendiente,
+            textStyle: estilosPublicacionesDirector.badgePendienteText
+        };
+
         return (
-            <View style={estilosPublicaciones.tarjeta} key={item._id}>
-                <View style={estilosPublicaciones.encabezadoTarjeta}>
-                    <View style={estilosPublicaciones.filaTarjeta}>
+            <View style={estilosPublicacionesDirector.tarjeta} key={item._id}>
+                <View style={estilosPublicacionesDirector.encabezadoTarjeta}>
+                    <View style={estilosPublicacionesDirector.filaTarjeta}>
                         <MaterialIcons name="show-chart" size={18} color="#03A9E0" />
-                        <Text style={estilosPublicaciones.textoTarjeta}>
+                        <Text style={estilosPublicacionesDirector.textoTarjeta}>
                             {item.grade === 0 ? 'Nivel Inicial' : `${item.grade}°`}
                         </Text>
                     </View>
-                    <View style={[
-                        estilosPublicaciones.badgeStatus,
-                        item.status === 'OPEN'
-                            ? estilosPublicaciones.badgePendiente
-                            : item.status === 'COMPLETED'
-                                ? estilosPublicaciones.badgeAsignada
-                                : estilosPublicaciones.badgeRechazada
-                    ]}>
-                        <Text style={[
-                            estilosPublicaciones.badgeStatusText,
-                            item.status === 'OPEN'
-                                ? estilosPublicaciones.badgePendienteText
-                                : item.status === 'COMPLETED'
-                                    ? estilosPublicaciones.badgeAsignadaText
-                                    : estilosPublicaciones.badgeRechazadaText
-                        ]}>
-                            {item.status}
+                    <View style={[estilosPublicacionesDirector.badgeStatus, estado.style]}>
+                        <Text style={[estilosPublicacionesDirector.badgeStatusText, estado.textStyle]}>
+                            {estado.label}
                         </Text>
                     </View>
                 </View>
-                <View style={estilosPublicaciones.filaTarjeta}>
+                <View style={estilosPublicacionesDirector.filaTarjeta}>
                     <MaterialIcons name="event" size={18} color={colores.primario} />
-                    <Text style={estilosPublicaciones.textoTarjeta}>
+                    <Text style={estilosPublicacionesDirector.textoTarjeta}>
                         {fechaFormateada}
                     </Text>
                 </View>
-                <View style={estilosPublicaciones.filaTarjeta}>
+                <View style={estilosPublicacionesDirector.filaTarjeta}>
                     <MaterialIcons name="event" size={18} color={colores.primario} />
-                    <Text style={estilosPublicaciones.textoTarjeta}>
+                    <Text style={estilosPublicacionesDirector.textoTarjeta}>
                         {postulaciones[item._id]?.length || 0} postulados
                     </Text>
                 </View>
@@ -259,7 +283,10 @@ const PublicacionesDirector = ({ navigation }) => {
             </View>
 
             <View style={{ flex: 1 }}>
-                <View style={estilosPublicaciones.contenedor}>
+                <View style={estilosPublicacionesDirector.contenedor}>
+                    <View style={estilosPublicacionesDirector.filaTitulo}>
+                        <Text style={estilosPublicacionesDirector.titulo}>Publicaciones</Text>
+                    </View>
                     <FlatList
                         data={datos.filter(item => Array.isArray(postulaciones[item._id]))}
                         renderItem={renderItem}
@@ -268,12 +295,12 @@ const PublicacionesDirector = ({ navigation }) => {
                         onEndReachedThreshold={0.5}
                         ListFooterComponent={
                             loading && !refreshing ? (
-                                <View style={estilosPublicaciones.spinnerCargando}>
+                                <View style={estilosPublicacionesDirector.spinnerCargando}>
                                     <ActivityIndicator size="large" color={colores.primario} />
                                 </View>
                             ) : datos.length >= total && total > 0 ? (
-                                <View style={estilosPublicaciones.spinnerCargando}>
-                                    <Text style={estilosPublicaciones.textoFinalLista}>
+                                <View style={estilosPublicacionesDirector.spinnerCargando}>
+                                    <Text style={estilosPublicacionesDirector.textoFinalLista}>
                                         No hay más publicaciones para mostrar
                                     </Text>
                                 </View>
