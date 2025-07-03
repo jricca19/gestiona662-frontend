@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     items: [],
-    lastUpdate: null,
+    lastUpdate: 0,
 };
 
 export const postulacionesSlice = createSlice({

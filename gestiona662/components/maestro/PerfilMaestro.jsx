@@ -195,7 +195,7 @@ const PerfilMaestro = ({ navigation }) => {
                                 />
                                 <View>
                                     <Text style={stylesPerfil.nombre}>{usuario.name} {usuario.lastName}</Text>
-                                    <Text style={stylesPerfil.rol}>Maestra</Text>
+                                    <Text style={stylesPerfil.rol}>Maestro/a</Text>
                                 </View>
                             </View>
                             <View>

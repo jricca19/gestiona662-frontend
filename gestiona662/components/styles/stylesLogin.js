@@ -5,8 +5,8 @@ const { width, height } = Dimensions.get('window');
 
 export const stylesLogin = StyleSheet.create({
     logo: {
-        width: width * 0.35,
-        height: width * 0.35,
+        width: width * 0.3,
+        height: width * 0.3,
         alignSelf: 'center',
         resizeMode: 'contain'
     },
@@ -47,7 +47,7 @@ export const stylesLogin = StyleSheet.create({
     },
     titulo: {
         fontSize: 24,
-        marginBottom: height * 0.05,
+        marginBottom: height * 0.02,
         textAlign: 'center',
         fontWeight: 'bold',
     },
@@ -57,10 +57,10 @@ export const stylesLogin = StyleSheet.create({
         textAlign: 'center'
     },
     container: {
-        padding: width * 0.07,
+        padding: width * 0.06,
         justifyContent: 'center',
         marginHorizontal: width * 0.08,
-        marginVertical: height * 0.03,
+        marginVertical: height * 0.01,
         backgroundColor: colores.terceario
     },
     filaInput: {

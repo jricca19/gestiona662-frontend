@@ -1,14 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
-    Modal,
-    FlatList,
-    Pressable
-} from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, Pressable, Alert } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { stylesCrearPublicacion } from '../styles/stylesCrearPublicacion';
 import * as SecureStore from 'expo-secure-store';
@@ -30,58 +21,84 @@ const CrearPublicacionDirector = ({ navigation }) => {
     const [modalGrado, setModalGrado] = useState(false);
 
     const handleCrearPublicacion = async () => {
-    if (!escuelaSeleccionada || !grado || !desde || !hasta||!ayuda) {
-        alert('Por favor complete todos los campos requeridos.');
-        return;
-    }
-
-    let shiftValue = '';
-    switch (turno) {
-        case 'Matutino':
-            shiftValue = 'MORNING';
-            break;
-        case 'Vespertino':
-            shiftValue = 'AFTERNOON';
-            break;
-        case 'Tiempo completo':
-            shiftValue = 'FULL_DAY';
-            break;
-        default:
-            shiftValue = '';
-    }
-
-    const payload = {
-        schoolId: escuelaSeleccionada._id,
-        grade: grado,
-        startDate: desde,
-        endDate: hasta,
-        shift: shiftValue,
-        details: ayuda,
-    };
-
-    try {
-        const token = await SecureStore.getItemAsync('token');
-
-        const res = await fetch('https://gestiona662-backend.vercel.app/v1/publications', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (res.ok) {
-            alert('Publicación creada correctamente');
-            navigation.goBack();
-        } else {
-            const errorData = await res.json();
-            alert('Error al crear publicación',errorData);
+        if (!escuelaSeleccionada || !grado || !desde || !hasta || !ayuda) {
+            Alert.alert('Campos requeridos', 'Por favor complete todos los campos requeridos.');
+            return;
         }
-    } catch (error) {
-        alert('Error al conectar con el servidor',error);
-    }
-};
+
+        const desdeDate = new Date(desde);
+        const hastaDate = new Date(hasta);
+        const diffMs = hastaDate - desdeDate;
+        const diffDias = diffMs / (1000 * 60 * 60 * 24);
+        if (diffDias > 2) {
+            Alert.alert('Rango de fechas inválido', 'No puede solicitar más de 3 días.');
+            return;
+        }
+
+        let shiftValue = '';
+        switch (turno) {
+            case 'Matutino':
+                shiftValue = 'MORNING';
+                break;
+            case 'Vespertino':
+                shiftValue = 'AFTERNOON';
+                break;
+            case 'Tiempo completo':
+                shiftValue = 'FULL_DAY';
+                break;
+            default:
+                shiftValue = '';
+        }
+
+        const payload = {
+            schoolId: escuelaSeleccionada._id,
+            grade: grado,
+            startDate: desde,
+            endDate: hasta,
+            shift: shiftValue,
+            details: ayuda,
+        };
+
+        try {
+            const token = await SecureStore.getItemAsync('token');
+
+            const res = await fetch('https://gestiona662-backend.vercel.app/v1/publications', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (res.ok) {
+                // Limpiar campos antes de navegar
+                setEscuelaSeleccionada(null);
+                setGrado('');
+                setDesde('');
+                setHasta('');
+                setTurno('Matutino');
+                setAyuda('');
+                Alert.alert(
+                    '¡Éxito!',
+                    'Publicación creada correctamente',
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => {
+                                navigation.navigate('directorTabs', { screen: 'misPublicaciones', params: { refresh: true } });
+                            },
+                        },
+                    ]
+                );
+            } else {
+                const errorData = await res.json();
+                Alert.alert('Error al crear publicación', errorData.message || 'No se pudo crear la publicación.');
+            }
+        } catch (error) {
+            Alert.alert('Error de conexión', String(error));
+        }
+    };
 
     useEffect(() => {
         const obtenerEscuelas = async () => {
@@ -114,7 +131,7 @@ const CrearPublicacionDirector = ({ navigation }) => {
         <View style={stylesCrearPublicacion.container}>
             <View style={stylesCrearPublicacion.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={stylesCrearPublicacion.backButton}>
-                    <Ionicons name="arrow-back" size={24} color="#fff" />
+                    <Ionicons name="arrow-back" size={28} color="#fff" />
                 </TouchableOpacity>
                 <Text style={stylesCrearPublicacion.headerTitle}>Crear publicación</Text>
             </View>
@@ -267,7 +284,7 @@ const CrearPublicacionDirector = ({ navigation }) => {
 
                 <Text style={stylesCrearPublicacion.label}>Turno:</Text>
                 <View style={stylesCrearPublicacion.turnoRow}>
-                    {['Matutino', 'Vespertino', 'Tiempo completo'].map((opcion) => (
+                    {['Matutino', 'Vespertino', 'Tiempo Completo'].map((opcion) => (
                         <TouchableOpacity
                             key={opcion}
                             style={stylesCrearPublicacion.turnoOpcion}

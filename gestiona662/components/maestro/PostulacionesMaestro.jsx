@@ -41,7 +41,7 @@ const statusOrder = {
     FINALIZED: 3,
 }
 
-const PostulacionesMaestro = ({ navigation }) => {
+const PostulacionesMaestro = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const datos = useSelector(state => state.postulaciones.items);
     const lastUpdate = useSelector(state => state.postulaciones.lastUpdate);
@@ -74,10 +74,19 @@ const PostulacionesMaestro = ({ navigation }) => {
     }
 
     useEffect(() => {
-        if (!lastUpdate || datos.length === 0) {
+        if (lastUpdate === 0) {
             fetchPostulaciones()
         }
     }, [lastUpdate]);
+
+    // Refrescar si viene el parámetro refresh desde la navegación
+    useEffect(() => {
+        if (route?.params?.refresh) {
+            fetchPostulaciones();
+            // Limpiar el parámetro para evitar recargas infinitas
+            navigation.setParams({ refresh: false });
+        }
+    }, [route?.params?.refresh]);
 
     const handleRefresh = () => {
         setRefreshing(true)
@@ -121,11 +130,39 @@ const PostulacionesMaestro = ({ navigation }) => {
         const pub = item.publicationId || {}
         const escuela = pub.schoolId || {}
 
+        const puedeEliminar = item.status === 'PENDING';
+
         return (
-            <DeslizarParaEliminar
-                onDelete={() => eliminarPostulacionHandler(item._id)}
-                confirmMessage="¿Seguro que desea eliminar esta postulación?"
-            >
+            puedeEliminar ? (
+                <DeslizarParaEliminar
+                    onDelete={() => eliminarPostulacionHandler(item._id)}
+                    confirmMessage="¿Seguro que desea eliminar esta postulación?"
+                >
+                    <EfectoSlide style={estilosPostulaciones.tarjeta}>
+                        <View key={item._id}>
+                            <View style={estilosPostulaciones.encabezadoTarjeta}>
+                                <Text style={estilosPostulaciones.nombreEscuela}>
+                                    Escuela N°{escuela.schoolNumber}
+                                </Text>
+                                <View style={estado.style}>
+                                    <Text style={[estilosPostulaciones.textoEstado, { color: estado.color }]}>{estado.label}</Text>
+                                </View>
+                            </View>
+                            <Text style={estilosPostulaciones.fechaTarjeta}>
+                                {pub.grade ? `${pub.grade}° - ` : ''}
+                                {pub.shift === 'MORNING' ? 'Mañana' : pub.shift === 'AFTERNOON' ? 'Tarde' : pub.shift === 'FULL' ? 'Tiempo Completo' : pub.shift}
+                            </Text>
+                            <Text style={estilosPostulaciones.fechaTarjeta}>{fechas}</Text>
+                            <TouchableOpacity
+                                style={estilosPostulaciones.botonDetalles}
+                                onPress={() => navigation.navigate('detallesPostulacion', { postulacion: item })}
+                            >
+                                <Text style={estilosPostulaciones.textoDetalles}>Ver Detalles</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </EfectoSlide>
+                </DeslizarParaEliminar>
+            ) : (
                 <EfectoSlide style={estilosPostulaciones.tarjeta}>
                     <View key={item._id}>
                         <View style={estilosPostulaciones.encabezadoTarjeta}>
@@ -149,7 +186,7 @@ const PostulacionesMaestro = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </EfectoSlide>
-            </DeslizarParaEliminar>
+            )
         )
     }
 

@@ -75,35 +75,6 @@ export const estilosPublicaciones = StyleSheet.create({
         alignItems: 'center',
         gap: width * 0.01,
     },
-    badgeRechazada: {
-  backgroundColor: '#FFCDD2',
-},
-badgeRechazadaText: {
-  color: '#D32F2F',
-},
-badgeStatus: {
-  borderRadius: 12,
-  paddingHorizontal: 12,
-  paddingVertical: 3,
-  marginLeft: 'auto',
-  alignSelf: 'center',
-},
-badgePendiente: {
-  backgroundColor: '#FFE082',
-},
-badgeAsignada: {
-  backgroundColor: '#C8F7C5',
-},
-badgeStatusText: {
-  fontWeight: 'bold',
-  fontSize: 14,
-},
-badgePendienteText: {
-  color: '#FFA000',
-},
-badgeAsignadaText: {
-  color: '#388E3C',
-},
     textoCalificacion: {
         marginLeft: width * 0.01,
         fontWeight: 'bold',

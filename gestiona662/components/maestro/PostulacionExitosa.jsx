@@ -52,7 +52,7 @@ const PostulacionExitosa = ({ route, navigation }) => {
             </Text>
 
             <BotonPulsaciones
-                onPress={() => navigation.replace('maestroTabs', { screen: 'misPostulaciones' })}
+                onPress={() => navigation.replace('maestroTabs', { screen: 'misPostulaciones', params: { refresh: true } })}
                 loading={false}
                 pulse={true}
                 text="Ver Postulaciones"

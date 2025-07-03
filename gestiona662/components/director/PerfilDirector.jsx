@@ -88,7 +88,7 @@ const PerfilDirector = ({ navigation }) => {
                             />
                             <View>
                                 <Text style={stylesPerfil.nombre}>{usuario.name} {usuario.lastName}</Text>
-                                <Text style={stylesPerfil.rol}>Director</Text>
+                                <Text style={stylesPerfil.rol}>Director/a</Text>
                             </View>
                         </View>
 
