@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Alert } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import { format, parseISO } from 'date-fns';
@@ -25,7 +25,7 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
 
     const onConfirmar = async () => {
         if (!seleccionado || !seleccion[seleccionado] || seleccion[seleccionado].length === 0) {
-            alert("Por favor selecciona una postulación y al menos un día.");
+            Alert.alert('Error', 'Por favor selecciona una postulación y al menos un día.');
             return;
         }
 
@@ -50,14 +50,14 @@ const PostulacionesPublicacion = ({ navigation, route }) => {
             const data = await res.json();
 
             if (res.ok) {
-                alert('Postulación asignada correctamente');
+                Alert.alert('¡Éxito!', 'Postulación asignada correctamente');
                 setSeleccion({});
                 setSeleccionado(null);
             } else {
-                alert('Error al asignar: ' + data.message);
+                Alert.alert('Error', 'Error al asignar: ' + data.message);
             }
         } catch (error) {
-            alert('Error de red al asignar la postulación');
+            Alert.alert('Error', 'Error de red al asignar la postulación');
         }
     };
 
@@ -233,16 +233,15 @@ const styles = StyleSheet.create({
         padding: 12,
         marginHorizontal: 12,
         marginBottom: 14,
-        shadowColor: '#000',
-        shadowOpacity: 0.07,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 4,
-        elevation: 2,
+        elevation: 6,
+        borderColor: colores.secundarioClaro,
+        borderWidth: 1,
     },
     cardSeleccionada: {
         backgroundColor: colores.secundarioMasClaro,
         borderColor: colores.primario,
         borderWidth: 2,
+        elevation: 2,
     },
     etiquetasRow: {
         flexDirection: 'row',
